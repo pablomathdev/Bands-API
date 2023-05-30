@@ -5,12 +5,9 @@ INSERT INTO tb_band (name, country, city, formation_year) VALUES ('Led Zeppelin'
 INSERT INTO tb_band (name, country, city, formation_year) VALUES ('Guns N\' Roses', 'United States', 'Los Angeles', 1985);
 INSERT INTO tb_band (name, country, city, formation_year) VALUES ('Queen', 'United Kingdom', 'London', 1970);
 
-
-
 INSERT INTO tb_genre (name) VALUES ('Trash Metal');
 INSERT INTO tb_genre (name) VALUES ('Heavy Metal');
 INSERT INTO tb_genre (name) VALUES ('Hard Rock');
-
 
 INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (1,1);
 INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (1,2);
@@ -19,3 +16,13 @@ INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (3,2);
 INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (4,3);
 INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (5,3);
 INSERT INTO tb_band_genre (tb_band_id,tb_genre_id) VALUES (6,3);
+
+INSERT INTO tb_member (name) VALUES ('James Hetfield');
+INSERT INTO tb_member (name) VALUES ('Lars Ulrich');
+INSERT INTO tb_member (name) VALUES ('Kirk Hammett');
+INSERT INTO tb_member (name) VALUES ('Robert Trujillo');
+
+INSERT INTO tb_band_member (tb_band_id,tb_member_id) VALUES (1,1);
+INSERT INTO tb_band_member (tb_band_id,tb_member_id) VALUES (1,2);
+INSERT INTO tb_band_member (tb_band_id,tb_member_id) VALUES (1,3);
+INSERT INTO tb_band_member (tb_band_id,tb_member_id) VALUES (1,4);
