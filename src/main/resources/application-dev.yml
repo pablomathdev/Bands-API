@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: dev     
+  jpa:
+    show-sql: true
+  flyway:
+    url: jdbc:mysql://localhost:3306/develop?createDatabaseIfNotExist=true&serverTimezone=UTC
+    user: root
+    password: password
+    locations: classpath:db/migration
+mysql:
+  datasource:
+     mysql-password: password
+     mysql-url: jdbc:mysql://localhost:3306/develop?createDatabaseIfNotExist=true&serverTimezone=UTC
+     mysql-user: root   

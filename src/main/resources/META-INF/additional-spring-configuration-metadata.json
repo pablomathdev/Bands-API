@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "mysql.datasource.mysql-user",
+      "type": "java.lang.String",
+      "description": "A description for 'mysql.datasource.mysql-user'"
+    },
+    {
+      "name": "mysql.datasource.mysql-url",
+      "type": "java.lang.String",
+      "description": "A description for 'mysql.datasource.mysql-url'"
+    },
+    {
+      "name": "mysql.datasource.mysql-password",
+      "type": "java.lang.String",
+      "description": "A description for 'mysql.datasource.mysql-password'"
+    }
+  ]
+}
