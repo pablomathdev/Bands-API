@@ -29,7 +29,7 @@ import com.github.pablomathdev.domain.repositories.BandRepository;
 class CreateBandServiceTests {
 	
 	
-    @Captor ArgumentCaptor<Band> saveCaptor;
+    @Captor ArgumentCaptor<Band> bandCaptor;
     
     @Mock
 	BandRepository bandRepository;
@@ -64,8 +64,8 @@ class CreateBandServiceTests {
 		
 		createBandService.execute(band);
 
-		 Mockito.verify(bandRepository).save(saveCaptor.capture());
-	       assertEquals(band, saveCaptor.getValue());
+		 Mockito.verify(bandRepository).save(bandCaptor.capture());
+	       assertEquals(band, bandCaptor.getValue());
 		
 		
 	}
