@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +32,8 @@ public class Band {
 	@Embedded
 	private Origin origin;
 	
-	@OneToOne
-	private Discography discography;
+	@OneToMany(mappedBy = "band")
+	private List<Album> albums;
 	
 	
 	@ManyToMany
