@@ -38,14 +38,14 @@ public class Band {
 	
 	@ManyToMany
 	@JoinTable(name = "tb_band_genre",
-	joinColumns = @JoinColumn(name= "tb_band_id"),
-	inverseJoinColumns = @JoinColumn(name= "tb_genre_id"))
+	joinColumns = @JoinColumn(name= "band_id"),
+	inverseJoinColumns = @JoinColumn(name= "genre_id"))
 	private Set<Genre> genres;
 
 	@ManyToMany
 	@JoinTable(name = "tb_band_member",
-	joinColumns = @JoinColumn(name="tb_band_id"),
-	inverseJoinColumns = @JoinColumn(name="tb_member_id"))
+	joinColumns = @JoinColumn(name="band_id"),
+	inverseJoinColumns = @JoinColumn(name="member_id"))
 	private List<Member> members; 
 	
 	

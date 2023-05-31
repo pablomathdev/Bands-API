@@ -14,8 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_album")
-public class Album extends Release {
+@Table(name = "tb_single")
+public class Single extends Release{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -25,8 +25,8 @@ public class Album extends Release {
 	private Band band;
 
 	@ManyToMany
-	@JoinTable(name = "tb_album_genre",
-	joinColumns = @JoinColumn(name = "album_id"), 
+	@JoinTable(name = "tb_single_genre",
+	joinColumns = @JoinColumn(name = "single_id"), 
 	inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres;
 
@@ -43,10 +43,10 @@ public class Album extends Release {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Album other = (Album) obj;
+		Single other = (Single) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 
+
+	
 }
