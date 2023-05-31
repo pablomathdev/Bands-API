@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,10 +27,11 @@ public class Genre {
 	
 	private String name;
 	
-	
+	@Setter(value = AccessLevel.NONE)
 	@ManyToMany(mappedBy = "genres")
 	private Set<Band> bands;
 	
+	@Setter(value = AccessLevel.NONE)
 	@ManyToMany(mappedBy = "genres")
 	private List<Track> tracks;
 	

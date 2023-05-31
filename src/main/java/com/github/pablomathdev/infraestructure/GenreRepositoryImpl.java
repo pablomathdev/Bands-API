@@ -2,21 +2,20 @@ package com.github.pablomathdev.infraestructure;
 
 import org.springframework.stereotype.Repository;
 
-import com.github.pablomathdev.domain.entities.Band;
+import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.repositories.IRepository;
 
 @Repository
-public class BandRepositoryImpl implements IRepository<Band,Integer>{
+public class GenreRepositoryImpl implements IRepository<Genre, Integer> {
 
 	@Override
-	public Band save(Band band) {
+	public Genre save(Genre object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	@Override
-	public Band findById(Integer id) {
+	public Genre findById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

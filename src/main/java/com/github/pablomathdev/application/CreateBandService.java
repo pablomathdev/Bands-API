@@ -4,20 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Band;
-import com.github.pablomathdev.domain.repositories.BandRepository;
-import com.github.pablomathdev.domain.services.CreateService;
+import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.repositories.IRepository;
+import com.github.pablomathdev.domain.services.ICreateService;
 
 @Service
-public class CreateBandService implements CreateService<Band> {
-
+public class CreateBandService implements ICreateService<Band> {
+    
 	@Autowired
-	BandRepository bandRepository;
+	IRepository<Genre, Integer> genreRepository;
+	
+	@Autowired
+	IRepository<Band,Integer> bandRepository;
 
 	@Override
 	public Band execute(Band entity) {
-
-		 bandRepository.save(entity);
-		return null;
+	  
+					
+	 return bandRepository.save(entity);
+	
 	}
 
 }

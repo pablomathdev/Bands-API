@@ -2,7 +2,6 @@ package com.github.pablomathdev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,57 +16,68 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.pablomathdev.application.CreateBandService;
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.entities.Member;
 import com.github.pablomathdev.domain.entities.Origin;
-import com.github.pablomathdev.domain.repositories.BandRepository;
+import com.github.pablomathdev.domain.repositories.IRepository;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class CreateBandServiceTests {
-	
-	
-    @Captor ArgumentCaptor<Band> bandCaptor;
-    
-    @Mock
-	BandRepository bandRepository;
-    
-	
-    @InjectMocks
+
+	@Captor
+	ArgumentCaptor<Band> bandCaptor;
+
+	@Mock
+	IRepository<Band,Integer> bandRepository;
+
+	@InjectMocks
 	CreateBandService createBandService;
 
 	@Test
 	public void should_call_save_method_repository_with_band() {
-
-		Band band = new Band();
-		band.setId(1);
-		band.setName("Metallica");
-		Origin origin = new Origin();
-		origin.setCountry("United States");
-		origin.setCity("San Francisco");
-		band.setOrigin(origin);
-		Album album = new Album();
-		album.setId(1);
-		album.setTitle("Master of Puppets");
-		band.setAlbums(Arrays.asList(album));
-		Member member = new Member();
-		member.setName("James Hatfield");
-		band.setMembers(Arrays.asList(member));
-		Genre genre = new Genre();
-		genre.setName("Trash Metal");
-		Set<Genre> set = new HashSet<>();
+        
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genre = genreFactory(1, "Trash Metal");
+		Set<Genre> set= new HashSet<>();
 		set.add(genre);
-		band.setGenres(set);
+		Band band = bandFactory(1, "Metallica",origin,set);
 		
 		
-		createBandService.execute(band);
 
-		 Mockito.verify(bandRepository).save(bandCaptor.capture());
-	       assertEquals(band, bandCaptor.getValue());
+		createBandService.execute(band);
 		
 		
+
+		Mockito.verify(bandRepository).save(bandCaptor.capture());
+		assertEquals(band, bandCaptor.getValue());
+
+	}
+	
+
+
+	private Band bandFactory(Integer id, String name,Origin origin ,Set<Genre> genres) {
+		Band band = new Band();
+		band.setId(id);
+		band.setName(name);
+		band.setOrigin(origin);
+		band.setGenres(genres);
+		return band;
+
 	}
 
+	private Origin originFactory(String city, String country, Integer formationYear) {
+		Origin origin = new Origin();
+		origin.setCity(city);
+		origin.setCountry(country);
+		origin.setFormationYear(formationYear);
+		return origin;
+
+	}
+	private Genre genreFactory(Integer id,String name) {
+		Genre genre = new Genre();
+		genre.setId(id);
+		genre.setName(name);
+		return genre;
+	}
 }
