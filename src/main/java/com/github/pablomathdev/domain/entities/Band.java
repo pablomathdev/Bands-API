@@ -1,5 +1,6 @@
 package com.github.pablomathdev.domain.entities;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class Band {
 	@JoinTable(name = "tb_band_genre",
 	joinColumns = @JoinColumn(name= "band_id"),
 	inverseJoinColumns = @JoinColumn(name= "genre_id"))
-	private Set<Genre> genres;
+	private Set<Genre> genres = new HashSet<>();
 
 	@ManyToMany
 	@JoinTable(name = "tb_band_member",
