@@ -1,5 +1,6 @@
 package com.github.pablomathdev.domain.entities;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -28,8 +29,12 @@ public class Genre {
 	
 	@ManyToMany(mappedBy = "genres")
 	private Set<Band> bands;
-
-
+	
+	@ManyToMany(mappedBy = "genres")
+	private List<Track> tracks;
+	
+    
+    
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);

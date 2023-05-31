@@ -1,5 +1,6 @@
 package com.github.pablomathdev.domain.entities;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +31,9 @@ public class Album extends Release {
 	joinColumns = @JoinColumn(name = "album_id"), 
 	inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres;
+	
+	@OneToMany(mappedBy = "album")
+	private List<Track> tracks;
 
 	@Override
 	public int hashCode() {
