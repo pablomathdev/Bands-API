@@ -1,6 +1,7 @@
 package com.github.pablomathdev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
@@ -21,6 +22,8 @@ import com.github.pablomathdev.application.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
@@ -75,11 +78,31 @@ class CreateBandServiceTests {
 
 		Mockito.verify(genreRepository, Mockito.times(2)).findByName(genreNameCaptor.capture());
 
-		List<String> capturedNames = genreNameCaptor.getAllValues();
-		List<String> expectedNames = List.of("Trash Metal", "Heavy Metal");
+		List<String> capturedGenreNames = genreNameCaptor.getAllValues();
+		List<String> expectedGenreNames = List.of("Trash Metal", "Heavy Metal");
 
-		assertTrue(capturedNames.contains(expectedNames.get(0)));
-		assertTrue(capturedNames.contains(expectedNames.get(1)));
+		assertTrue(capturedGenreNames.contains(expectedGenreNames.get(0)));
+		assertTrue(capturedGenreNames.contains(expectedGenreNames.get(1)));
+
+	}
+
+    
+	static final String INVALID_GENRE_NAME = "Pop";
+
+	@Test
+	public void should_Throw_Exception_When_Genre_Repository_Throws() {
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genreInvalid = genreFactory(1, INVALID_GENRE_NAME);
+		Set<Genre> set = new HashSet<>();
+		set.add(genreInvalid);
+
+		Band band = bandFactory(1, "Metallica", origin, set);
+
+		Mockito.when(genreRepository.findByName(genreInvalid.getName())).thenThrow(
+				new EntityNotFoundException(String.format("there is no genre named: %s", genreInvalid.getName())));
+
+		Throwable exception = assertThrows(GenreNotFoundByNameException.class, () -> createBandService.execute(band));
+		assertEquals("there is no genre named: " + genreInvalid.getName(), exception.getMessage());
 
 	}
 

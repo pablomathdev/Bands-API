@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
@@ -26,19 +28,25 @@ public class CreateBandService implements ICreateService<Band> {
 	public Band execute(Band band) {
 
 		Set<Genre> genres = new HashSet<>();
-		
-		band.getGenres().forEach((g) -> {
 
-			Optional<Genre> genre = genreRepository.findByName(g.getName());
-			
-			if(genre.isPresent()) {
-				genres.add(genre.get());
-			}
-		});
+		try {
 
-		Optional<Band> band1 = bandRepository.save(band);
+			band.getGenres().forEach((g) -> {
 
-		return band1.orElse(null);
+				Optional<Genre> genre = genreRepository.findByName(g.getName());
+
+				if (genre.isPresent()) {
+					genres.add(genre.get());
+				}
+			});
+			Optional<Band> band1 = bandRepository.save(band);
+		    
+			return band1.orElse(null);
+
+		} catch (EntityNotFoundException e) {
+			throw new GenreNotFoundByNameException(e.getMessage());
+		}
+
 	}
 
 }

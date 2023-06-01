@@ -19,7 +19,7 @@ public class GenreRepositoryImpl implements IGenreRepository{
 	@Override
 	public Optional<Genre> findByName(String name) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return null;
 	}
 	
 	
