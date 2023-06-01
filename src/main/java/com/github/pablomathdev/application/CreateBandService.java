@@ -9,36 +9,36 @@ import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
-import com.github.pablomathdev.domain.repositories.IRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 
 @Service
 public class CreateBandService implements ICreateService<Band> {
 
 	@Autowired
-	IGenreRepository genreRepository;
+	IBandRepository bandRepository;
 
 	@Autowired
-	IRepository<Band, Integer> bandRepository;
+	IGenreRepository genreRepository;
 
 	@Override
-	public Band execute(Band entity) {
+	public Band execute(Band band) {
 
 		Set<Genre> genres = new HashSet<>();
+		
+		band.getGenres().forEach((g) -> {
 
-		entity.getGenres().stream()
-		.map(Genre::getName).forEach((name) -> {
-			Optional<Genre> genre = genreRepository.findByName(name);
-
-			genre.ifPresent(genres::add);
-
+			Optional<Genre> genre = genreRepository.findByName(g.getName());
+			
+			if(genre.isPresent()) {
+				genres.add(genre.get());
+			}
 		});
 
-		entity.setGenres(genres);
+		Optional<Band> band1 = bandRepository.save(band);
 
-		return bandRepository.save(entity);
-
+		return band1.orElse(null);
 	}
 
 }
