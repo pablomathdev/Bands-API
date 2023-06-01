@@ -19,6 +19,7 @@ import com.github.pablomathdev.application.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.IRepository;
 
 @SpringBootTest
@@ -27,9 +28,15 @@ class CreateBandServiceTests {
 
 	@Captor
 	ArgumentCaptor<Band> bandCaptor;
+	
+	@Captor
+	ArgumentCaptor<String> GenreNameCaptor;
 
 	@Mock
 	IRepository<Band,Integer> bandRepository;
+	
+	@Mock
+	IGenreRepository genreRepository;
 
 	@InjectMocks
 	CreateBandService createBandService;
@@ -52,6 +59,21 @@ class CreateBandServiceTests {
 		Mockito.verify(bandRepository).save(bandCaptor.capture());
 		assertEquals(band, bandCaptor.getValue());
 
+	}
+	@Test
+	public void should_call_findByName_genre_repository_with_name() {
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genre = genreFactory(1, "Trash Metal");
+		Set<Genre> set= new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory(1, "Metallica",origin,set);
+		
+		
+		createBandService.execute(band);
+		
+		Mockito.verify(genreRepository).findByName(GenreNameCaptor.capture());
+		assertEquals("Trash Metal", GenreNameCaptor.getValue());
+		
 	}
 	
 

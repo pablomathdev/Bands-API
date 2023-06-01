@@ -1,5 +1,7 @@
 package com.github.pablomathdev.infraestructure;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Band;
@@ -16,7 +18,7 @@ public class BandRepositoryImpl implements IRepository<Band,Integer>{
 
 
 	@Override
-	public Band findById(Integer id) {
+	public Optional<Band> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
