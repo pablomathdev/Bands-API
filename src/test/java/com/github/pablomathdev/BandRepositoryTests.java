@@ -54,7 +54,7 @@ public class BandRepositoryTests {
 		
 	}
 	@Test
-	public void should_throw_When_Entity_Manager_throws_exception_Entity_Already_Exists() {
+	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExistsDuringSave() {
 		
 		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");
