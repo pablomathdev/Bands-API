@@ -31,8 +31,6 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 @ExtendWith(MockitoExtension.class)
 class CreateBandServiceTests {
 
-	@Captor
-	ArgumentCaptor<Band> bandCaptor;
 
 	@Captor
 	ArgumentCaptor<String> genreNameCaptor;
