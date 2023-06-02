@@ -1,5 +1,7 @@
 package com.github.pablomathdev;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 
 import java.util.HashSet;
@@ -16,8 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 
 @SpringBootTest
@@ -46,6 +50,25 @@ public class BandRepositoryTests {
 		bandRepositoryImpl.save(band);
 		
 		Mockito.verify(entityManager).persist(eq(band));
+		
+		
+	}
+	@Test
+	public void should_throw_When_Entity_Manager_throws_exception_Entity_Already_Exists() {
+		
+		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
+		Genre genre = Factory.genreFactory("Alternative Rock");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = Factory.bandFactory("Nirvana",origin,set);
+		
+		
+		
+		
+		Mockito.doThrow(new EntityExistsException()).when(entityManager).persist(band);
+
+		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandRepositoryImpl.save(band));
+		assertEquals("This Band Already Exists", exception.getMessage());
 		
 		
 	}
