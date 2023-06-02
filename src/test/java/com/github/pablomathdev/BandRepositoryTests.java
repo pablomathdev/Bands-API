@@ -38,7 +38,7 @@ public class BandRepositoryTests {
 	
 	
 	@Test
-	public void should_call_find_method_Entity_Manager_with_band() {
+	public void should_InvokeEntityManagerPersist_withCorrectArguments() {
 		
 		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");
