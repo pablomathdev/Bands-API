@@ -1,5 +1,6 @@
 package com.github.pablomathdev;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,11 +52,11 @@ class CreateBandServiceTests {
 	
 		
 		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre = genreFactory(1, "Trash Metal");
+		Genre genre = genreFactory("Trash Metal");
 
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
-		Band band = bandFactory(1, "Metallica", origin, set);
+		Band band = bandFactory("Metallica", origin, set);
        
 		createBandService.execute(band);
 		
@@ -67,13 +68,13 @@ class CreateBandServiceTests {
 	@Test
 	public void should_call_findByName_genre_repository_with_name() {
 		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory(1, "Trash Metal");
-		Genre genre2 = genreFactory(2, "Heavy Metal");
+		Genre genre1 = genreFactory("Trash Metal");
+		Genre genre2 = genreFactory("Heavy Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 		set.add(genre2);
 
-		Band band = bandFactory(1, "Metallica", origin, set);
+		Band band = bandFactory("Metallica", origin, set);
 
 		createBandService.execute(band);
 
@@ -92,11 +93,11 @@ class CreateBandServiceTests {
 	@Test
 	public void should_Throw_Exception_When_Genre_Repository_Throws() {
 		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genreInvalid = genreFactory(1, INVALID_GENRE_NAME);
+		Genre genreInvalid = genreFactory(INVALID_GENRE_NAME);
 		Set<Genre> set = new HashSet<>();
 		set.add(genreInvalid);
 
-		Band band = bandFactory(1, "Metallica", origin, set);
+		Band band = bandFactory("Metallica", origin, set);
 
 		Mockito.when(genreRepository.findByName(genreInvalid.getName())).thenThrow(
 				new EntityNotFoundException(String.format("there is no genre named: %s", genreInvalid.getName())));
@@ -109,31 +110,34 @@ class CreateBandServiceTests {
 	@Test
 	public void should_return_a_band_When_the_band_repository_saves_a_band() {
 		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory(1, "Trash Metal");
-		Genre genre2 = genreFactory(2, "Heavy Metal");
+		Genre genre1 = genreFactory("Trash Metal");
+		Genre genre2 = genreFactory("Heavy Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 		set.add(genre2);
 
-		Band band = bandFactory(1, "Metallica", origin, set);
+		Band band = bandFactory("Metallica", origin, set);
 
 		
 
-		Band bandReturned = bandFactory(1, "Metallica", origin, set);
-
-		Mockito.when(bandRepository.save(band)).thenReturn(bandReturned);
+		Band bandExpected = bandFactory("Metallica", origin, set);
+        bandExpected.setId(1);
+		
+		
+		Mockito.when(bandRepository.save(band)).thenReturn(bandExpected);
 		
 		Band bandSaved = createBandService.execute(band);
 
-		assertEquals(bandReturned, bandSaved);
+		assertEquals(bandExpected, bandSaved);
+		assertEquals(bandExpected.getName(), bandSaved.getName());
+		assertNotNull(bandExpected.getId());
 
 	}
 	
 
 
-	private Band bandFactory(Integer id, String name, Origin origin, Set<Genre> genres) {
+	private Band bandFactory(String name, Origin origin, Set<Genre> genres) {
 		Band band = new Band();
-		band.setId(id);
 		band.setName(name);
 		band.setOrigin(origin);
 		band.setGenres(genres);
@@ -150,9 +154,8 @@ class CreateBandServiceTests {
 
 	}
 
-	private Genre genreFactory(Integer id, String name) {
+	private Genre genreFactory(String name) {
 		Genre genre = new Genre();
-		genre.setId(id);
 		genre.setName(name);
 		return genre;
 	}
