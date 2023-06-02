@@ -111,10 +111,8 @@ class CreateBandServiceTests {
 	public void should_return_a_band_When_the_band_repository_saves_a_band() {
 		Origin origin = originFactory("San Francisco", "United States", 1981);
 		Genre genre1 = genreFactory("Trash Metal");
-		Genre genre2 = genreFactory("Heavy Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
-		set.add(genre2);
 
 		Band band = bandFactory("Metallica", origin, set);
 
@@ -131,6 +129,7 @@ class CreateBandServiceTests {
 		assertEquals(bandExpected, bandSaved);
 		assertEquals(bandExpected.getName(), bandSaved.getName());
 		assertNotNull(bandExpected.getId());
+		assertNotNull(bandExpected.getGenres());
 
 	}
 	
