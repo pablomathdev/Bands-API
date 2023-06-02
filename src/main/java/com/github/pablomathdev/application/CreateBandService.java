@@ -15,6 +15,9 @@ import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 
+import lombok.Setter;
+
+@Setter
 @Service
 public class CreateBandService implements ICreateService<Band> {
 
@@ -39,9 +42,7 @@ public class CreateBandService implements ICreateService<Band> {
 					genres.add(genre.get());
 				}
 			});
-			Optional<Band> band1 = bandRepository.save(band);
-		    
-			return band1.orElse(null);
+			 return bandRepository.save(band);
 
 		} catch (EntityNotFoundException e) {
 			throw new GenreNotFoundByNameException(e.getMessage());

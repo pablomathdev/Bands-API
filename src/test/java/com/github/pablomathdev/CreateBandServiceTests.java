@@ -1,5 +1,4 @@
 package com.github.pablomathdev;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,24 +41,26 @@ class CreateBandServiceTests {
 
 	@Mock
 	IGenreRepository genreRepository;
-
+    
 	@InjectMocks
 	private CreateBandService createBandService;
 
+	
 	@Test
 	public void should_call_save_method_repository_with_band() {
-
+	
+		
 		Origin origin = originFactory("San Francisco", "United States", 1981);
 		Genre genre = genreFactory(1, "Trash Metal");
 
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
 		Band band = bandFactory(1, "Metallica", origin, set);
-
+       
 		createBandService.execute(band);
+		
 
-		Mockito.verify(bandRepository).save(bandCaptor.capture());
-		assertEquals(band, bandCaptor.getValue());
+		Mockito.verify(bandRepository).save(Mockito.eq(band));
 
 	}
 
@@ -86,7 +87,6 @@ class CreateBandServiceTests {
 
 	}
 
-    
 	static final String INVALID_GENRE_NAME = "Pop";
 
 	@Test
@@ -105,6 +105,31 @@ class CreateBandServiceTests {
 		assertEquals("there is no genre named: " + genreInvalid.getName(), exception.getMessage());
 
 	}
+
+	@Test
+	public void should_return_a_band_When_the_band_repository_saves_a_band() {
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = genreFactory(1, "Trash Metal");
+		Genre genre2 = genreFactory(2, "Heavy Metal");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre1);
+		set.add(genre2);
+
+		Band band = bandFactory(1, "Metallica", origin, set);
+
+		
+
+		Band bandReturned = bandFactory(1, "Metallica", origin, set);
+
+		Mockito.when(bandRepository.save(band)).thenReturn(bandReturned);
+		
+		Band bandSaved = createBandService.execute(band);
+
+		assertEquals(bandReturned, bandSaved);
+
+	}
+	
+
 
 	private Band bandFactory(Integer id, String name, Origin origin, Set<Genre> genres) {
 		Band band = new Band();

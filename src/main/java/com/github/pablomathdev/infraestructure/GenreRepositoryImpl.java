@@ -8,10 +8,10 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 @Repository
-public class GenreRepositoryImpl implements IGenreRepository{
+public class GenreRepositoryImpl implements IGenreRepository {
 
 	@Override
-	public Optional<Genre> save(Genre object) {
+	public Genre save(Genre object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -21,6 +21,5 @@ public class GenreRepositoryImpl implements IGenreRepository{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
 }

@@ -12,9 +12,9 @@ import com.github.pablomathdev.domain.repositories.IFindableRepository;
 public class BandRepositoryImpl implements IBandRepository,IFindableRepository<Band, Integer>{
 
 	@Override
-	public Optional<Band> save(Band object) {
+	public Band save(Band object) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return null;
 	}
 
 	@Override
