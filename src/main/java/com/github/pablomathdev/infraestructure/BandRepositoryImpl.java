@@ -26,7 +26,7 @@ public class BandRepositoryImpl implements IBandRepository, IFindableRepository<
 			entityManager.persist(object);
 			entityManager.flush();
 
-			return entityManager.find(Band.class, object.getId());
+			return object;
 		} catch (EntityExistsException e) {
 			throw new BandAlreadyExistsException();
 		}
@@ -41,7 +41,10 @@ public class BandRepositoryImpl implements IBandRepository, IFindableRepository<
 
 	@Override
 	public Optional<Band> findById(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+
+		Band band = entityManager.find(Band.class, id);
+	    Optional<Band> optionalBand = Optional.ofNullable(band);
+	   
+	    return optionalBand;
 	}
 }

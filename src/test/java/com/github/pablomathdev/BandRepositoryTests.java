@@ -73,6 +73,25 @@ public class BandRepositoryTests {
 		
 	}
 	
+	@Test
+	public void should_InvokeEntityManagerFind_withCorrectArguments() {
+		
+		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
+		Genre genre = Factory.genreFactory("Alternative Rock");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = Factory.bandFactory("Nirvana",origin,set);
+		band.setId(2);
+		
+		
+	    bandRepositoryImpl.findById(2);
+		
+		Mockito.verify(entityManager).find(eq(Band.class),eq(2));
+		
+		
+		
+	}
+	
 	
 	
 }
