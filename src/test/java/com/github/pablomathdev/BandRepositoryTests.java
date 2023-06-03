@@ -3,6 +3,7 @@ package com.github.pablomathdev;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,75 +24,89 @@ import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class BandRepositoryTests {
-    
-	
+
+	@Mock
+	TypedQuery<Band> typedQueryBand;
+
 	@Mock
 	EntityManager entityManager;
-	
-	
+
 	@InjectMocks
 	BandRepositoryImpl bandRepositoryImpl;
-	
-	
+
 	@Test
 	public void should_InvokeEntityManagerPersist_withCorrectArguments() {
-		
-		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
+
+		Origin origin = Factory.originFactory("Aberdeen", "United States", 1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
-		Band band = Factory.bandFactory("Nirvana",origin,set);
-		
-		
+		Band band = Factory.bandFactory("Nirvana", origin, set);
+
+		String jpql = "select b from Band b where b.nome = :nome";
+
+		when(entityManager.createQuery(jpql, Band.class)).thenReturn(typedQueryBand);
+
 		bandRepositoryImpl.save(band);
-		
+
 		Mockito.verify(entityManager).persist(eq(band));
-		
-		
+
 	}
+
 	@Test
 	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExistsDuringSave() {
-		
-		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
+
+		Origin origin = Factory.originFactory("Aberdeen", "United States", 1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
-		Band band = Factory.bandFactory("Nirvana",origin,set);
-		
-		
-		
-		
+		Band band = Factory.bandFactory("Nirvana", origin, set);
+
 		Mockito.doThrow(new EntityExistsException()).when(entityManager).persist(band);
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandRepositoryImpl.save(band));
 		assertEquals("This Band Already Exists", exception.getMessage());
-		
-		
+
 	}
-	
+
 	@Test
 	public void should_InvokeEntityManagerFind_withCorrectArguments() {
-		
-		Origin origin = Factory.originFactory("Aberdeen","United States",1987);
+
+		Origin origin = Factory.originFactory("Aberdeen", "United States", 1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
-		Band band = Factory.bandFactory("Nirvana",origin,set);
+		Band band = Factory.bandFactory("Nirvana", origin, set);
 		band.setId(2);
-		
-		
-	    bandRepositoryImpl.findById(2);
-		
-		Mockito.verify(entityManager).find(eq(Band.class),eq(2));
-		
-		
-		
+
+		bandRepositoryImpl.findById(2);
+
+		Mockito.verify(entityManager).find(eq(Band.class), eq(2));
+
 	}
-	
-	
-	
+
+	@Test
+	public void should_InvokeBandRepositoryFindByName_withCorrectArguments() {
+
+		Origin origin = Factory.originFactory("Aberdeen", "United States", 1987);
+		Genre genre = Factory.genreFactory("Alternative Rock");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = Factory.bandFactory("Nirvana", origin, set);
+
+		String jpql = "select b from Band b where b.nome = :nome";
+
+		when(entityManager.createQuery(jpql, Band.class)).thenReturn(typedQueryBand);
+
+		bandRepositoryImpl.findByName(band.getName());
+
+		Mockito.verify(typedQueryBand).setParameter(eq("name"), eq(band.getName()));
+
+	}
+
 }
