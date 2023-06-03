@@ -1,7 +1,5 @@
 package com.github.pablomathdev.infraestructure;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
@@ -17,7 +15,7 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	}
 
 	@Override
-	public Optional<Genre> findByName(String name) {
+	public Genre findByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -3,6 +3,7 @@ package com.github.pablomathdev;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -19,17 +20,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
-import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class BandRepositoryTests {
 
+	static final String SELECT_BAND_BY_NAME = "select b from Band b where b.name = :name";
+	
 	@Mock
 	TypedQuery<Band> typedQueryBand;
 
@@ -48,9 +51,10 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
 
-		String jpql = "select b from Band b where b.nome = :nome";
+		
 
-		when(entityManager.createQuery(jpql, Band.class)).thenReturn(typedQueryBand);
+		when(typedQueryBand.getSingleResult()).thenReturn(new Band());
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
 
 		bandRepositoryImpl.save(band);
 
@@ -66,11 +70,19 @@ public class BandRepositoryTests {
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
+		
+		
+		
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
+		when(bandRepositoryImpl.findByName("Nirvana")).thenReturn(band);
+		
+		doThrow(new PersistenceException()).when(entityManager).persist(band);
 
-		Mockito.doThrow(new EntityExistsException()).when(entityManager).persist(band);
+		
+		
+		Throwable exception = assertThrows(EntitySaveException.class, () -> bandRepositoryImpl.save(band));
 
-		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandRepositoryImpl.save(band));
-		assertEquals("This Band Already Exists", exception.getMessage());
+		assertEquals("Failed to save the band Nirvana", exception.getMessage());
 
 	}
 
@@ -99,9 +111,8 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
 
-		String jpql = "select b from Band b where b.nome = :nome";
 
-		when(entityManager.createQuery(jpql, Band.class)).thenReturn(typedQueryBand);
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
 
 		bandRepositoryImpl.findByName(band.getName());
 

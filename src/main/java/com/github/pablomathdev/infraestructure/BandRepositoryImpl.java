@@ -6,14 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IFindableRepository;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Repository
@@ -26,31 +26,32 @@ public class BandRepositoryImpl implements IBandRepository, IFindableRepository<
 	public Band save(Band object) {
 
 		try {
-			entityManager.persist(object);
-			entityManager.flush();
+			if(findByName(object.getName()) == null) {
+				throw new BandAlreadyExistsException();
+			};
 
-			return findByName(object.getName()).orElse(object);
-		} catch (EntityExistsException e) {
-			throw new BandAlreadyExistsException();
-		}
+			entityManager.persist(object);
+			return object;
+
+		} catch (PersistenceException e) {
+
+			throw new EntitySaveException(String.format("Failed to save the band %s", object.getName()), e);
+		} 
 
 	}
 
 	@Override
-	public Optional<Band> findByName(String name) {
+	public Band findByName(String name) {
 
-		String jpql = "select b from Band b where b.nome = :nome";
+		String jpql = "select b from Band b where b.name = :name";
 
 		TypedQuery<Band> query = entityManager.createQuery(jpql, Band.class);
 		query.setParameter("name", name);
 
 		try {
-			Band result = query.getSingleResult();
-
-			return Optional.ofNullable(result);
+			return query.getSingleResult();
 		} catch (NoResultException e) {
-
-			throw new EntityNotFoundException(String.format("Entity with name %s not found!", name));
+			return null;
 		}
 
 	}

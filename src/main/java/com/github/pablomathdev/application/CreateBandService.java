@@ -1,7 +1,6 @@
 package com.github.pablomathdev.application;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +35,11 @@ public class CreateBandService implements ICreateService<Band> {
 
 			band.getGenres().forEach((g) -> {
 
-				Optional<Genre> genre = genreRepository.findByName(g.getName());
+				Genre genre = genreRepository.findByName(g.getName());
 
-				if (genre.isPresent()) {
-					genres.add(genre.get());
-				}
+				
+					genres.add(genre);
+				
 			});
 			 return bandRepository.save(band);
 
