@@ -1,8 +1,10 @@
 package com.github.pablomathdev;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +24,8 @@ import com.github.pablomathdev.application.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
@@ -31,7 +35,6 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 @ExtendWith(MockitoExtension.class)
 class CreateBandServiceTests {
 
-
 	@Captor
 	ArgumentCaptor<String> genreNameCaptor;
 
@@ -40,24 +43,21 @@ class CreateBandServiceTests {
 
 	@Mock
 	IGenreRepository genreRepository;
-    
+
 	@InjectMocks
 	private CreateBandService createBandService;
 
-	
 	@Test
 	public void should_call_save_method_repository_with_band() {
-	
-		
+
 		Origin origin = originFactory("San Francisco", "United States", 1981);
 		Genre genre = genreFactory("Trash Metal");
 
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
 		Band band = bandFactory("Metallica", origin, set);
-       
+
 		createBandService.execute(band);
-		
 
 		Mockito.verify(bandRepository).save(Mockito.eq(band));
 
@@ -106,6 +106,26 @@ class CreateBandServiceTests {
 	}
 
 	@Test
+	public void should_ThrowAlreadyExistsException_WhenBandRepositorySaveThrows() {
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = genreFactory("Trash Metal");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre1);
+
+		Band band = bandFactory("Metallica", origin, set);
+
+		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException());
+	
+		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> createBandService.execute(band));
+		
+		
+		assertEquals("This Band Already Exists", exception.getMessage());
+		
+		
+
+	}
+
+	@Test
 	public void should_return_a_band_When_the_band_repository_saves_a_band() {
 		Origin origin = originFactory("San Francisco", "United States", 1981);
 		Genre genre1 = genreFactory("Trash Metal");
@@ -114,14 +134,11 @@ class CreateBandServiceTests {
 
 		Band band = bandFactory("Metallica", origin, set);
 
-		
-
 		Band bandExpected = bandFactory("Metallica", origin, set);
-        bandExpected.setId(1);
-		
-		
+		bandExpected.setId(1);
+
 		Mockito.when(bandRepository.save(band)).thenReturn(bandExpected);
-		
+
 		Band bandSaved = createBandService.execute(band);
 
 		assertEquals(bandExpected, bandSaved);
@@ -130,8 +147,6 @@ class CreateBandServiceTests {
 		assertNotNull(bandExpected.getGenres());
 
 	}
-	
-
 
 	private Band bandFactory(String name, Origin origin, Set<Genre> genres) {
 		Band band = new Band();

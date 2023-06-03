@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Band;
-import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IFindableRepository;
@@ -27,7 +27,7 @@ public class BandRepositoryImpl implements IBandRepository, IFindableRepository<
 
 		try {
 			if(findByName(object.getName()) == null) {
-				throw new BandAlreadyExistsException();
+				throw new AlreadyExistsException();
 			};
 
 			entityManager.persist(object);

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
@@ -45,6 +47,8 @@ public class CreateBandService implements ICreateService<Band> {
 
 		} catch (EntityNotFoundException e) {
 			throw new GenreNotFoundByNameException(e.getMessage());
+		}catch (AlreadyExistsException e) {
+			throw new BandAlreadyExistsException(e);
 		}
 
 	}
