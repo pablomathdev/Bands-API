@@ -26,7 +26,9 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.BusinessException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
@@ -115,13 +117,10 @@ class CreateBandServiceTests {
 		Band band = bandFactory("Metallica", origin, set);
 
 		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException());
-	
+
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> createBandService.execute(band));
-		
-		
+
 		assertEquals("This Band Already Exists", exception.getMessage());
-		
-		
 
 	}
 
@@ -146,6 +145,24 @@ class CreateBandServiceTests {
 		assertNotNull(bandExpected.getId());
 		assertNotNull(bandExpected.getGenres());
 
+	}
+
+	@Test
+	public void should_ThrowEntitySaveException_WhenBandRepositorySaveThorwPersistenceException() {
+		Origin origin = originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = genreFactory("Trash Metal");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre1);
+
+		Band band = bandFactory("Metallica", origin, set);
+
+		when(bandRepository.save(band))
+		.thenThrow(new EntitySaveException(String.format("Failed to save the band %s", band.getName()), null));
+
+		
+		Throwable exception = assertThrows(BusinessException.class, () -> createBandService.execute(band));
+
+		assertEquals(String.format("Failed to save the band %s", band.getName()), exception.getMessage());
 	}
 
 	private Band bandFactory(String name, Origin origin, Set<Genre> genres) {
