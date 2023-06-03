@@ -52,12 +52,12 @@ class CreateBandServiceTests {
 	@Test
 	public void should_call_save_method_repository_with_band() {
 
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre = genreFactory("Trash Metal");
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genre = Factory.genreFactory("Trash Metal");
 
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		createBandService.execute(band);
 
@@ -66,15 +66,15 @@ class CreateBandServiceTests {
 	}
 
 	@Test
-	public void should_call_findByName_genre_repository_with_name() {
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory("Trash Metal");
-		Genre genre2 = genreFactory("Heavy Metal");
+	public void should_InvokeGenreRepositoryfindByName_withCorrectArguments() {
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = Factory.genreFactory("Trash Metal");
+		Genre genre2 = Factory.genreFactory("Heavy Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 		set.add(genre2);
 
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		createBandService.execute(band);
 
@@ -91,13 +91,13 @@ class CreateBandServiceTests {
 	static final String INVALID_GENRE_NAME = "Pop";
 
 	@Test
-	public void should_Throw_Exception_When_Genre_Repository_Throws() {
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genreInvalid = genreFactory(INVALID_GENRE_NAME);
+	public void should_ThrowGenreNotFoundByNameException_WhenGenreRepositoryFindByNameThrowsEntityNotFoundException() {
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genreInvalid = Factory.genreFactory(INVALID_GENRE_NAME);
 		Set<Genre> set = new HashSet<>();
 		set.add(genreInvalid);
 
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		Mockito.when(genreRepository.findByName(genreInvalid.getName())).thenThrow(
 				new EntityNotFoundException(String.format("there is no genre named: %s", genreInvalid.getName())));
@@ -109,12 +109,12 @@ class CreateBandServiceTests {
 
 	@Test
 	public void should_ThrowAlreadyExistsException_WhenBandRepositorySaveThrows() {
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory("Trash Metal");
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = Factory.genreFactory("Trash Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException());
 
@@ -125,15 +125,15 @@ class CreateBandServiceTests {
 	}
 
 	@Test
-	public void should_return_a_band_When_the_band_repository_saves_a_band() {
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory("Trash Metal");
+	public void should_ReturnBand_WhenTheBandRepositorySavesABand() {
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = Factory.genreFactory("Trash Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
-		Band bandExpected = bandFactory("Metallica", origin, set);
+		Band bandExpected = Factory.bandFactory("Metallica", origin, set);
 		bandExpected.setId(1);
 
 		Mockito.when(bandRepository.save(band)).thenReturn(bandExpected);
@@ -149,43 +149,19 @@ class CreateBandServiceTests {
 
 	@Test
 	public void should_ThrowEntitySaveException_WhenBandRepositorySaveThorwPersistenceException() {
-		Origin origin = originFactory("San Francisco", "United States", 1981);
-		Genre genre1 = genreFactory("Trash Metal");
+		Origin origin = Factory.originFactory("San Francisco", "United States", 1981);
+		Genre genre1 = Factory.genreFactory("Trash Metal");
 		Set<Genre> set = new HashSet<>();
 		set.add(genre1);
 
-		Band band = bandFactory("Metallica", origin, set);
+		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		when(bandRepository.save(band))
-		.thenThrow(new EntitySaveException(String.format("Failed to save the band %s", band.getName()), null));
+				.thenThrow(new EntitySaveException(String.format("Failed to save the band %s", band.getName()), null));
 
-		
 		Throwable exception = assertThrows(BusinessException.class, () -> createBandService.execute(band));
 
 		assertEquals(String.format("Failed to save the band %s", band.getName()), exception.getMessage());
 	}
 
-	private Band bandFactory(String name, Origin origin, Set<Genre> genres) {
-		Band band = new Band();
-		band.setName(name);
-		band.setOrigin(origin);
-		band.setGenres(genres);
-		return band;
-
-	}
-
-	private Origin originFactory(String city, String country, Integer formationYear) {
-		Origin origin = new Origin();
-		origin.setCity(city);
-		origin.setCountry(country);
-		origin.setFormationYear(formationYear);
-		return origin;
-
-	}
-
-	private Genre genreFactory(String name) {
-		Genre genre = new Genre();
-		genre.setName(name);
-		return genre;
-	}
 }
