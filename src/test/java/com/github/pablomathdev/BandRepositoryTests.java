@@ -103,7 +103,7 @@ public class BandRepositoryTests {
 	}
 
 	@Test
-	public void should_InvokeBandRepositoryFindByName_withCorrectArguments() {
+	public void should_InvokeTypedQuery_withCorrectArguments() {
 
 		Origin origin = Factory.originFactory("Aberdeen", "United States", 1987);
 		Genre genre = Factory.genreFactory("Alternative Rock");

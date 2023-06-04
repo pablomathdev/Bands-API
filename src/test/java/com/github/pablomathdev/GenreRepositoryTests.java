@@ -1,4 +1,6 @@
 package com.github.pablomathdev;
+
+import static com.github.pablomathdev.Factory.genreFactory;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,11 +16,14 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.infraestructure.GenreRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
-import static com.github.pablomathdev.Factory.genreFactory;
+import jakarta.persistence.TypedQuery;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class GenreRepositoryTests {
+
+	@Mock
+	TypedQuery<Genre> typedQueryGenre;
 
 	@Mock
 	EntityManager entityManager;
@@ -29,16 +34,28 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_InvokeEntityManagerPersit_WithCorrectArguments() {
 
-	Genre genre = genreFactory("Heavy Metal");
-	
-	
-	genreRepositoryImpl.save(genre);
-	
-	
-        verify(entityManager).persist(eq(genre));
+		Genre genre = genreFactory("Heavy Metal");
+
+		genreRepositoryImpl.save(genre);
+
+		verify(entityManager).persist(eq(genre));
+
+	}
+
+	@Test
+	public void should_InvokeTypedQuery_WithCorrectArguments() {
+		Genre genre = genreFactory("Heavy Metal");
+
+		String jpql = "select g from Genre g where g.name = :name";
+
 		
+		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
 		
-		
+		genreRepositoryImpl.findByName(genre.getName());
+
+
+		verify(typedQueryGenre).setParameter(eq("name"), eq(genre.getName()));
+
 	}
 
 }
