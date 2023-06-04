@@ -34,6 +34,11 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_InvokeEntityManagerPersit_WithCorrectArguments() {
 
+
+		String jpql = "select g from Genre g where g.name = :name";
+
+		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+		
 		Genre genre = genreFactory("Heavy Metal");
 
 		genreRepositoryImpl.save(genre);
