@@ -1,4 +1,4 @@
-package com.github.pablomathdev.application;
+package com.github.pablomathdev.application.services;
 
 import java.util.HashSet;
 import java.util.Set;
