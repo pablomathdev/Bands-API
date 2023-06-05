@@ -3,6 +3,8 @@ package com.github.pablomathdev;
 import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,7 +60,7 @@ public class BandRepositoryTests {
 	}
 
 	@Test
-	public void should_InvokeTypedQuery_withCorrectArguments() {
+	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
@@ -77,6 +79,30 @@ public class BandRepositoryTests {
 
 	}
 	
+	@Test
+	public void should_FindByNameReturnABand_WhenTheTypedQueryReturnABand() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory("any_band", origin, set);
+		
+		Band bandExpected = bandFactory("any_band", origin, set);
+		bandExpected.setId(1);
+		
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME,Band.class)).thenReturn(typedQueryBand);
+		
+		when(typedQueryBand.getSingleResult()).thenReturn(bandExpected);
+		
+		
+		bandRepositoryImpl.findByName(band.getName());
+		
+		
+		assertEquals(bandExpected.getName(),band.getName());
+		assertNotNull(bandExpected.getId());
+		
+		
+	}
 	
 
 }
