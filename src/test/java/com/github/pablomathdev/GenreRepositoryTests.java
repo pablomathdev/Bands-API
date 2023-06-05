@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.infraestructure.GenreRepositoryImpl;
 
@@ -41,7 +42,6 @@ public class GenreRepositoryTests {
 
 	@Test
 	public void should_InvokeEntityManagerPersit_WithCorrectArguments() {
-
 
 		Genre genre = genreFactory("Heavy Metal");
 
@@ -72,7 +72,6 @@ public class GenreRepositoryTests {
 	public void should_ThrowEntitySaveException_WhenEntityManagerPersistThrowsPersistenceException() {
 		Genre genre = genreFactory("Heavy Metal");
 
-
 		doThrow(new PersistenceException()).when(entityManager).persist(genre);
 
 		Throwable exception = assertThrows(EntitySaveException.class, () -> genreRepositoryImpl.save(genre));
@@ -98,9 +97,28 @@ public class GenreRepositoryTests {
 
 		Genre expected = genreRepositoryImpl.findByName(genre.getName());
 
-		
 		assertEquals(expected.getName(), genre.getName());
-		
+
+	}
+
+	@Test
+	public void should_FindByNameThrowEntityNotFoundException_WhenTypedQueryGetResultListIsEmpty() {
+
+		String jpql = "select g from Genre g where g.name = :name";
+
+		Genre genre = genreFactory("any_genre");
+
+		List<Genre> results = new ArrayList<>();
+
+		when(typedQueryGenre.getResultList()).thenReturn(results);
+
+		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+
+		Throwable exception = assertThrows(EntityNotFoundException.class,
+				() -> genreRepositoryImpl.findByName(genre.getName()));
+
+		assertEquals(EntityNotFoundException.class, exception.getClass());
+
 	}
 
 }
