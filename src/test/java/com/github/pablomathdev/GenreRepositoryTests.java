@@ -31,6 +31,7 @@ import jakarta.persistence.TypedQuery;
 @ExtendWith(MockitoExtension.class)
 public class GenreRepositoryTests {
 
+	static final String SELECT_GENRE_BY_NAME = "select g from Genre g where g.name = :name";
 	@Mock
 	TypedQuery<Genre> typedQueryGenre;
 
@@ -43,7 +44,7 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_InvokeEntityManagerPersit_WithCorrectArguments() {
 
-		Genre genre = genreFactory("Heavy Metal");
+		Genre genre = genreFactory("any_genre");
 
 		genreRepositoryImpl.save(genre);
 
@@ -53,14 +54,12 @@ public class GenreRepositoryTests {
 
 	@Test
 	public void should_InvokeTypedQuery_WithCorrectArguments() {
-		Genre genre = genreFactory("Heavy Metal");
+		Genre genre = genreFactory("any_genre");
 
 		List<Genre> result = new ArrayList<>();
 		result.add(genre);
 
-		String jpql = "select g from Genre g where g.name = :name";
-
-		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+		when(entityManager.createQuery(SELECT_GENRE_BY_NAME, Genre.class)).thenReturn(typedQueryGenre);
 		when(typedQueryGenre.getResultList()).thenReturn(result);
 		genreRepositoryImpl.findByName(genre.getName());
 
@@ -70,7 +69,7 @@ public class GenreRepositoryTests {
 
 	@Test
 	public void should_ThrowEntitySaveException_WhenEntityManagerPersistThrowsPersistenceException() {
-		Genre genre = genreFactory("Heavy Metal");
+		Genre genre = genreFactory("genre");
 
 		doThrow(new PersistenceException()).when(entityManager).persist(genre);
 
@@ -82,8 +81,6 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_FindByNameReturnAGenre_WhenTypedQueryGetResultListReturnAGenre() {
 
-		String jpql = "select g from Genre g where g.name = :name";
-
 		Genre genre = genreFactory("any_genre");
 
 		List<Genre> results = new ArrayList<>();
@@ -93,7 +90,7 @@ public class GenreRepositoryTests {
 
 		when(typedQueryGenre.getResultList()).thenReturn(results);
 
-		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+		when(entityManager.createQuery(SELECT_GENRE_BY_NAME, Genre.class)).thenReturn(typedQueryGenre);
 
 		Genre expected = genreRepositoryImpl.findByName(genre.getName());
 
@@ -104,15 +101,13 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_FindByNameThrowEntityNotFoundException_WhenTypedQueryGetResultListIsEmpty() {
 
-		String jpql = "select g from Genre g where g.name = :name";
-
 		Genre genre = genreFactory("any_genre");
 
 		List<Genre> results = new ArrayList<>();
 
 		when(typedQueryGenre.getResultList()).thenReturn(results);
 
-		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+		when(entityManager.createQuery(SELECT_GENRE_BY_NAME, Genre.class)).thenReturn(typedQueryGenre);
 
 		Throwable exception = assertThrows(EntityNotFoundException.class,
 				() -> genreRepositoryImpl.findByName(genre.getName()));
