@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -161,6 +162,24 @@ public class BandRepositoryTests {
 		 boolean expected =bandRepositoryImpl.exists(band.getName());
 
 		assertFalse(expected);
+
+	}
+	@Test
+	public void should_ExistsReturnTrue_WhenTypedQueryGetSingleResultIsEqualOne() {
+
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory("any_band", origin, set);
+
+		when(typedQueryInteger.getSingleResult()).thenReturn(1);
+
+		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+
+		 boolean expected =bandRepositoryImpl.exists(band.getName());
+
+		assertTrue(expected);
 
 	}
 
