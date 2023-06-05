@@ -42,13 +42,7 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_InvokeEntityManagerPersit_WithCorrectArguments() {
 
-		String jpql = "select g from Genre g where g.name = :name";
 
-		List<Genre> result = new ArrayList<>();
-		result.add(new Genre());	
-		
-		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
-		when(typedQueryGenre.getResultList()).thenReturn(result);
 		Genre genre = genreFactory("Heavy Metal");
 
 		genreRepositoryImpl.save(genre);
@@ -62,8 +56,8 @@ public class GenreRepositoryTests {
 		Genre genre = genreFactory("Heavy Metal");
 
 		List<Genre> result = new ArrayList<>();
-		result.add(genre);	
-		
+		result.add(genre);
+
 		String jpql = "select g from Genre g where g.name = :name";
 
 		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
@@ -78,19 +72,35 @@ public class GenreRepositoryTests {
 	public void should_ThrowEntitySaveException_WhenEntityManagerPersistThrowsPersistenceException() {
 		Genre genre = genreFactory("Heavy Metal");
 
-		String jpql = "select g from Genre g where g.name = :name";
 
-	
-		List<Genre> result = new ArrayList<>();
-		result.add(genre);	
-		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
-		when(typedQueryGenre.getResultList()).thenReturn(result);
 		doThrow(new PersistenceException()).when(entityManager).persist(genre);
 
 		Throwable exception = assertThrows(EntitySaveException.class, () -> genreRepositoryImpl.save(genre));
-		
+
 		assertEquals(String.format("Failed to save the genre %s", genre.getName()), exception.getMessage());
 	}
 
+	@Test
+	public void should_FindByNameReturnAGenre_WhenTypedQueryGetResultListReturnAGenre() {
+
+		String jpql = "select g from Genre g where g.name = :name";
+
+		Genre genre = genreFactory("any_genre");
+
+		List<Genre> results = new ArrayList<>();
+		Genre genreExpected = new Genre();
+		genreExpected.setName("any_genre");
+		results.add(genreExpected);
+
+		when(typedQueryGenre.getResultList()).thenReturn(results);
+
+		when(entityManager.createQuery(jpql, Genre.class)).thenReturn(typedQueryGenre);
+
+		Genre expected = genreRepositoryImpl.findByName(genre.getName());
+
+		
+		assertEquals(expected.getName(), genre.getName());
+		
+	}
 
 }
