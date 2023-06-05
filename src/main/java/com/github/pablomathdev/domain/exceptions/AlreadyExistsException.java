@@ -4,4 +4,8 @@ public class AlreadyExistsException  extends BusinessException{
 
 	private static final long serialVersionUID = 1L;
 
+	
+	public AlreadyExistsException(Throwable cause) {
+		super(cause);
+	}
 }

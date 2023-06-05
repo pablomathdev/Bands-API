@@ -29,7 +29,7 @@ import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.BusinessException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
+import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
@@ -102,7 +102,7 @@ class CreateBandServiceTests {
 		Mockito.when(genreRepository.findByName(genreInvalid.getName())).thenThrow(
 				new EntityNotFoundException(String.format("there is no genre named: %s", genreInvalid.getName())));
 
-		Throwable exception = assertThrows(GenreNotFoundByNameException.class, () -> createBandService.execute(band));
+		Throwable exception = assertThrows(GenreNotFoundException.class, () -> createBandService.execute(band));
 		assertEquals("there is no genre named: " + genreInvalid.getName(), exception.getMessage());
 
 	}
@@ -116,7 +116,7 @@ class CreateBandServiceTests {
 
 		Band band = Factory.bandFactory("Metallica", origin, set);
 
-		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException());
+		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException(null));
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> createBandService.execute(band));
 

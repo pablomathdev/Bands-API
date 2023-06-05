@@ -26,7 +26,7 @@ public class BandRepositoryImpl implements IBandRepository, IFindableRepository<
 	public Band save(Band object) {
 
 		try {
-			if(findByName(object.getName()) == null) {
+			if(findByName(object.getName()) != null) {
 				throw new AlreadyExistsException();
 			};
 

@@ -13,7 +13,7 @@ import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.BusinessException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreNotFoundByNameException;
+import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
@@ -48,7 +48,7 @@ public class CreateBandService implements ICreateService<Band> {
 			 return bandRepository.save(band);
 
 		} catch (EntityNotFoundException e) {
-			throw new GenreNotFoundByNameException(e.getMessage());
+			throw new GenreNotFoundException(e.getMessage());
 		}catch (AlreadyExistsException e) {
 			throw new BandAlreadyExistsException(e);
 		}catch (EntitySaveException e) {

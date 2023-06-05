@@ -1,13 +1,18 @@
 package com.github.pablomathdev.infraestructure;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Repository
@@ -19,13 +24,17 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	@Override
 	public Genre save(Genre object) {
 
-		if (findByName(object.getName()) == null) {
+		try {
+			findByName(object.getName());
 
+			entityManager.persist(object);
+
+			return object;
+		} catch (EntityNotFoundException e) {
+			throw new AlreadyExistsException(e);
+		} catch (PersistenceException e) {
+			throw new EntitySaveException(String.format("Failed to save the genre %s", object.getName()), e);
 		}
-
-		entityManager.persist(object);
-
-		return object;
 
 	}
 
@@ -35,13 +44,14 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		String jpql = "select g from Genre g where g.name = :name";
 
 		TypedQuery<Genre> query = entityManager.createQuery(jpql, Genre.class);
-        query.setParameter("name", name);
-		
-        try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
+		query.setParameter("name", name);
 
-			return null;
+		List<Genre> result = query.getResultList();
+
+		if (!result.isEmpty()) {
+			return result.get(0);
+		} else {
+			throw new EntityNotFoundException(String.format("Genre %s Not Found !", name));
 		}
 
 	}
