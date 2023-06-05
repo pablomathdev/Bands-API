@@ -4,6 +4,7 @@ import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
@@ -142,6 +143,24 @@ public class BandRepositoryTests {
 		bandRepositoryImpl.exists(band.getName());
 
 		verify(typedQueryInteger).setParameter(eq("name"), eq(band.getName()));
+
+	}
+	@Test
+	public void should_ReturnFalse_WhenTypedQueryGetSingleResultIsDifferentOfOne() {
+
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory("any_band", origin, set);
+
+		when(typedQueryInteger.getSingleResult()).thenReturn(0);
+
+		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+
+		 boolean expected =bandRepositoryImpl.exists(band.getName());
+
+		assertFalse(expected);
 
 	}
 
