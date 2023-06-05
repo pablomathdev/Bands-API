@@ -5,6 +5,7 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,7 @@ import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 @SpringBootTest
@@ -78,7 +80,7 @@ public class BandRepositoryTests {
 		verify(typedQueryBand).setParameter(eq("name"), eq(band.getName()));
 
 	}
-	
+
 	@Test
 	public void should_FindByNameReturnABand_WhenTheTypedQueryReturnABand() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
@@ -86,23 +88,41 @@ public class BandRepositoryTests {
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
-		
+
 		Band bandExpected = bandFactory("any_band", origin, set);
 		bandExpected.setId(1);
-		
-		when(entityManager.createQuery(SELECT_BAND_BY_NAME,Band.class)).thenReturn(typedQueryBand);
-		
+
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
+
 		when(typedQueryBand.getSingleResult()).thenReturn(bandExpected);
-		
-		
+
 		bandRepositoryImpl.findByName(band.getName());
-		
-		
-		assertEquals(bandExpected.getName(),band.getName());
+
+		assertEquals(bandExpected.getName(), band.getName());
 		assertNotNull(bandExpected.getId());
-		
-		
+
 	}
+
+	@Test
+	public void should_ThrowNoResultException_WhenTypedQueryThrowsNoResultException() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory("any_band", origin, set);
+
+
+		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
+
 	
+		when(typedQueryBand.getSingleResult()).thenThrow(NoResultException.class);
+		
+		Throwable exception = assertThrows(NoResultException.class,
+				() -> bandRepositoryImpl.findByName(band.getName()));
+		
+		
+		assertEquals(NoResultException.class,exception.getClass());
+
+	}
 
 }
