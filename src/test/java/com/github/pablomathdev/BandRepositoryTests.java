@@ -36,9 +36,13 @@ import jakarta.persistence.TypedQuery;
 public class BandRepositoryTests {
 
 	static final String SELECT_BAND_BY_NAME = "select b from Band b where b.name = :name";
+	static final String COUNT_BAND = "select count(b) from Band b where b.name = :name";
 
 	@Mock
 	TypedQuery<Band> typedQueryBand;
+
+	@Mock
+	TypedQuery<Integer> typedQueryInteger;
 
 	@Mock
 	EntityManager entityManager;
@@ -111,17 +115,33 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
-
 		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
 
-	
 		when(typedQueryBand.getSingleResult()).thenThrow(NoResultException.class);
-		
+
 		Throwable exception = assertThrows(NoResultException.class,
 				() -> bandRepositoryImpl.findByName(band.getName()));
-		
-		
-		assertEquals(NoResultException.class,exception.getClass());
+
+		assertEquals(NoResultException.class, exception.getClass());
+
+	}
+
+	@Test
+	public void should_InvokeTypedQueryExists_withCorrectArguments() {
+
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		Set<Genre> set = new HashSet<>();
+		set.add(genre);
+		Band band = bandFactory("any_band", origin, set);
+
+		when(typedQueryInteger.getSingleResult()).thenReturn(1);
+
+		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+
+		bandRepositoryImpl.exists(band.getName());
+
+		verify(typedQueryInteger).setParameter(eq("name"), eq(band.getName()));
 
 	}
 
