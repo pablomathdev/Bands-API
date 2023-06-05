@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
@@ -23,15 +22,12 @@ public class GenreRepositoryImpl implements IGenreRepository {
 
 	@Override
 	public Genre save(Genre object) {
-
 		try {
-			findByName(object.getName());
 
 			entityManager.persist(object);
 
 			return object;
-		} catch (EntityNotFoundException e) {
-			throw new AlreadyExistsException(e);
+
 		} catch (PersistenceException e) {
 			throw new EntitySaveException(String.format("Failed to save the genre %s", object.getName()), e);
 		}
@@ -51,7 +47,7 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		if (!result.isEmpty()) {
 			return result.get(0);
 		} else {
-			throw new EntityNotFoundException(String.format("Genre %s Not Found !", name));
+			throw new EntityNotFoundException(String.format("Genre %s Not Found!",name));
 		}
 
 	}

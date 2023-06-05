@@ -7,11 +7,6 @@ public class BandAlreadyExistsException extends BusinessException {
 	private String message = "This Band Already Exists";
 
 
-	public BandAlreadyExistsException(Throwable cause) {
-		super(cause);
-	}
-	
-
 	public String getMessage() {
 		return message;
 	}

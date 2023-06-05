@@ -1,6 +1,6 @@
 package com.github.pablomathdev.domain.exceptions;
 
-public class EntitySaveException extends BusinessException {
+public class EntitySaveException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 

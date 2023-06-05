@@ -24,14 +24,13 @@ import com.github.pablomathdev.application.services.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
-import com.github.pablomathdev.domain.exceptions.AlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.BusinessException;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
+import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -99,11 +98,10 @@ class CreateBandServiceTests {
 
 		Band band = Factory.bandFactory("Metallica", origin, set);
 
-		Mockito.when(genreRepository.findByName(genreInvalid.getName())).thenThrow(
-				new EntityNotFoundException(String.format("there is no genre named: %s", genreInvalid.getName())));
-
+		when(genreRepository.findByName(genreInvalid.getName()))
+		.thenThrow(new EntityNotFoundException("Genre" + genreInvalid.getName() + "Not Found!"));
 		Throwable exception = assertThrows(GenreNotFoundException.class, () -> createBandService.execute(band));
-		assertEquals("there is no genre named: " + genreInvalid.getName(), exception.getMessage());
+		assertEquals("Genre" + genreInvalid.getName() + "Not Found!", exception.getMessage());
 
 	}
 
@@ -116,7 +114,7 @@ class CreateBandServiceTests {
 
 		Band band = Factory.bandFactory("Metallica", origin, set);
 
-		when(bandRepository.save(band)).thenThrow(new AlreadyExistsException(null));
+		when(bandRepository.exists(band.getName())).thenReturn(true);
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> createBandService.execute(band));
 
@@ -157,9 +155,9 @@ class CreateBandServiceTests {
 		Band band = Factory.bandFactory("Metallica", origin, set);
 
 		when(bandRepository.save(band))
-				.thenThrow(new EntitySaveException(String.format("Failed to save the band %s", band.getName()), null));
+				.thenThrow(new PersistenceException(String.format("Failed to save the band %s", band.getName()), null));
 
-		Throwable exception = assertThrows(BusinessException.class, () -> createBandService.execute(band));
+		Throwable exception = assertThrows(EntitySaveException.class, () -> createBandService.execute(band));
 
 		assertEquals(String.format("Failed to save the band %s", band.getName()), exception.getMessage());
 	}

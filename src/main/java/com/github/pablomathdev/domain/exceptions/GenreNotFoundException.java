@@ -9,4 +9,8 @@ public class GenreNotFoundException extends EntityNotFoundException {
 
 	}
 
+	public GenreNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

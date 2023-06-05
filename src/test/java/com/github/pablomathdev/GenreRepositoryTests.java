@@ -4,7 +4,6 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -92,5 +91,6 @@ public class GenreRepositoryTests {
 		
 		assertEquals(String.format("Failed to save the genre %s", genre.getName()), exception.getMessage());
 	}
+
 
 }

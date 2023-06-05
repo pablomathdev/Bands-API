@@ -6,7 +6,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,7 @@ import jakarta.persistence.TypedQuery;
 public class BandRepositoryTests {
 
 	static final String SELECT_BAND_BY_NAME = "select b from Band b where b.name = :name";
-	
+
 	@Mock
 	TypedQuery<Band> typedQueryBand;
 
@@ -51,11 +53,6 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
 
-		
-
-		when(typedQueryBand.getSingleResult()).thenReturn(new Band());
-		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
-
 		bandRepositoryImpl.save(band);
 
 		Mockito.verify(entityManager).persist(eq(band));
@@ -70,16 +67,9 @@ public class BandRepositoryTests {
 		Set<Genre> set = new HashSet<>();
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
-		
-		
-		
-		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
-		when(bandRepositoryImpl.findByName("Nirvana")).thenReturn(band);
-		
+
 		doThrow(new PersistenceException()).when(entityManager).persist(band);
 
-		
-		
 		Throwable exception = assertThrows(EntitySaveException.class, () -> bandRepositoryImpl.save(band));
 
 		assertEquals("Failed to save the band Nirvana", exception.getMessage());
@@ -111,8 +101,11 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = Factory.bandFactory("Nirvana", origin, set);
 
+		List<Band> result = new ArrayList<>();
+		result.add(band);
 
 		when(entityManager.createQuery(SELECT_BAND_BY_NAME, Band.class)).thenReturn(typedQueryBand);
+		when(typedQueryBand.getResultList()).thenReturn(result);
 
 		bandRepositoryImpl.findByName(band.getName());
 
