@@ -146,7 +146,7 @@ public class BandRepositoryTests {
 
 	}
 	@Test
-	public void should_ReturnFalse_WhenTypedQueryGetSingleResultIsDifferentOfOne() {
+	public void should_ExistsReturnFalse_WhenTypedQueryGetSingleResultIsDifferentOfOne() {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
