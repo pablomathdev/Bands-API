@@ -184,7 +184,7 @@ public class BandRepositoryTests {
 	}
 	
 	@Test 
-	public void should_RetornEmptyList_WhenTypedQueryGetResultListIsEmpty() {
+	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
 		
 		when(entityManager.createQuery("from Band",Band.class)).thenReturn(typedQueryBand);
 		
@@ -196,6 +196,25 @@ public class BandRepositoryTests {
 		 List<Band> listBandExpected =  bandRepositoryImpl.findAll();
 		
 		 assertTrue(listBandExpected.isEmpty());
+	     
+	}
+	@Test 
+	public void should_ReturnBands_WhenTypedQueryGetResultListNotIsEmpty() {
+		Origin origin = originFactory("any_city","any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+		Band band2 = bandFactory("any_band_2", origin, null);
+		
+		when(entityManager.createQuery("from Band",Band.class)).thenReturn(typedQueryBand);
+		
+		List<Band> results = new ArrayList<>();
+		results.add(band1);
+		results.add(band2);
+		when(typedQueryBand.getResultList()).thenReturn(results);
+		
+		
+		 List<Band> listBandExpected =  bandRepositoryImpl.findAll();
+		
+		 assertFalse(listBandExpected.isEmpty());
 	     
 	}
 
