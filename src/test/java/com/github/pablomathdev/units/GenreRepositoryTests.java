@@ -1,4 +1,4 @@
-package com.github.pablomathdev;
+package com.github.pablomathdev.units;
 
 import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;

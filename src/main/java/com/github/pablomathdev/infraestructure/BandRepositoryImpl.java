@@ -10,6 +10,7 @@ import com.github.pablomathdev.domain.repositories.IBandRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class BandRepositoryImpl implements IBandRepository {
@@ -18,6 +19,7 @@ public class BandRepositoryImpl implements IBandRepository {
 	private EntityManager entityManager;
 
 	@Override
+	@Transactional
 	public Band save(Band object) {
 
 		entityManager.persist(object);
@@ -39,10 +41,10 @@ public class BandRepositoryImpl implements IBandRepository {
 	public boolean exists(String name) {
 		String jpql = "select count(b) from Band b where b.name = :name";
 
-		TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		query.setParameter("name", name);
 
-		if (query.getSingleResult() == 1) {
+		if (query.getSingleResult() == 1L) {
 			return true;
 		}
 

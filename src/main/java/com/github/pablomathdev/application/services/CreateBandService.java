@@ -47,6 +47,8 @@ public class CreateBandService implements ICreateService<Band> {
 				genres.add(genre);
 
 			});
+			
+			band.setGenres(genres);			
 			return bandRepository.save(band);
 
 		} catch (EntityNotFoundException e) {

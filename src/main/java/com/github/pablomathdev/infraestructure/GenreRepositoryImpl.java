@@ -13,6 +13,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class GenreRepositoryImpl implements IGenreRepository {
@@ -21,11 +22,11 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	private EntityManager entityManager;
 
 	@Override
+	@Transactional
 	public Genre save(Genre object) {
 		try {
 
 			entityManager.persist(object);
-
 			return object;
 
 		} catch (PersistenceException e) {
