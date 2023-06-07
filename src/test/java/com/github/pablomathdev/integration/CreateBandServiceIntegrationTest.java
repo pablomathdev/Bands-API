@@ -19,6 +19,7 @@ import com.github.pablomathdev.application.services.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 
 @SpringBootTest
@@ -58,6 +59,22 @@ public class CreateBandServiceIntegrationTest {
 		});
 		
 		assertEquals(String.format("Genre %s Not Found!",genre.getName()), exception.getMessage());
+
+	}
+	@Test
+	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExists() {
+		Origin origin = originFactory("Los Angeles", "United States", 1981);
+		Genre genre = genreFactory("Trash Metal");
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre);
+
+		Band band = bandFactory("Metallica", origin, genres);
+
+		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> {
+			createBandService.execute(band);
+		});
+		
+		assertEquals(String.format("Band %s Already Exists!",band.getName()), exception.getMessage());
 
 	}
 

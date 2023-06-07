@@ -36,7 +36,7 @@ public class CreateBandService implements ICreateService<Band> {
 
 		if (bandRepository.exists(band.getName()) == true) {
 
-			throw new BandAlreadyExistsException();
+			throw new BandAlreadyExistsException(band.getName());
 		}
 
 		try {
