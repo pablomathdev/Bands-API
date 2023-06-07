@@ -121,7 +121,7 @@ class CreateBandServiceTests {
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> createBandService.execute(band));
 
-		assertEquals("This Band Already Exists", exception.getMessage());
+		assertEquals(String.format("Band %s Already Exists!",band.getName()), exception.getMessage());
 
 	}
 

@@ -10,9 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import com.github.pablomathdev.application.services.CreateBandService;
@@ -24,13 +28,32 @@ import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreateBandServiceIntegrationTest {
+
+	static final String INSERT_BAND_SQL = "INSERT INTO tb_band (name, country, city, formation_year) VALUES (?,?,?,?);";
+	static final String INSERT_GENRE_SQL = "INSERT INTO tb_genre (name) VALUES (?);";
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	private CreateBandService createBandService;
 
+	@BeforeAll
+	private void initData() {
+		jdbcTemplate.update(INSERT_BAND_SQL,"Metallica","United States","San Francisco",1981);
+		jdbcTemplate.update(INSERT_GENRE_SQL,"Trash Metal");
+	}
+
+	@AfterAll
+	public void dropDatabaseTest() {
+		jdbcTemplate.execute("DROP DATABASE develop_test");
+	}
+
 	@Test
 	public void should_CreateBandSuccessfully() {
+
 		Origin origin = originFactory("Los Angeles", "United States", 1983);
 		Genre genre = genreFactory("Trash Metal");
 		Set<Genre> genres = new HashSet<>();
@@ -57,10 +80,11 @@ public class CreateBandServiceIntegrationTest {
 		Throwable exception = assertThrows(GenreNotFoundException.class, () -> {
 			createBandService.execute(band);
 		});
-		
-		assertEquals(String.format("Genre %s Not Found!",genre.getName()), exception.getMessage());
+
+		assertEquals(String.format("Genre %s Not Found!", genre.getName()), exception.getMessage());
 
 	}
+
 	@Test
 	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExists() {
 		Origin origin = originFactory("Los Angeles", "United States", 1981);
@@ -73,8 +97,8 @@ public class CreateBandServiceIntegrationTest {
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> {
 			createBandService.execute(band);
 		});
-		
-		assertEquals(String.format("Band %s Already Exists!",band.getName()), exception.getMessage());
+
+		assertEquals(String.format("Band %s Already Exists!", band.getName()), exception.getMessage());
 
 	}
 

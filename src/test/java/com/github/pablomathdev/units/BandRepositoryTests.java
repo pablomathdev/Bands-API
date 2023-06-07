@@ -44,7 +44,7 @@ public class BandRepositoryTests {
 	TypedQuery<Band> typedQueryBand;
 
 	@Mock
-	TypedQuery<Integer> typedQueryInteger;
+	TypedQuery<Long> typedQueryLong;
 
 	@Mock
 	EntityManager entityManager;
@@ -137,13 +137,13 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
-		when(typedQueryInteger.getSingleResult()).thenReturn(1);
+		when(typedQueryLong.getSingleResult()).thenReturn(1L);
 
-		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+		when(entityManager.createQuery(COUNT_BAND, Long.class)).thenReturn(typedQueryLong);
 
 		bandRepositoryImpl.exists(band.getName());
 
-		verify(typedQueryInteger).setParameter(eq("name"), eq(band.getName()));
+		verify(typedQueryLong).setParameter(eq("name"), eq(band.getName()));
 
 	}
 	@Test
@@ -155,9 +155,9 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
-		when(typedQueryInteger.getSingleResult()).thenReturn(0);
+		when(typedQueryLong.getSingleResult()).thenReturn(0L);
 
-		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+		when(entityManager.createQuery(COUNT_BAND, Long.class)).thenReturn(typedQueryLong);
 
 		 boolean expected =bandRepositoryImpl.exists(band.getName());
 
@@ -173,9 +173,9 @@ public class BandRepositoryTests {
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
-		when(typedQueryInteger.getSingleResult()).thenReturn(1);
+		when(typedQueryLong.getSingleResult()).thenReturn(1L);
 
-		when(entityManager.createQuery(COUNT_BAND, Integer.class)).thenReturn(typedQueryInteger);
+		when(entityManager.createQuery(COUNT_BAND, Long.class)).thenReturn(typedQueryLong);
 
 		 boolean expected =bandRepositoryImpl.exists(band.getName());
 
