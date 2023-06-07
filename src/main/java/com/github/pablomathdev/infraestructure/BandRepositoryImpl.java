@@ -1,5 +1,7 @@
 package com.github.pablomathdev.infraestructure;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Band;
@@ -46,6 +48,14 @@ public class BandRepositoryImpl implements IBandRepository {
 
 		return false;
 
+	}
+
+	@Override
+	public List<Band> findAll() {
+	
+		TypedQuery<Band> query = entityManager.createQuery("from Band", Band.class);
+		
+		return query.getResultList();
 	}
 
 }

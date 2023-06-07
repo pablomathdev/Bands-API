@@ -182,5 +182,22 @@ public class BandRepositoryTests {
 		assertTrue(expected);
 
 	}
+	
+	@Test 
+	public void should_RetornEmptyList_WhenTypedQueryGetResultListIsEmpty() {
+		
+		when(entityManager.createQuery("from Band",Band.class)).thenReturn(typedQueryBand);
+		
+		List<Band> results = new ArrayList<>();
+		
+		when(typedQueryBand.getResultList()).thenReturn(results);
+		
+		
+		 List<Band> listBandExpected =  bandRepositoryImpl.findAll();
+		
+		 assertTrue(listBandExpected.isEmpty());
+	     
+	}
+
 
 }

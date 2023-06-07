@@ -52,4 +52,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 
 	}
 
+	@Override
+	public List<Genre> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

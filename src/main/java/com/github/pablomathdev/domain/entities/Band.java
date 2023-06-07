@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +37,7 @@ public class Band {
 	@Embedded
 	private Origin origin;
 	
+	@JsonIgnore
 	@Setter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "band")
 	private List<Album> albums;
@@ -45,6 +48,8 @@ public class Band {
 	inverseJoinColumns = @JoinColumn(name= "genre_id"))
 	private Set<Genre> genres = new HashSet<>();
 
+	
+	@JsonIgnore
 	@Setter(value = AccessLevel.NONE)
 	@ManyToMany
 	@JoinTable(name = "tb_band_member",
