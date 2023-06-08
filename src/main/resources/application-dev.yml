@@ -8,7 +8,7 @@ spring:
     url: jdbc:mysql://localhost:3306/develop?createDatabaseIfNotExist=true&serverTimezone=UTC
     user: root
     password: password
-    locations: classpath:db/migration
+    locations: classpath:db/migration,classpath:db/migration/test
 mysql:
   datasource:
      mysql-password: password
