@@ -21,7 +21,7 @@ import lombok.Setter;
 
 @Setter
 @Service
-public class CreateBandService implements ICreateService<Band> {
+public class BandService implements ICreateService<Band>{
 
 	@Autowired
 	IBandRepository bandRepository;
@@ -47,8 +47,8 @@ public class CreateBandService implements ICreateService<Band> {
 				genres.add(genre);
 
 			});
-			
-			band.setGenres(genres);			
+
+			band.setGenres(genres);
 			return bandRepository.save(band);
 
 		} catch (EntityNotFoundException e) {
@@ -58,5 +58,6 @@ public class CreateBandService implements ICreateService<Band> {
 		}
 
 	}
+
 
 }
