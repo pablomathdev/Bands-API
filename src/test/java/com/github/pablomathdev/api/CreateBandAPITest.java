@@ -18,6 +18,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import com.github.pablomathdev.JsonFileReader;
 
@@ -31,6 +32,7 @@ public class CreateBandAPITest {
 
 	static final String CREATE_BAND_SUCCESS = "src/test/java/com/github/pablomathdev/create_band_test_success.json";
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE= "src/test/java/com/github/pablomathdev/create_band_test_error_non-existent_genre.json";
+	static final String CREATE_BAND_ERROR_BAND_EXISTING = "src/test/java/com/github/pablomathdev/create_band_test_error_band_existing.json";
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -52,7 +54,7 @@ public class CreateBandAPITest {
 		jdbcTemplate.execute("DROP DATABASE develop_test");
 	}
 
-	@Sql(scripts = { "../insert_genre.sql" })
+	@Sql(scripts = { "../insert_genre.sql" },executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void should_ReturnStatusCode201_WhenBandIsCreated() throws IOException {
 
@@ -77,6 +79,20 @@ public class CreateBandAPITest {
 		.post()
 		.then()
 		.statusCode(400);
+
+	}
+	@Sql(scripts = {"../insert_band.sql","../insert_genre.sql"},executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void should_ReturnStatusCode409_WhenBandAlreadyExist() throws IOException {
+
+		given()
+		.body(JsonFileReader.readJsonFile(CREATE_BAND_ERROR_BAND_EXISTING))
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.post()
+		.then()
+		.statusCode(409);
 
 	}
 }

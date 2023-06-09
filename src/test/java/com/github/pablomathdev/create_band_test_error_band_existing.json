@@ -1,0 +1,13 @@
+{
+	"name": "Metallica",
+	"origin": {
+		"country": "United States",
+		"city": "San Francisco",
+		"formationYear": 1981
+	},
+	"genres": [
+		{
+			"name": "Trash Metal"
+		}
+	]
+}
