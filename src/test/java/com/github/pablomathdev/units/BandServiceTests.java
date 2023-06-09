@@ -19,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.pablomathdev.Factory;
 import com.github.pablomathdev.application.services.BandService;
@@ -35,9 +34,8 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class CreateBandServiceTests {
+class BandServiceTests {
 
 	static final String INVALID_GENRE_NAME = "Invalid_genre_name";
 
@@ -59,9 +57,9 @@ class CreateBandServiceTests {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
 		Genre genre = Factory.genreFactory("any_genre");
 
-		Set<Genre> set = new HashSet<>();
-		set.add(genre);
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
 		bandService.create(band);
 
@@ -74,11 +72,11 @@ class CreateBandServiceTests {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
 		Genre genre1 = Factory.genreFactory("genre_1");
 		Genre genre2 = Factory.genreFactory("genre_2");
-		Set<Genre> set = new HashSet<>();
-		set.add(genre1);
-		set.add(genre2);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre1);
+		genres.add(genre2);
 
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
 		bandService.create(band);
 
@@ -96,10 +94,10 @@ class CreateBandServiceTests {
 	public void should_ThrowGenreNotFoundByNameException_WhenGenreRepositoryFindByNameThrowsEntityNotFoundException() {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
 		Genre genreInvalid = Factory.genreFactory(INVALID_GENRE_NAME);
-		Set<Genre> set = new HashSet<>();
-		set.add(genreInvalid);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genreInvalid);
 
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
 		when(genreRepository.findByName(INVALID_GENRE_NAME))
 				.thenThrow(new EntityNotFoundException("Genre" + INVALID_GENRE_NAME + "Not Found!"));
@@ -112,10 +110,10 @@ class CreateBandServiceTests {
 	public void should_ThrowAlreadyExistsException_WhenBandRepositoryExistsThrows() {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
 		Genre genre1 = Factory.genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
-		set.add(genre1);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre1);
 
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
 		when(bandRepository.exists(band.getName())).thenReturn(true);
 
@@ -128,13 +126,13 @@ class CreateBandServiceTests {
 	@Test
 	public void should_ReturnBand_WhenTheBandRepositorySavesABand() {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
-		Genre genre1 = Factory.genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
-		set.add(genre1);
+		Genre genre = Factory.genreFactory("any_genre");
+		Set<Genre> genres= new HashSet<>();
+		genres.add(genre);
 
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
-		Band bandExpected = Factory.bandFactory("band_expected", origin, set);
+		Band bandExpected = Factory.bandFactory("band_expected", origin, genres);
 		bandExpected.setId(1);
 
 		when(bandRepository.save(band)).thenReturn(bandExpected);
@@ -152,10 +150,10 @@ class CreateBandServiceTests {
 	public void should_ThrowEntitySaveException_WhenBandRepositorySaveThorwPersistenceException() {
 		Origin origin = Factory.originFactory("any_city", "any_country", 1999);
 		Genre genre1 = Factory.genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
-		set.add(genre1);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre1);
 
-		Band band = Factory.bandFactory("any_band", origin, set);
+		Band band = Factory.bandFactory("any_band", origin, genres);
 
 		when(bandRepository.save(band))
 				.thenThrow(new PersistenceException(String.format("Failed to save the band %s", band.getName()), null));
@@ -163,6 +161,26 @@ class CreateBandServiceTests {
 		Throwable exception = assertThrows(EntitySaveException.class, () -> bandService.create(band));
 
 		assertEquals(String.format("Failed to save the band %s", band.getName()), exception.getMessage());
+	}
+	
+	@Test
+	public void should_FindReturnBands_WhenBandRepositoryFindAllReturnBands() {
+		Origin origin = Factory.originFactory("any_city","any_country" , 1999);
+		Genre genre = Factory.genreFactory("any_genre");
+		Set<Genre> genres = new HashSet<>();
+		genres.add(genre);
+		Band band1 = Factory.bandFactory("any_band_1", origin,genres);
+		Band band2 = Factory.bandFactory("any_band_2", origin,genres);
+		
+
+		List<Band> result = List.of(band1,band2);
+		
+		when(bandRepository.findAll()).thenReturn(result);
+		
+	   List<Band> expected = bandService.find();
+		
+		assertEquals(expected.size(),2);
+		
 	}
 
 }

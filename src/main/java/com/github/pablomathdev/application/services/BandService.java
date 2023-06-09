@@ -23,7 +23,7 @@ import lombok.Setter;
 
 @Setter
 @Service
-public class BandService implements ICreateService<Band>,IFindAllService<Band>{
+public class BandService implements ICreateService<Band>, IFindAllService<Band> {
 
 	@Autowired
 	IBandRepository bandRepository;
@@ -63,9 +63,8 @@ public class BandService implements ICreateService<Band>,IFindAllService<Band>{
 
 	@Override
 	public List<Band> find() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
+		return bandRepository.findAll();
+	}
 
 }
