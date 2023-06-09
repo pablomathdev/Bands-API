@@ -11,13 +11,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.github.pablomathdev.application.services.CreateBandService;
 import com.github.pablomathdev.domain.entities.Band;
@@ -26,25 +26,18 @@ import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 
+
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreateBandServiceIntegrationTest {
 
-	static final String INSERT_BAND_SQL = "INSERT INTO tb_band (name, country, city, formation_year) VALUES (?,?,?,?);";
-	static final String INSERT_GENRE_SQL = "INSERT INTO tb_genre (name) VALUES (?);";
-	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	private CreateBandService createBandService;
 
-	@BeforeAll
-	private void initData() {
-		jdbcTemplate.update(INSERT_BAND_SQL,"Metallica","United States","San Francisco",1981);
-		jdbcTemplate.update(INSERT_GENRE_SQL,"Trash Metal");
-	}
 
 	@AfterAll
 	public void dropDatabaseTest() {
@@ -68,6 +61,7 @@ public class CreateBandServiceIntegrationTest {
 
 	}
 
+	@Sql(scripts = {"../insert_genre.sql"})
 	@Test
 	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
 		Origin origin = originFactory("Aberdeen", "United States", 1987);
@@ -85,6 +79,7 @@ public class CreateBandServiceIntegrationTest {
 
 	}
 
+	@Sql(scripts = {"../insert_band.sql"})
 	@Test
 	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExists() {
 		Origin origin = originFactory("Los Angeles", "United States", 1981);
