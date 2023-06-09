@@ -1,5 +1,9 @@
 package com.github.pablomathdev.api;
 
+import static io.restassured.RestAssured.basePath;
+import static io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails;
+import static io.restassured.RestAssured.given;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
@@ -25,8 +29,9 @@ import io.restassured.http.ContentType;
 @TestPropertySource(locations = "/application-test.properties")
 public class CreateBandAPITest {
 
-	static final String PATH_BAND = "src/test/java/com/github/pablomathdev/resource.json";
-
+	static final String CREATE_BAND_SUCCESS = "src/test/java/com/github/pablomathdev/create_band_test_success.json";
+	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE= "src/test/java/com/github/pablomathdev/create_band_test_error_non-existent_genre.json";
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -35,9 +40,9 @@ public class CreateBandAPITest {
 
 	@BeforeAll
 	public void setUp() {
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		RestAssured.basePath = "/api/bands";
+		basePath = "/api/bands";
 
 	}
 
@@ -51,8 +56,27 @@ public class CreateBandAPITest {
 	@Test
 	public void should_ReturnStatusCode201_WhenBandIsCreated() throws IOException {
 
-		RestAssured.given().body(JsonFileReader.readJsonFile(PATH_BAND)).contentType(ContentType.JSON)
-				.accept(ContentType.JSON).when().post().then().statusCode(201);
+		given()
+		.body(JsonFileReader.readJsonFile(CREATE_BAND_SUCCESS))
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.post()
+		.then()
+		.statusCode(201);
+
+	}
+	@Test
+	public void should_ReturnStatusCode400_WhenGenreInBandNotExists() throws IOException {
+
+		given()
+		.body(JsonFileReader.readJsonFile(CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE))
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.post()
+		.then()
+		.statusCode(400);
 
 	}
 }
