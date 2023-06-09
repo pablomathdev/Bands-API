@@ -34,7 +34,7 @@ public class BandController {
 
 		try {
 
-			Band bandSaved = BandService.execute(band);
+			Band bandSaved = BandService.create(band);
 			return ResponseEntity.status(HttpStatus.CREATED).body(bandSaved);
 		} catch (BandAlreadyExistsException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

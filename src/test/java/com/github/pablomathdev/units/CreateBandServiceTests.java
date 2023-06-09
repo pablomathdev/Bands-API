@@ -63,7 +63,7 @@ class CreateBandServiceTests {
 		set.add(genre);
 		Band band = Factory.bandFactory("any_band", origin, set);
 
-		bandService.execute(band);
+		bandService.create(band);
 
 		Mockito.verify(bandRepository).save(eq(band));
 
@@ -80,7 +80,7 @@ class CreateBandServiceTests {
 
 		Band band = Factory.bandFactory("any_band", origin, set);
 
-		bandService.execute(band);
+		bandService.create(band);
 
 		Mockito.verify(genreRepository, Mockito.times(2)).findByName(genreNameCaptor.capture());
 
@@ -103,7 +103,7 @@ class CreateBandServiceTests {
 
 		when(genreRepository.findByName(INVALID_GENRE_NAME))
 				.thenThrow(new EntityNotFoundException("Genre" + INVALID_GENRE_NAME + "Not Found!"));
-		Throwable exception = assertThrows(GenreNotFoundException.class, () -> bandService.execute(band));
+		Throwable exception = assertThrows(GenreNotFoundException.class, () -> bandService.create(band));
 		assertEquals("Genre" + INVALID_GENRE_NAME + "Not Found!", exception.getMessage());
 
 	}
@@ -119,7 +119,7 @@ class CreateBandServiceTests {
 
 		when(bandRepository.exists(band.getName())).thenReturn(true);
 
-		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandService.execute(band));
+		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandService.create(band));
 
 		assertEquals(String.format("Band %s Already Exists!",band.getName()), exception.getMessage());
 
@@ -139,7 +139,7 @@ class CreateBandServiceTests {
 
 		when(bandRepository.save(band)).thenReturn(bandExpected);
 
-		Band bandSaved = bandService.execute(band);
+		Band bandSaved = bandService.create(band);
 
 		assertEquals(bandExpected, bandSaved);
 		assertEquals(bandExpected.getName(), bandSaved.getName());
@@ -160,7 +160,7 @@ class CreateBandServiceTests {
 		when(bandRepository.save(band))
 				.thenThrow(new PersistenceException(String.format("Failed to save the band %s", band.getName()), null));
 
-		Throwable exception = assertThrows(EntitySaveException.class, () -> bandService.execute(band));
+		Throwable exception = assertThrows(EntitySaveException.class, () -> bandService.create(band));
 
 		assertEquals(String.format("Failed to save the band %s", band.getName()), exception.getMessage());
 	}

@@ -1,6 +1,7 @@
 package com.github.pablomathdev.application.services;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,14 @@ import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
+import com.github.pablomathdev.domain.services.IFindAllService;
 
 import jakarta.persistence.PersistenceException;
 import lombok.Setter;
 
 @Setter
 @Service
-public class BandService implements ICreateService<Band>{
+public class BandService implements ICreateService<Band>,IFindAllService<Band>{
 
 	@Autowired
 	IBandRepository bandRepository;
@@ -30,7 +32,7 @@ public class BandService implements ICreateService<Band>{
 	IGenreRepository genreRepository;
 
 	@Override
-	public Band execute(Band band) {
+	public Band create(Band band) {
 
 		Set<Genre> genres = new HashSet<>();
 
@@ -57,6 +59,12 @@ public class BandService implements ICreateService<Band>{
 			throw new EntitySaveException(String.format("Failed to save the band %s", band.getName()), e);
 		}
 
+	}
+
+	@Override
+	public List<Band> find() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

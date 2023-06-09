@@ -52,7 +52,7 @@ public class CreateBandServiceIntegrationTest {
 
 		Band band = bandFactory("Megadeth", origin, genres);
 
-		Band bandSaved = bandService.execute(band);
+		Band bandSaved = bandService.create(band);
 
 		assertNotNull(bandSaved.getId());
 		assertEquals(bandSaved.getName(), band.getName());
@@ -70,7 +70,7 @@ public class CreateBandServiceIntegrationTest {
 		Band band = bandFactory("Nirvana", origin, genres);
 
 		Throwable exception = assertThrows(GenreNotFoundException.class, () -> {
-			bandService.execute(band);
+			bandService.create(band);
 		});
 
 		assertEquals(String.format("Genre %s Not Found!", genre.getName()), exception.getMessage());
@@ -88,7 +88,7 @@ public class CreateBandServiceIntegrationTest {
 		Band band = bandFactory("Metallica", origin, genres);
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> {
-			bandService.execute(band);
+			bandService.create(band);
 		});
 
 		assertEquals(String.format("Band %s Already Exists!", band.getName()), exception.getMessage());
