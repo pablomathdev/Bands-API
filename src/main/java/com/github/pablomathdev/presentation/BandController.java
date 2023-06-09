@@ -1,8 +1,11 @@
 package com.github.pablomathdev.presentation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,22 +22,23 @@ import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
 public class BandController {
 
 	@Autowired
-	private BandService BandService;
-	
-//	@GetMapping("/bands")
-//	public List<Band> findAll(){
-//		
-//      return findAllBandsService.findAll();
-//		
-//	}
-	
-	
+	private BandService bandService;
+
+	@GetMapping("/bands")
+	public ResponseEntity<List<Band>> findAllBands() {
+
+		List<Band> bands = bandService.find();
+
+		return ResponseEntity.ok(bands);
+
+	}
+
 	@PostMapping("/bands")
 	public ResponseEntity<?> save(@RequestBody Band band) {
 
 		try {
 
-			Band bandSaved = BandService.create(band);
+			Band bandSaved = bandService.create(band);
 			return ResponseEntity.status(HttpStatus.CREATED).body(bandSaved);
 		} catch (BandAlreadyExistsException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -45,7 +49,5 @@ public class BandController {
 		}
 
 	}
-	
-
 
 }

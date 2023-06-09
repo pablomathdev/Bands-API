@@ -6,6 +6,7 @@ import static io.restassured.RestAssured.given;
 
 import java.io.IOException;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,6 @@ public class CreateBandAPITest {
 	static final String CREATE_BAND_SUCCESS = "classpath:data/create_band_test_success.json";
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";
 	static final String CREATE_BAND_ERROR_BAND_EXISTING = "classpath:data/create_band_test_error_band_existing.json";
-
 	
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -90,6 +90,21 @@ public class CreateBandAPITest {
 		
 		given().body(resource.getInputStream()).contentType(ContentType.JSON)
 				.accept(ContentType.JSON).when().post().then().statusCode(409);
+
+	}
+	@Sql(scripts = {"classpath:sql/insert_bands.sql"},executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void should_ReturnStatusCode200AndAllBands_WhenBandExist() {
+
+		
+	     given()
+	     .accept(ContentType.JSON)
+	     .when()
+	     .get()
+	     .then()
+	     .statusCode(200)
+	     .assertThat()
+	     .body("size()",Matchers.is(2));
 
 	}
 
