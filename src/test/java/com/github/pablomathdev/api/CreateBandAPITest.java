@@ -107,5 +107,18 @@ public class CreateBandAPITest {
 	     .body("size()",Matchers.is(2));
 
 	}
+	@Test
+	public void should_ReturnStatusCode204_WhenBandNotExists() {
+
+		
+	     given()
+	     .accept(ContentType.JSON)
+	     .when()
+	     .get()
+	     .then()
+	     .statusCode(204);
+	     
+
+	}
 
 }
