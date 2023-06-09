@@ -182,5 +182,18 @@ class BandServiceTests {
 		assertEquals(expected.size(),2);
 		
 	}
+	@Test
+	public void should_FindReturnEmpty_WhenBandRepositoryFindAllNotReturnBands() {
+	
+
+		List<Band> result = List.of();
+		
+		when(bandRepository.findAll()).thenReturn(result);
+		
+	     List<Band> expected = bandService.find();
+		
+		assertTrue(expected.isEmpty());
+		
+	}
 
 }
