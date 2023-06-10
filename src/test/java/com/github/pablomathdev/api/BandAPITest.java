@@ -30,7 +30,7 @@ import io.restassured.http.ContentType;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
-public class CreateBandAPITest {
+public class BandAPITest {
 
 	static final String CREATE_BAND_SUCCESS = "classpath:data/create_band_test_success.json";
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";

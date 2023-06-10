@@ -19,9 +19,8 @@ import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
 
 import jakarta.persistence.PersistenceException;
-import lombok.Setter;
 
-@Setter
+
 @Service
 public class BandService implements ICreateService<Band>, IFindAllService<Band> {
 
