@@ -1,8 +1,12 @@
 package com.github.pablomathdev.domain.entities;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,6 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,21 +37,25 @@ public class Band {
 	@Embedded
 	private Origin origin;
 	
+	@JsonIgnore
+	@Setter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "band")
 	private List<Album> albums;
-	
 	
 	@ManyToMany
 	@JoinTable(name = "tb_band_genre",
 	joinColumns = @JoinColumn(name= "band_id"),
 	inverseJoinColumns = @JoinColumn(name= "genre_id"))
-	private Set<Genre> genres;
+	private Set<Genre> genres = new HashSet<>();
 
+	
+	@JsonIgnore
+	@Setter(value = AccessLevel.NONE)
 	@ManyToMany
 	@JoinTable(name = "tb_band_member",
 	joinColumns = @JoinColumn(name="band_id"),
 	inverseJoinColumns = @JoinColumn(name="member_id"))
-	private List<Member> members; 
+	private List<Member> members = new ArrayList<>();
 	
 	
 	
