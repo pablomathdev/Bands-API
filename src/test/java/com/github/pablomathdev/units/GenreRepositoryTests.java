@@ -21,24 +21,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
-import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.infraestructure.GenreRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
-
 @ExtendWith(MockitoExtension.class)
 public class GenreRepositoryTests {
 
 	static final String SELECT_GENRE_BY_NAME = "select g from Genre g where g.name = :name";
-	
+
 	static final String COUNT_GENRE = "select count(g) from Genre g where g.name = :name";
-	
+
 	@Mock
 	TypedQuery<Genre> typedQueryGenre;
-	
+
 	@Mock
 	TypedQuery<Long> typedQueryLong;
 
@@ -80,9 +78,8 @@ public class GenreRepositoryTests {
 
 		doThrow(new PersistenceException()).when(entityManager).persist(genre);
 
-		Throwable exception = assertThrows(EntitySaveException.class, () -> genreRepositoryImpl.save(genre));
+		assertThrows(PersistenceException.class, () -> genreRepositoryImpl.save(genre));
 
-		assertEquals(String.format("Failed to save the genre %s", genre.getName()), exception.getMessage());
 	}
 
 	@Test
@@ -116,43 +113,37 @@ public class GenreRepositoryTests {
 
 		when(entityManager.createQuery(SELECT_GENRE_BY_NAME, Genre.class)).thenReturn(typedQueryGenre);
 
-		Throwable exception = assertThrows(EntityNotFoundException.class,
-				() -> genreRepositoryImpl.findByName(genre.getName()));
-
-		assertEquals(EntityNotFoundException.class, exception.getClass());
+		assertThrows(EntityNotFoundException.class, () -> genreRepositoryImpl.findByName(genre.getName()));
 
 	}
-	
+
 	@Test
 	public void should_ExistsReturnTrue_whenTypedQueryGetSingleResultReturnOneResult() {
-		
+
 		Genre genre = genreFactory("any_genre");
-		
-		
+
 		when(typedQueryLong.getSingleResult()).thenReturn(1L);
-		
-		when(entityManager.createQuery(COUNT_GENRE,Long.class)).thenReturn(typedQueryLong);
-		
-	    Boolean exists = genreRepositoryImpl.exists(genre.getName());
-		
-		
+
+		when(entityManager.createQuery(COUNT_GENRE, Long.class)).thenReturn(typedQueryLong);
+
+		Boolean exists = genreRepositoryImpl.exists(genre.getName());
+
 		assertTrue(exists);
-		
+
 	}
+
 	@Test
 	public void should_ExistsReturnFalse_whenTypedQueryGetSingleResultReturnZeroResult() {
-		
+
 		Genre genre = genreFactory("any_genre");
-		
-		
+
 		when(typedQueryLong.getSingleResult()).thenReturn(0L);
-		
-		when(entityManager.createQuery(COUNT_GENRE,Long.class)).thenReturn(typedQueryLong);
-		
-	    Boolean exists = genreRepositoryImpl.exists(genre.getName());
-		
-		
+
+		when(entityManager.createQuery(COUNT_GENRE, Long.class)).thenReturn(typedQueryLong);
+
+		Boolean exists = genreRepositoryImpl.exists(genre.getName());
+
 		assertFalse(exists);
-		
+
 	}
 }
