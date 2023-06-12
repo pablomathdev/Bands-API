@@ -7,5 +7,5 @@ public interface IRepository<T,ID> {
 	List<T> findAll();
 	T save(T object);
 	T findByName(String name);
-	
+	boolean exists(String name);
 }

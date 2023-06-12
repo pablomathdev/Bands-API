@@ -54,4 +54,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		return null;
 	}
 
+	@Override
+	public boolean exists(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

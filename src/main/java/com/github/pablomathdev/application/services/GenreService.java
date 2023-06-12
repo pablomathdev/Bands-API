@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
+import com.github.pablomathdev.domain.exceptions.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 
@@ -19,6 +20,11 @@ public class GenreService implements ICreateService<Genre> {
 	@Override
 	public Genre create(Genre genre) {
 
+		if(genreRepository.exists(genre.getName()) == true) {
+			throw new GenreAlreadyExistsException(genre.getName());
+		}
+		
+		
 		try {
 			return genreRepository.save(genre);
 		} catch (PersistenceException e) {

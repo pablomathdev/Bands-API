@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
+import com.github.pablomathdev.domain.exceptions.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;
@@ -47,8 +48,21 @@ public class GenreServiceTests {
 		when(genreRepository.save(genre)).thenThrow(PersistenceException.class);
 
 		Throwable exception = assertThrows(EntitySaveException.class, () -> genreService.create(genre));
-		
-		assertEquals(String.format("Failed to save the genre %s", genre.getName()),exception.getMessage());
+
+		assertEquals(String.format("Failed to save the genre %s", genre.getName()), exception.getMessage());
 
 	}
+
+	@Test
+	public void should_ThrowGenreAlreadyExistsException_WhenGenreRepositoryExistsReturnTrue() {
+		Genre genre = genreFactory("any_genre");
+
+		when(genreRepository.exists(genre.getName())).thenReturn(true);
+
+		Throwable exception = assertThrows(GenreAlreadyExistsException.class, () -> genreService.create(genre));
+
+		assertEquals(String.format("Genre %s Already Exists!", genre.getName()), exception.getMessage());
+
+	}
+
 }
