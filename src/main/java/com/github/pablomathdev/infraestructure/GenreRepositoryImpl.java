@@ -24,14 +24,9 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	@Override
 	@Transactional
 	public Genre save(Genre object) {
-		try {
 
-			entityManager.persist(object);
-			return object;
-
-		} catch (PersistenceException e) {
-			throw new EntitySaveException(String.format("Failed to save the genre %s", object.getName()), e);
-		}
+		entityManager.persist(object);
+		return object;
 
 	}
 
@@ -48,7 +43,7 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		if (!result.isEmpty()) {
 			return result.get(0);
 		} else {
-			throw new EntityNotFoundException(String.format("Genre %s Not Found!",name));
+			throw new EntityNotFoundException(String.format("Genre %s Not Found!", name));
 		}
 
 	}
