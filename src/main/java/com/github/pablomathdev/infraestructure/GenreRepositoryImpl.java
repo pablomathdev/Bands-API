@@ -6,12 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
-import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
@@ -56,7 +54,14 @@ public class GenreRepositoryImpl implements IGenreRepository {
 
 	@Override
 	public boolean exists(String name) {
-		// TODO Auto-generated method stub
+		String jpql = "select count(g) from Genre g where g.name = :name";
+
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		query.setParameter("name", name);
+
+		if (query.getSingleResult() == 1L) {
+			return true;
+		}
 		return false;
 	}
 

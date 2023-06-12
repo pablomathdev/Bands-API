@@ -3,6 +3,7 @@ package com.github.pablomathdev.units;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -31,8 +32,14 @@ import jakarta.persistence.TypedQuery;
 public class GenreRepositoryTests {
 
 	static final String SELECT_GENRE_BY_NAME = "select g from Genre g where g.name = :name";
+	
+	static final String COUNT_GENRE = "select count(g) from Genre g where g.name = :name";
+	
 	@Mock
 	TypedQuery<Genre> typedQueryGenre;
+	
+	@Mock
+	TypedQuery<Long> typedQueryLong;
 
 	@Mock
 	EntityManager entityManager;
@@ -113,6 +120,23 @@ public class GenreRepositoryTests {
 
 		assertEquals(EntityNotFoundException.class, exception.getClass());
 
+	}
+	
+	@Test
+	public void should_ExistsReturnTrue_whenTypedQueryGetSingleResultReturnOneResult() {
+		
+		Genre genre = genreFactory("any_genre");
+		
+		
+		when(typedQueryLong.getSingleResult()).thenReturn(1L);
+		
+		when(entityManager.createQuery(COUNT_GENRE,Long.class)).thenReturn(typedQueryLong);
+		
+	    Boolean exists = genreRepositoryImpl.exists(genre.getName());
+		
+		
+		assertTrue(exists);
+		
 	}
 
 }
