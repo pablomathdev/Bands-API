@@ -25,10 +25,10 @@ import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
-import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
@@ -102,6 +102,7 @@ class BandServiceTests {
 		when(genreRepository.findByName(INVALID_GENRE_NAME))
 				.thenThrow(new EntityNotFoundException("Genre" + INVALID_GENRE_NAME + "Not Found!"));
 		Throwable exception = assertThrows(GenreNotFoundException.class, () -> bandService.create(band));
+		
 		assertEquals("Genre" + INVALID_GENRE_NAME + "Not Found!", exception.getMessage());
 
 	}

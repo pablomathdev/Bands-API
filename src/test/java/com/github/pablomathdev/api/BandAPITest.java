@@ -7,8 +7,7 @@ import static io.restassured.RestAssured.given;
 import java.io.IOException;
 
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -20,9 +19,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
-import org.springframework.test.context.jdbc.SqlConfig;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -35,39 +31,35 @@ public class BandAPITest {
 	static final String CREATE_BAND_SUCCESS = "classpath:data/create_band_test_success.json";
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";
 	static final String CREATE_BAND_ERROR_BAND_EXISTING = "classpath:data/create_band_test_error_band_existing.json";
-	
+
 	@Autowired
 	private ResourceLoader resourceLoader;
-	
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@LocalServerPort
 	private int port;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		basePath = "/api/bands";
 
+		clearDatabase();
+
+		prepareData();
+
 	}
 
-	@AfterAll
-	public void dropDatabaseTest() {
-
-		jdbcTemplate.execute("DROP DATABASE develop_test");
-	}
-
-	@Sql(scripts = {"classpath:sql/insert_genre.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, config = @SqlConfig(encoding = "UTF-8"))
 	@Test
 	public void should_ReturnStatusCode201_WhenBandIsCreated() throws IOException {
- 
+
 		Resource resource = resourceLoader.getResource(CREATE_BAND_SUCCESS);
-		
-		
-		given().body(resource.getInputStream()).contentType(ContentType.JSON)
-				.accept(ContentType.JSON).when().post().then().statusCode(201);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(201);
 
 	}
 
@@ -75,50 +67,52 @@ public class BandAPITest {
 	public void should_ReturnStatusCode400_WhenGenreInBandNotExists() throws IOException {
 
 		Resource resource = resourceLoader.getResource(CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE);
-		
-		
-		given().body(resource.getInputStream())
-				.contentType(ContentType.JSON).accept(ContentType.JSON).when().post().then().statusCode(400);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(400);
 
 	}
 
-	@Sql(scripts = { "classpath:sql/insert_band.sql","classpath:sql/insert_genre.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void should_ReturnStatusCode409_WhenBandAlreadyExist() throws IOException {
 
 		Resource resource = resourceLoader.getResource(CREATE_BAND_ERROR_BAND_EXISTING);
-		
-		given().body(resource.getInputStream()).contentType(ContentType.JSON)
-				.accept(ContentType.JSON).when().post().then().statusCode(409);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(409);
 
 	}
-	@Sql(scripts = {"classpath:sql/insert_bands.sql"},executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+
 	@Test
 	public void should_ReturnStatusCode200AndAllBands_WhenBandExist() {
 
-		
-	     given()
-	     .accept(ContentType.JSON)
-	     .when()
-	     .get()
-	     .then()
-	     .statusCode(200)
-	     .assertThat()
-	     .body("size()",Matchers.is(2));
+		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",
+				Matchers.is(1));
 
 	}
+
 	@Test
 	public void should_ReturnStatusCode204_WhenBandNotExists() {
 
-		
-	     given()
-	     .accept(ContentType.JSON)
-	     .when()
-	     .get()
-	     .then()
-	     .statusCode(204);
-	     
+		clearDatabase();
+
+		given().accept(ContentType.JSON).when().get().then().statusCode(204);
 
 	}
 
+	public void prepareData() {
+		jdbcTemplate.update(
+				"INSERT INTO tb_band (name,country,city,formation_year) VALUES ('Metallica','United States','San Francisco',1981)");
+
+		jdbcTemplate.update("INSERT INTO tb_genre (name) VALUES ('Trash Metal');");
+		jdbcTemplate.update("INSERT INTO tb_genre (name) VALUES ('Heavy Metal');");
+	}
+
+	public void clearDatabase() {
+		jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
+		jdbcTemplate.update("DELETE FROM tb_band_genre");
+		jdbcTemplate.update("DELETE FROM tb_band");
+		jdbcTemplate.update("DELETE FROM tb_genre");
+		jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
+	}
 }

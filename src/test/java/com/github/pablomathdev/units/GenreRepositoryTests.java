@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.infraestructure.GenreRepositoryImpl;
 
 import jakarta.persistence.EntityManager;

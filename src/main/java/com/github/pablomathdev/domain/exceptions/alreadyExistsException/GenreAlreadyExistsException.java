@@ -1,4 +1,6 @@
-package com.github.pablomathdev.domain.exceptions;
+package com.github.pablomathdev.domain.exceptions.alreadyExistsException;
+
+import com.github.pablomathdev.domain.exceptions.BusinessException;
 
 public class GenreAlreadyExistsException extends BusinessException {
 

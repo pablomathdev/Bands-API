@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.EntityManager;

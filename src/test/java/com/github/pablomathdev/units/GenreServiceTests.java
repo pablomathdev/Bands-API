@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;
