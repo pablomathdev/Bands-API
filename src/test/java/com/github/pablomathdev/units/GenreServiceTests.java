@@ -3,6 +3,7 @@ package com.github.pablomathdev.units;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,6 +63,19 @@ public class GenreServiceTests {
 		Throwable exception = assertThrows(GenreAlreadyExistsException.class, () -> genreService.create(genre));
 
 		assertEquals(String.format("Genre %s Already Exists!", genre.getName()), exception.getMessage());
+
+	}
+
+	@Test
+	public void should_ReturnGenre_WhenGenreRepositoryExistsIsFalse() {
+		Genre genre = genreFactory("any_genre");
+
+		when(genreRepository.exists(genre.getName())).thenReturn(false);
+		when(genreRepository.save(genre)).thenReturn(genre);
+
+		Genre genreSaved = genreService.create(genre);
+
+		assertEquals(genre, genreSaved);
 
 	}
 
