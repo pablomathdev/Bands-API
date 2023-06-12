@@ -2,6 +2,7 @@ package com.github.pablomathdev.units;
 
 import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -138,5 +139,20 @@ public class GenreRepositoryTests {
 		assertTrue(exists);
 		
 	}
-
+	@Test
+	public void should_ExistsReturnFalse_whenTypedQueryGetSingleResultReturnZeroResult() {
+		
+		Genre genre = genreFactory("any_genre");
+		
+		
+		when(typedQueryLong.getSingleResult()).thenReturn(0L);
+		
+		when(entityManager.createQuery(COUNT_GENRE,Long.class)).thenReturn(typedQueryLong);
+		
+	    Boolean exists = genreRepositoryImpl.exists(genre.getName());
+		
+		
+		assertFalse(exists);
+		
+	}
 }
