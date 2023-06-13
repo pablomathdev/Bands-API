@@ -11,7 +11,7 @@ import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 
 @RestController
-@RequestMapping(value = "/api/genres")
+@RequestMapping(value = "/api")
 public class GenreController {
 
 	
@@ -19,7 +19,7 @@ public class GenreController {
 	private GenreService genreService;
 	
 	
-	@PostMapping
+	@PostMapping(value = "/genres")
 	public ResponseEntity<?> save(@RequestBody Genre genre){
 		
 		Genre genreSaved = genreService.create(genre);
