@@ -30,7 +30,7 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoun
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CreateBandServiceIntegrationTest {
+public class BandServiceIntegrationTest {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

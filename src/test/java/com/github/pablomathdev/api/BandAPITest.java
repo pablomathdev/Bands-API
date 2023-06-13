@@ -114,5 +114,7 @@ public class BandAPITest {
 		jdbcTemplate.update("DELETE FROM tb_band");
 		jdbcTemplate.update("DELETE FROM tb_genre");
 		jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
+		jdbcTemplate.execute("ALTER TABLE tb_band AUTO_INCREMENT=1");
+		jdbcTemplate.execute("ALTER TABLE tb_genre AUTO_INCREMENT=1");
 	}
 }
