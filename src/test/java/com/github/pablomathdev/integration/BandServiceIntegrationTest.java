@@ -10,15 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
@@ -26,6 +23,7 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.utils.ExecuteSQL;
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
@@ -33,14 +31,19 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoun
 public class BandServiceIntegrationTest {
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private ExecuteSQL executeSQL;
 
 	@Autowired
 	private BandService bandService;
 
-	@AfterAll
-	public void dropDatabaseTest() {
-		jdbcTemplate.execute("DROP DATABASE develop_test");
+	@BeforeEach
+	public void clearDatabaseTest() {
+		executeSQL.run("clear_database_test.sql");
+	}
+
+	@BeforeEach
+	public void prepareData() {
+		executeSQL.run("data_test.sql");
 	}
 
 	@Test
@@ -60,7 +63,6 @@ public class BandServiceIntegrationTest {
 
 	}
 
-	@Sql(scripts = { "classpath:sql/insert_genre.sql" },executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
 		Origin origin = originFactory("Aberdeen", "United States", 1987);
@@ -78,7 +80,6 @@ public class BandServiceIntegrationTest {
 
 	}
 
-	@Sql(scripts = { "classpath:sql/insert_band.sql" },executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExists() {
 		Origin origin = originFactory("Los Angeles", "United States", 1981);

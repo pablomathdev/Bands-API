@@ -17,8 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+
+import com.github.pablomathdev.utils.ExecuteSQL;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -36,7 +37,7 @@ public class BandAPITest {
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private ExecuteSQL executeSQL;
 
 	@LocalServerPort
 	private int port;
@@ -101,20 +102,10 @@ public class BandAPITest {
 	}
 
 	public void prepareData() {
-		jdbcTemplate.update(
-				"INSERT INTO tb_band (name,country,city,formation_year) VALUES ('Metallica','United States','San Francisco',1981)");
-
-		jdbcTemplate.update("INSERT INTO tb_genre (name) VALUES ('Trash Metal');");
-		jdbcTemplate.update("INSERT INTO tb_genre (name) VALUES ('Heavy Metal');");
+		executeSQL.run("data_test.sql");
 	}
 
 	public void clearDatabase() {
-		jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
-		jdbcTemplate.update("DELETE FROM tb_band_genre");
-		jdbcTemplate.update("DELETE FROM tb_band");
-		jdbcTemplate.update("DELETE FROM tb_genre");
-		jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
-		jdbcTemplate.execute("ALTER TABLE tb_band AUTO_INCREMENT=1");
-		jdbcTemplate.execute("ALTER TABLE tb_genre AUTO_INCREMENT=1");
+		executeSQL.run("clear_database_test.sql");
 	}
 }
