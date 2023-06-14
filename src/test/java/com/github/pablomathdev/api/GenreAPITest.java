@@ -25,7 +25,8 @@ import io.restassured.http.ContentType;
 @TestPropertySource(locations = "/application-test.properties")
 public class GenreAPITest {
 
-	static final String CREATE_GENRE_SUCCESS = "classpath:data/create_genre_test_success.json";
+	private static final String CREATE_GENRE_SUCCESS = "classpath:data/create_genre_test_success.json";
+	private static final String CREATE_GENRE_ERROR_GENRE_EXISTING = "classpath:data/create_genre_test_error_genre_existing.json";
 
 	@LocalServerPort
 	private int port;
@@ -61,6 +62,22 @@ public class GenreAPITest {
 		.post()
 		.then()
 	    .statusCode(200);
+		
+
+	}
+	@Test
+	public void should_ReturnStatusCode409_WhenGenreAlreadyExists() throws IOException {
+
+		Resource resource = resourceLoader.getResource(CREATE_GENRE_ERROR_GENRE_EXISTING);
+
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.post()
+		.then()
+	    .statusCode(409);
 		
 
 	}
