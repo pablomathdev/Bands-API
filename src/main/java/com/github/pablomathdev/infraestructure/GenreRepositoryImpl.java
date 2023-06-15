@@ -48,8 +48,9 @@ public class GenreRepositoryImpl implements IGenreRepository {
 
 	@Override
 	public List<Genre> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	    TypedQuery<Genre> query = entityManager.createQuery("from Genre",Genre.class);
+	    
+	    return query.getResultList();
 	}
 
 	@Override

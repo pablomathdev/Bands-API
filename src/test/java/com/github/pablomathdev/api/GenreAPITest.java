@@ -6,8 +6,11 @@ import static io.restassured.RestAssured.given;
 
 import java.io.IOException;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -23,6 +26,7 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
+@ExtendWith(MockitoExtension.class)
 public class GenreAPITest {
 
 	private static final String CREATE_GENRE_SUCCESS = "classpath:data/create_genre_test_success.json";
@@ -54,33 +58,30 @@ public class GenreAPITest {
 
 		Resource resource = resourceLoader.getResource(CREATE_GENRE_SUCCESS);
 
-		given()
-		.body(resource.getInputStream())
-		.contentType(ContentType.JSON)
-		.accept(ContentType.JSON)
-		.when()
-		.post()
-		.then()
-	    .statusCode(200);
-		
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(200);
 
 	}
+
 	@Test
 	public void should_ReturnStatusCode409_WhenGenreAlreadyExists() throws IOException {
 
 		Resource resource = resourceLoader.getResource(CREATE_GENRE_ERROR_GENRE_EXISTING);
 
-		given()
-		.body(resource.getInputStream())
-		.contentType(ContentType.JSON)
-		.accept(ContentType.JSON)
-		.when()
-		.post()
-		.then()
-	    .statusCode(409);
-		
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(409);
 
 	}
+
+	@Test
+	public void should_ReturnStatusCode200AndAllGenres_WhenGenreExist() {
+
+		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",
+				Matchers.is(1));
+
+	}
+	
+
 
 	public void prepareData() {
 		executeSQL.run("data_test.sql");

@@ -116,7 +116,8 @@ class BandServiceTests {
 
 		Band band = Factory.bandFactory("any_band", origin, genres);
 
-		when(bandRepository.exists(band.getName())).thenReturn(true);
+         when(bandRepository.exists(band.getName())).thenReturn(true);
+
 
 		Throwable exception = assertThrows(BandAlreadyExistsException.class, () -> bandService.create(band));
 
