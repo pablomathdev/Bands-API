@@ -61,6 +61,7 @@ public class BandRepositoryImpl implements IBandRepository {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Band band) {
 	
 		entityManager.remove(band);
