@@ -12,3 +12,5 @@ VALUES
    'San Francisco',
    1981
 );
+INSERT INTO tb_genre (name) VALUES ('Heavy Metal');
+INSERT INTO tb_genre (name) VALUES ('Trash Metal');

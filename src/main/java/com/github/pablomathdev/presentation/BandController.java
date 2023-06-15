@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
-import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 
 @RestController
 @RequestMapping(value = "/api")

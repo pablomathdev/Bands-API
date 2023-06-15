@@ -32,7 +32,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
-
 @ExtendWith(MockitoExtension.class)
 public class BandRepositoryTests {
 
@@ -120,10 +119,7 @@ public class BandRepositoryTests {
 
 		when(typedQueryBand.getSingleResult()).thenThrow(NoResultException.class);
 
-		Throwable exception = assertThrows(NoResultException.class,
-				() -> bandRepositoryImpl.findByName(band.getName()));
-
-		assertEquals(NoResultException.class, exception.getClass());
+		assertThrows(NoResultException.class, () -> bandRepositoryImpl.findByName(band.getName()));
 
 	}
 
@@ -145,6 +141,7 @@ public class BandRepositoryTests {
 		verify(typedQueryLong).setParameter(eq("name"), eq(band.getName()));
 
 	}
+
 	@Test
 	public void should_ExistsReturnFalse_WhenTypedQueryGetSingleResultIsDifferentOfOne() {
 
@@ -158,11 +155,12 @@ public class BandRepositoryTests {
 
 		when(entityManager.createQuery(COUNT_BAND, Long.class)).thenReturn(typedQueryLong);
 
-		 boolean expected =bandRepositoryImpl.exists(band.getName());
+		boolean expected = bandRepositoryImpl.exists(band.getName());
 
 		assertFalse(expected);
 
 	}
+
 	@Test
 	public void should_ExistsReturnTrue_WhenTypedQueryGetSingleResultIsEqualOne() {
 
@@ -176,12 +174,12 @@ public class BandRepositoryTests {
 
 		when(entityManager.createQuery(COUNT_BAND, Long.class)).thenReturn(typedQueryLong);
 
-		 boolean expected =bandRepositoryImpl.exists(band.getName());
+		boolean expected = bandRepositoryImpl.exists(band.getName());
 
 		assertTrue(expected);
 
 	}
-	
+
 	@Test 
 	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
 		
@@ -197,25 +195,24 @@ public class BandRepositoryTests {
 		 assertTrue(listBandExpected.isEmpty());
 	     
 	}
-	@Test 
+
+	@Test
 	public void should_ReturnBands_WhenTypedQueryGetResultListNotIsEmpty() {
-		Origin origin = originFactory("any_city","any_country", 1999);
+		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band1 = bandFactory("any_band_1", origin, null);
 		Band band2 = bandFactory("any_band_2", origin, null);
-		
-		when(entityManager.createQuery("from Band",Band.class)).thenReturn(typedQueryBand);
-		
+
+		when(entityManager.createQuery("from Band", Band.class)).thenReturn(typedQueryBand);
+
 		List<Band> results = new ArrayList<>();
 		results.add(band1);
 		results.add(band2);
 		when(typedQueryBand.getResultList()).thenReturn(results);
-		
-		
-		 List<Band> listBandExpected =  bandRepositoryImpl.findAll();
-		
-		 assertFalse(listBandExpected.isEmpty());
-	     
-	}
 
+		List<Band> listBandExpected = bandRepositoryImpl.findAll();
+
+		assertFalse(listBandExpected.isEmpty());
+
+	}
 
 }

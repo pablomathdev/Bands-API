@@ -5,13 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
-import com.github.pablomathdev.domain.exceptions.EntitySaveException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
@@ -24,14 +22,9 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	@Override
 	@Transactional
 	public Genre save(Genre object) {
-		try {
 
-			entityManager.persist(object);
-			return object;
-
-		} catch (PersistenceException e) {
-			throw new EntitySaveException(String.format("Failed to save the genre %s", object.getName()), e);
-		}
+		entityManager.persist(object);
+		return object;
 
 	}
 
@@ -48,15 +41,29 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		if (!result.isEmpty()) {
 			return result.get(0);
 		} else {
-			throw new EntityNotFoundException(String.format("Genre %s Not Found!",name));
+			throw new EntityNotFoundException(String.format("Genre %s Not Found!", name));
 		}
 
 	}
 
 	@Override
 	public List<Genre> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	    TypedQuery<Genre> query = entityManager.createQuery("from Genre",Genre.class);
+	    
+	    return query.getResultList();
+	}
+
+	@Override
+	public boolean exists(String name) {
+		String jpql = "select count(g) from Genre g where g.name = :name";
+
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		query.setParameter("name", name);
+
+		if (query.getSingleResult() == 1L) {
+			return true;
+		}
+		return false;
 	}
 
 }

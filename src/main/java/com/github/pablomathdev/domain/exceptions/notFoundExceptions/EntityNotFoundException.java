@@ -1,4 +1,6 @@
-package com.github.pablomathdev.domain.exceptions;
+package com.github.pablomathdev.domain.exceptions.notFoundExceptions;
+
+import com.github.pablomathdev.domain.exceptions.BusinessException;
 
 public class EntityNotFoundException extends BusinessException {
 

@@ -9,8 +9,8 @@ import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -24,14 +24,16 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
-@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
-public class BandAPITest {
+@ExtendWith(MockitoExtension.class)
+public class GenreAPITest {
 
-	static final String CREATE_BAND_SUCCESS = "classpath:data/create_band_test_success.json";
-	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";
-	static final String CREATE_BAND_ERROR_BAND_EXISTING = "classpath:data/create_band_test_error_band_existing.json";
+	private static final String CREATE_GENRE_SUCCESS = "classpath:data/create_genre_test_success.json";
+	private static final String CREATE_GENRE_ERROR_GENRE_EXISTING = "classpath:data/create_genre_test_error_genre_existing.json";
+
+	@LocalServerPort
+	private int port;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -39,14 +41,11 @@ public class BandAPITest {
 	@Autowired
 	private ExecuteSQL executeSQL;
 
-	@LocalServerPort
-	private int port;
-
 	@BeforeEach
-	public void setUp() {
+	private void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		basePath = "/api/bands";
+		basePath = "/api/genres";
 
 		clearDatabase();
 
@@ -55,29 +54,19 @@ public class BandAPITest {
 	}
 
 	@Test
-	public void should_ReturnStatusCode201_WhenBandIsCreated() throws IOException {
+	public void should_ReturnStatusCode201_WhenGenreIsCreated() throws IOException {
 
-		Resource resource = resourceLoader.getResource(CREATE_BAND_SUCCESS);
+		Resource resource = resourceLoader.getResource(CREATE_GENRE_SUCCESS);
 
 		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
-				.then().statusCode(201);
+				.then().statusCode(200);
 
 	}
 
 	@Test
-	public void should_ReturnStatusCode400_WhenGenreInBandNotExists() throws IOException {
+	public void should_ReturnStatusCode409_WhenGenreAlreadyExists() throws IOException {
 
-		Resource resource = resourceLoader.getResource(CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE);
-
-		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
-				.then().statusCode(400);
-
-	}
-
-	@Test
-	public void should_ReturnStatusCode409_WhenBandAlreadyExist() throws IOException {
-
-		Resource resource = resourceLoader.getResource(CREATE_BAND_ERROR_BAND_EXISTING);
+		Resource resource = resourceLoader.getResource(CREATE_GENRE_ERROR_GENRE_EXISTING);
 
 		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
 				.then().statusCode(409);
@@ -85,21 +74,22 @@ public class BandAPITest {
 	}
 
 	@Test
-	public void should_ReturnStatusCode200AndAllBands_WhenBandExist() {
+	public void should_ReturnStatusCode200AndAllGenres_WhenGenreExist() {
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",
-				Matchers.is(1));
+				Matchers.is(2));
 
 	}
-
 	@Test
-	public void should_ReturnStatusCode204_WhenBandNotExists() {
+	public void should_ReturnStatusCode204_WhenGenreNotExists() {
 
 		clearDatabase();
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(204);
 
 	}
+	
+
 
 	public void prepareData() {
 		executeSQL.run("data_test.sql");

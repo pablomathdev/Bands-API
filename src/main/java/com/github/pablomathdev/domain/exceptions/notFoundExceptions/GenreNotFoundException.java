@@ -1,4 +1,4 @@
-package com.github.pablomathdev.domain.exceptions;
+package com.github.pablomathdev.domain.exceptions.notFoundExceptions;
 
 public class GenreNotFoundException extends EntityNotFoundException {
 

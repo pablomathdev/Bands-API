@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.exceptions.BandAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
