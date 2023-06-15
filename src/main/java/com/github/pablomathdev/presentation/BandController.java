@@ -60,7 +60,7 @@ public class BandController {
 	public ResponseEntity<?> delete(@PathVariable String name){
 		
 		try {
-			bandService.delete(name);
+			bandService.delete(name.toLowerCase());
 			return ResponseEntity.ok().build();
 		}catch (BandNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
