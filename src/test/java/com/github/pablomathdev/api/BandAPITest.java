@@ -111,6 +111,16 @@ public class BandAPITest {
 		.then()
 		.statusCode(200);
 	}
+	
+	@Test
+	public void should_ReturnStatusCode400_WhenBandNotExists() {
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/Nirvana")
+		.then()
+		.statusCode(404);
+	}
 
 	public void prepareData() {
 		executeSQL.run("data_test.sql");
