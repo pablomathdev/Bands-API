@@ -6,8 +6,10 @@ import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -94,6 +96,19 @@ public class BandServiceIntegrationTest {
 		});
 
 		assertEquals(String.format("Band %s Already Exists!", band.getName()), exception.getMessage());
+
+	}
+
+	@Test
+	public void should_DeleteBand_WhenBandExists() {
+
+		bandService.delete("Metallica");
+
+		List<Band> bands = bandService.find();
+		
+		boolean bandIsRemoved = bands.stream().noneMatch(band -> band.getName().equals("Metallica"));
+
+		assertTrue(bandIsRemoved);
 
 	}
 

@@ -48,16 +48,16 @@ public class Band {
 	inverseJoinColumns = @JoinColumn(name= "genre_id"))
 	private Set<Genre> genres = new HashSet<>();
 
-	
-	@JsonIgnore
-	@Setter(value = AccessLevel.NONE)
-	@ManyToMany
-	@JoinTable(name = "tb_band_member",
-	joinColumns = @JoinColumn(name="band_id"),
-	inverseJoinColumns = @JoinColumn(name="member_id"))
-	private List<Member> members = new ArrayList<>();
-	
-	
+//	
+//	@JsonIgnore
+//	@Setter(value = AccessLevel.NONE)
+//	@ManyToMany
+//	@JoinTable(name = "tb_band_member",
+//	joinColumns = @JoinColumn(name="band_id"),
+//	inverseJoinColumns = @JoinColumn(name="member_id"))
+//	private List<Member> members = new ArrayList<>();
+//	
+//	
 	
 	@Override
 	public int hashCode() {
