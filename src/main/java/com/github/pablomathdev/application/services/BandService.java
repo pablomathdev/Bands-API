@@ -19,7 +19,6 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
 
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 
 
@@ -74,8 +73,8 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 			Band band = bandRepository.findByName(nameBand);
 			
 			bandRepository.delete(band);
-		}catch (NoResultException e) {
-			throw new BandNotFoundException(String.format("Band %s Not Found!", nameBand), e);
+		}catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(),e);
 		}
 		
 		
