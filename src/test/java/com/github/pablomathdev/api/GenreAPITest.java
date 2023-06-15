@@ -80,6 +80,14 @@ public class GenreAPITest {
 				Matchers.is(2));
 
 	}
+	@Test
+	public void should_ReturnStatusCode204_WhenGenreNotExists() {
+
+		clearDatabase();
+
+		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+	}
 	
 
 
