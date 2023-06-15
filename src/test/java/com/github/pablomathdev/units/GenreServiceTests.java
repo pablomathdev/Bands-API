@@ -3,6 +3,7 @@ package com.github.pablomathdev.units;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -95,6 +96,19 @@ public class GenreServiceTests {
 	   List<Genre> actual = genreService.find();
 		
 		assertEquals(2,actual.size());
+		
+	}
+	@Test
+	public void should_FindReturnEmpty_WhenGenreRepositoryFindAllNotReturnGenres() {
+	
+
+		List<Genre> result = List.of();
+		
+		when(genreRepository.findAll()).thenReturn(result);
+		
+	     List<Genre> actual = genreService.find();
+		
+		assertTrue(actual.isEmpty());
 		
 	}
 
