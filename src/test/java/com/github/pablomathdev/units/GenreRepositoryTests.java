@@ -146,6 +146,7 @@ public class GenreRepositoryTests {
 		assertFalse(exists);
 
 	}
+
 	@Test 
 	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
       when(entityManager.createQuery("from Genre",Genre.class)).thenReturn(typedQueryGenre);
@@ -158,5 +159,24 @@ public class GenreRepositoryTests {
 		 List<Genre> listGenreExpected =  genreRepositoryImpl.findAll();
 		
 		 assertTrue(listGenreExpected.isEmpty());
+	}
+
+	@Test 
+	public void should_ReturnGenre_WhenTypedQueryGetResultListNotIsEmpty() {
+     
+		Genre genre1 = genreFactory("any_genre_1");
+		
+		when(entityManager.createQuery("from Genre",Genre.class)).thenReturn(typedQueryGenre);
+		
+      
+      
+		List<Genre> results = new ArrayList<>();
+		results.add(genre1);
+		when(typedQueryGenre.getResultList()).thenReturn(results);
+		
+		
+		 List<Genre> listGenreExpected =  genreRepositoryImpl.findAll();
+		
+		 assertFalse(listGenreExpected.isEmpty());
 	}
 }
