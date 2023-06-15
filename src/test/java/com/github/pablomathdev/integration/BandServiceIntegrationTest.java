@@ -24,6 +24,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
@@ -105,10 +106,17 @@ public class BandServiceIntegrationTest {
 		bandService.delete("Metallica");
 
 		List<Band> bands = bandService.find();
-		
+
 		boolean bandIsRemoved = bands.stream().noneMatch(band -> band.getName().equals("Metallica"));
 
 		assertTrue(bandIsRemoved);
+
+	}
+
+	@Test
+	public void should_ThrowBandNotFoundException_WhenBandNotExists() {
+
+		assertThrows(BandNotFoundException.class, () -> bandService.delete("Nirvana"));
 
 	}
 
