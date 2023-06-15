@@ -179,9 +179,9 @@ class BandServiceTests {
 		
 		when(bandRepository.findAll()).thenReturn(result);
 		
-	   List<Band> expected = bandService.find();
+	   List<Band> actual = bandService.find();
 		
-		assertEquals(expected.size(),2);
+		assertEquals(2,actual.size());
 		
 	}
 	@Test
@@ -192,9 +192,9 @@ class BandServiceTests {
 		
 		when(bandRepository.findAll()).thenReturn(result);
 		
-	     List<Band> expected = bandService.find();
+	     List<Band> actual = bandService.find();
 		
-		assertTrue(expected.isEmpty());
+		assertTrue(actual.isEmpty());
 		
 	}
 

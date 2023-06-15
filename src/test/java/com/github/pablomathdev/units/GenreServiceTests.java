@@ -7,12 +7,15 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.github.pablomathdev.Factory;
 import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
@@ -76,6 +79,23 @@ public class GenreServiceTests {
 
 		assertEquals(genre, genreSaved);
 
+	}
+	@Test
+	public void should_FindReturnGenres_WhenGenreRepositoryFindAllReturnGenres() {
+		
+		Genre genre1 = Factory.genreFactory("any_genre_1");
+		Genre genre2 = Factory.genreFactory("any_genre_2");
+	
+		
+
+		List<Genre> result = List.of(genre1,genre2);
+		
+		when(genreRepository.findAll()).thenReturn(result);
+		
+	   List<Genre> actual = genreService.find();
+		
+		assertEquals(2,actual.size());
+		
 	}
 
 }
