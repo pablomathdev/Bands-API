@@ -8,4 +8,6 @@ public interface IRepository<T,ID> {
 	T save(T object);
 	T findByName(String name);
 	boolean exists(String name);
+	void delete(T object);
+	
 }

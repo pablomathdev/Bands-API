@@ -60,4 +60,10 @@ public class BandRepositoryImpl implements IBandRepository {
 		return query.getResultList();
 	}
 
+	@Override
+	public void delete(Band band) {
+	
+		entityManager.remove(band);
+	}
+
 }

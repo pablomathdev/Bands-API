@@ -66,4 +66,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		return false;
 	}
 
+	@Override
+	public void delete(Genre object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

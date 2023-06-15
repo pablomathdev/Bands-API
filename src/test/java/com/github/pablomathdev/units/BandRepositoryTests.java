@@ -214,5 +214,14 @@ public class BandRepositoryTests {
 		assertFalse(listBandExpected.isEmpty());
 
 	}
+	
+	@Test
+	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+		
+		bandRepositoryImpl.delete(band1);
+		verify(entityManager).remove(eq(band1));
+	}
 
 }
