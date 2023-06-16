@@ -113,7 +113,7 @@ public class BandAPITest {
 	}
 	
 	@Test
-	public void should_ReturnStatusCode400_WhenBandNotExists() {
+	public void should_ReturnStatusCode404_WhenBandNotExists() {
 		given()
 		.accept(ContentType.JSON)
 		.when()

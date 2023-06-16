@@ -67,8 +67,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Genre object) {
-		// TODO Auto-generated method stub
+	
+		entityManager.remove(object);
 		
 	}
 
