@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.EntityRelationshipException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
@@ -64,6 +65,8 @@ public class GenreController {
 			return ResponseEntity.ok().build();
 		} catch (GenreNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}catch (EntityRelationshipException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 
 	}

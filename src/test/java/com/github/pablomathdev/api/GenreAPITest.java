@@ -96,7 +96,7 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/heavy-Metal")
+		.delete("/trash-metal")
 		.then()
 		.statusCode(200);
 
@@ -109,9 +109,22 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/pantera")
+		.delete("/alternative-rock")
 		.then()
 		.statusCode(404);
+
+	}
+	@Test
+	public void should_ReturnStatusCode409_WhenGenreAssociatedWithOtherEntities() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/heavy-metal")
+		.then()
+		.statusCode(409);
 
 	}
 	

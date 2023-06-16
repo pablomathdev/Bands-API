@@ -71,6 +71,7 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	public void delete(Genre object) {
 	
 		entityManager.remove(object);
+		entityManager.flush();
 		
 	}
 
