@@ -22,6 +22,8 @@ import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;
@@ -125,4 +127,15 @@ public class GenreServiceTests {
 
 	}
 
+	@Test
+	public void should_ThrowGenreNotFoundException_WhenGenrNotExists() {
+
+		Genre genre = genreFactory("any_genre");
+
+		when(genreRepository.findByName(any())).thenThrow(EntityNotFoundException.class);
+
+		assertThrows(GenreNotFoundException.class, () -> genreService.delete(genre.getName()));
+
+	}
+	
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
@@ -45,10 +47,15 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 	
 	public void delete(String nameGenre) {
 		
+		try {
+			Genre genre = genreRepository.findByName(nameGenre);
+			
+			genreRepository.delete(genre);
+		}catch (EntityNotFoundException e) {
+			throw new GenreNotFoundException(e.getMessage(),e);
+		}
 		
-		Genre genre = genreRepository.findByName(nameGenre);
 		
-		genreRepository.delete(genre);
 	}
 
 }
