@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
@@ -15,6 +16,7 @@ import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
 
 import jakarta.persistence.PersistenceException;
+
 
 @Service
 public class GenreService implements ICreateService<Genre>,IFindAllService<Genre> {
@@ -44,7 +46,7 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 		return genreRepository.findAll();
 	}
 	
-	
+	@Transactional
 	public void delete(String nameGenre) {
 		
 		try {

@@ -4,6 +4,9 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +32,13 @@ public class GenreServiceIntegrationTest {
 	@BeforeEach
 	private void clearDatabaseTest() {
 		executeSQL.run("clear_database_test.sql");
-		
+
 	}
-	
+
 	@BeforeEach
 	private void prepareData() {
 		executeSQL.run("data_test.sql");
 	}
-	
 
 	@Test
 	public void should_CreateGenreSuccessfully() {
@@ -59,5 +61,17 @@ public class GenreServiceIntegrationTest {
 
 	}
 
+	@Test
+	public void should_DeleteGenre_WhenGenreExists() {
+
+		genreService.delete("Trash Metal");
+
+		List<Genre> genres = genreService.find();
+
+		boolean genreIsRemoved = genres.stream().noneMatch(genre -> genre.getName().equals("Trash Metal"));
+
+		assertTrue(genreIsRemoved);
+
+	}
 
 }
