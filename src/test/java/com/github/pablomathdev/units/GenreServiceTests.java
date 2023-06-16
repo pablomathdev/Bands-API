@@ -4,6 +4,7 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -81,35 +82,47 @@ public class GenreServiceTests {
 		assertEquals(genre, genreSaved);
 
 	}
+
 	@Test
 	public void should_FindReturnGenres_WhenGenreRepositoryFindAllReturnGenres() {
-		
+
 		Genre genre1 = Factory.genreFactory("any_genre_1");
 		Genre genre2 = Factory.genreFactory("any_genre_2");
-	
-		
 
-		List<Genre> result = List.of(genre1,genre2);
-		
+		List<Genre> result = List.of(genre1, genre2);
+
 		when(genreRepository.findAll()).thenReturn(result);
-		
-	   List<Genre> actual = genreService.find();
-		
-		assertEquals(2,actual.size());
-		
+
+		List<Genre> actual = genreService.find();
+
+		assertEquals(2, actual.size());
+
 	}
+
 	@Test
 	public void should_FindReturnEmpty_WhenGenreRepositoryFindAllNotReturnGenres() {
-	
 
 		List<Genre> result = List.of();
-		
+
 		when(genreRepository.findAll()).thenReturn(result);
-		
-	     List<Genre> actual = genreService.find();
-		
+
+		List<Genre> actual = genreService.find();
+
 		assertTrue(actual.isEmpty());
-		
+
+	}
+
+	@Test
+	public void should_InvokeGenreRepositoryDelete_WithCorrectArguments() {
+
+		Genre genre = genreFactory("any_genre");
+
+		when(genreRepository.findByName(any())).thenReturn(genre);
+
+		genreService.delete(genre.getName());
+
+		verify(genreRepository).delete(eq(genre));
+
 	}
 
 }

@@ -189,4 +189,5 @@ public class GenreRepositoryTests {
 		
 		verify(entityManager).remove(eq(genre1));
 	}
+
 }

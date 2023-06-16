@@ -41,5 +41,14 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 
 		return genreRepository.findAll();
 	}
+	
+	
+	public void delete(String nameGenre) {
+		
+		
+		Genre genre = genreRepository.findByName(nameGenre);
+		
+		genreRepository.delete(genre);
+	}
 
 }
