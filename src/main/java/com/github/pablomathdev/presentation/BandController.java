@@ -19,6 +19,7 @@ import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import static com.github.pablomathdev.presentation.utils.TransformeString.tranform;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -57,10 +58,10 @@ public class BandController {
 
 	}
 	@DeleteMapping(value = "/bands/{name}")
-	public ResponseEntity<?> delete(@PathVariable String name){
+	public ResponseEntity<?> delete(@PathVariable String name){	
 		
 		try {
-			bandService.delete(name.toLowerCase());
+			bandService.delete(tranform(name));
 			return ResponseEntity.ok().build();
 		}catch (BandNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

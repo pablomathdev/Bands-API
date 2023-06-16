@@ -18,6 +18,7 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import static com.github.pablomathdev.presentation.utils.TransformeString.tranform;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -56,8 +57,10 @@ public class GenreController {
 
 	@DeleteMapping(value = "/genres/{name}")
 	public ResponseEntity<?> delete(@PathVariable String name) {
+
 		try {
-			genreService.delete(name.replace("-", " "));
+
+			genreService.delete(tranform(name));
 			return ResponseEntity.ok().build();
 		} catch (GenreNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

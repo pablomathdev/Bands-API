@@ -46,8 +46,8 @@ public class GenreAPITest {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		basePath = "/api/genres";
-//
-//		clearDatabase();
+
+		clearDatabase();
 
 		prepareData();
 
@@ -96,9 +96,22 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/Heavy-Metal")
+		.delete("/heavy-Metal")
 		.then()
 		.statusCode(200);
+
+	}
+	@Test
+	public void should_ReturnStatusCode404_WhenGenreNotExists() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/pantera")
+		.then()
+		.statusCode(404);
 
 	}
 	
