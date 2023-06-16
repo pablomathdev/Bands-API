@@ -46,8 +46,8 @@ public class GenreAPITest {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		basePath = "/api/genres";
-
-		clearDatabase();
+//
+//		clearDatabase();
 
 		prepareData();
 
@@ -86,6 +86,19 @@ public class GenreAPITest {
 		clearDatabase();
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+	}
+	@Test
+	public void should_ReturnStatusCode200_WhenGenreIsRemoved() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/Heavy-Metal")
+		.then()
+		.statusCode(200);
 
 	}
 	
