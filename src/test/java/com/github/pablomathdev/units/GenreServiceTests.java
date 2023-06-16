@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,10 +17,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.github.pablomathdev.Factory;
 import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.EntityRelationshipException;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
@@ -137,5 +140,19 @@ public class GenreServiceTests {
 		assertThrows(GenreNotFoundException.class, () -> genreService.delete(genre.getName()));
 
 	}
+	
+	@Test
+	public void should_ThrowEntityRelationshipExceptionion_WhenGenreRepositoryDeleteThrowDataIntegrityViolationException() {
+
+		Genre genre = genreFactory("any_genre");
+
+
+        doThrow(DataIntegrityViolationException.class).when(genreRepository).delete(any());;
+		
+		assertThrows(EntityRelationshipException.class, () -> genreService.delete(genre.getName()));
+
+	}
+	
+	
 	
 }
