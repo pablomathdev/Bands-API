@@ -1,5 +1,7 @@
 package com.github.pablomathdev.presentation.v1;
 
+import static com.github.pablomathdev.presentation.v1.utils.TransformeString.tranform;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
-import static com.github.pablomathdev.presentation.utils.TransformeString.tranform;
 
 @RestController
 @RequestMapping(value = "/v1/bands")
