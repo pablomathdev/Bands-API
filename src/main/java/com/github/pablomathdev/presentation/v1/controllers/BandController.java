@@ -1,4 +1,4 @@
-package com.github.pablomathdev.presentation.v1;
+package com.github.pablomathdev.presentation.v1.controllers;
 
 import static com.github.pablomathdev.presentation.v1.utils.TransformeString.tranform;
 
