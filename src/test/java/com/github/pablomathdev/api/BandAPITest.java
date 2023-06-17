@@ -46,7 +46,7 @@ public class BandAPITest {
 	public void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		basePath = "/api/bands";
+		basePath = "/v1/bands";
 
 		clearDatabase();
 

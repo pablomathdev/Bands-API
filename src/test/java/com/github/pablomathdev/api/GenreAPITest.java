@@ -45,7 +45,7 @@ public class GenreAPITest {
 	private void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		basePath = "/api/genres";
+		basePath = "/v1/genres";
 
 		clearDatabase();
 
