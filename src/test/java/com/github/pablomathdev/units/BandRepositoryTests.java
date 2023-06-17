@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
@@ -119,7 +120,7 @@ public class BandRepositoryTests {
 
 		when(typedQueryBand.getSingleResult()).thenThrow(NoResultException.class);
 
-		assertThrows(NoResultException.class, () -> bandRepositoryImpl.findByName(band.getName()));
+		assertThrows(EntityNotFoundException.class, () -> bandRepositoryImpl.findByName(band.getName()));
 
 	}
 

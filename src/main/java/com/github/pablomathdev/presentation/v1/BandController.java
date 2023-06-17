@@ -1,4 +1,4 @@
-package com.github.pablomathdev.presentation;
+package com.github.pablomathdev.presentation.v1;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoun
 import static com.github.pablomathdev.presentation.utils.TransformeString.tranform;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/v1/bands")
 public class BandController {
 
 	@Autowired
 	private BandService bandService;
 
-	@GetMapping("/bands")
+	@GetMapping
 	public ResponseEntity<List<Band>> findAllBands() {
 
 		List<Band> bands = bandService.find();
@@ -41,7 +41,7 @@ public class BandController {
 
 	}
 
-	@PostMapping("/bands")
+	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Band band) {
 
 		try {
@@ -57,7 +57,7 @@ public class BandController {
 		}
 
 	}
-	@DeleteMapping(value = "/bands/{name}")
+	@DeleteMapping(value = "/{name}")
 	public ResponseEntity<?> delete(@PathVariable String name){	
 		
 		try {
