@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Band;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -35,7 +37,12 @@ public class BandRepositoryImpl implements IBandRepository {
 		TypedQuery<Band> query = entityManager.createQuery(jpql, Band.class);
 		query.setParameter("name", name);
 
-		return query.getSingleResult();
+		try {
+			return query.getSingleResult();
+		}catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Band %s not found!", name), e);
+		}
+		
 	}
 
 	public boolean exists(String name) {
@@ -58,6 +65,13 @@ public class BandRepositoryImpl implements IBandRepository {
 		TypedQuery<Band> query = entityManager.createQuery("from Band", Band.class);
 		
 		return query.getResultList();
+	}
+
+	@Override
+	@Transactional
+	public void delete(Band band) {
+	
+		entityManager.remove(band);
 	}
 
 }

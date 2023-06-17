@@ -179,4 +179,15 @@ public class GenreRepositoryTests {
 		
 		 assertFalse(listGenreExpected.isEmpty());
 	}
+	
+	@Test
+	public void should_InvokeEntityManagerRemove_WithCorrectArguments() {
+		Genre genre1 = genreFactory("any_genre_1");
+		
+		genreRepositoryImpl.delete(genre1);
+		
+		
+		verify(entityManager).remove(eq(genre1));
+	}
+
 }

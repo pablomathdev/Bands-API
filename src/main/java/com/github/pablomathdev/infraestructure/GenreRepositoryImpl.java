@@ -66,4 +66,13 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		return false;
 	}
 
+	@Override
+	@Transactional
+	public void delete(Genre object) {
+	
+		entityManager.remove(object);
+		entityManager.flush();
+		
+	}
+
 }

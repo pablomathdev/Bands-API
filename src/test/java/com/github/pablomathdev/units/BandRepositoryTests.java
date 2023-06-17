@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
@@ -119,7 +120,7 @@ public class BandRepositoryTests {
 
 		when(typedQueryBand.getSingleResult()).thenThrow(NoResultException.class);
 
-		assertThrows(NoResultException.class, () -> bandRepositoryImpl.findByName(band.getName()));
+		assertThrows(EntityNotFoundException.class, () -> bandRepositoryImpl.findByName(band.getName()));
 
 	}
 
@@ -213,6 +214,15 @@ public class BandRepositoryTests {
 
 		assertFalse(listBandExpected.isEmpty());
 
+	}
+	
+	@Test
+	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+		
+		bandRepositoryImpl.delete(band1);
+		verify(entityManager).remove(eq(band1));
 	}
 
 }

@@ -6,11 +6,13 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
@@ -64,6 +66,22 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	public List<Band> find() {
 
 		return bandRepository.findAll();
+	}
+	
+	@Transactional
+	public void delete(String nameBand) {
+		
+		try {
+			Band band = bandRepository.findByName(nameBand);
+			
+			bandRepository.delete(band);
+		}catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(),e);
+		}
+		
+		
+		
+		
 	}
 
 }

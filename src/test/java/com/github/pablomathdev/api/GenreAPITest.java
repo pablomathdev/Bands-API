@@ -45,7 +45,7 @@ public class GenreAPITest {
 	private void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		basePath = "/api/genres";
+		basePath = "/v1/genres";
 
 		clearDatabase();
 
@@ -86,6 +86,45 @@ public class GenreAPITest {
 		clearDatabase();
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+	}
+	@Test
+	public void should_ReturnStatusCode200_WhenGenreIsRemoved() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/trash-metal")
+		.then()
+		.statusCode(200);
+
+	}
+	@Test
+	public void should_ReturnStatusCode404_WhenGenreNotExists() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/alternative-rock")
+		.then()
+		.statusCode(404);
+
+	}
+	@Test
+	public void should_ReturnStatusCode409_WhenGenreAssociatedWithOtherEntities() {
+
+
+
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/heavy-metal")
+		.then()
+		.statusCode(409);
 
 	}
 	

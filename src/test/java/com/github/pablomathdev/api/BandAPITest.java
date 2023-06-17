@@ -46,7 +46,7 @@ public class BandAPITest {
 	public void setUp() {
 		enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
-		basePath = "/api/bands";
+		basePath = "/v1/bands";
 
 		clearDatabase();
 
@@ -99,6 +99,27 @@ public class BandAPITest {
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(204);
 
+	}
+	
+	@Test 
+	public void should_ReturnStatusCode200_WhenBandIsRemoved() {
+		
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/metallica")
+		.then()
+		.statusCode(200);
+	}
+	
+	@Test
+	public void should_ReturnStatusCode404_WhenBandNotExists() {
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.delete("/nirvana")
+		.then()
+		.statusCode(404);
 	}
 
 	public void prepareData() {
