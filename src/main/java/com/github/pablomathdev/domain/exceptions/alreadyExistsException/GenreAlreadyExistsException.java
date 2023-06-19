@@ -1,14 +1,12 @@
 package com.github.pablomathdev.domain.exceptions.alreadyExistsException;
 
-import com.github.pablomathdev.domain.exceptions.BusinessException;
-
-public class GenreAlreadyExistsException extends BusinessException {
+public class GenreAlreadyExistsException extends EntityAlreadyExistsException {
 
 	private static final long serialVersionUID = 1L;
 
 	private String genreName;
 
-	private String message = "Genre %s Already Exists!";
+	private String message = "Genre %s already exists";
 
 	public GenreAlreadyExistsException(String genreName) {
 		this.genreName = genreName;

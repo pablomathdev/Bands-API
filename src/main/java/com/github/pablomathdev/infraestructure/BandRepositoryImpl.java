@@ -40,7 +40,7 @@ public class BandRepositoryImpl implements IBandRepository {
 		try {
 			return query.getSingleResult();
 		}catch (NoResultException e) {
-			throw new EntityNotFoundException(String.format("Band %s not found!", name), e);
+			throw new EntityNotFoundException(String.format("Band %s not found", name), e);
 		}
 		
 	}

@@ -58,7 +58,7 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 		}catch (EntityNotFoundException e) {
 			throw new GenreNotFoundException(e.getMessage(),e);
 		}catch (DataIntegrityViolationException e) {
-			throw new EntityRelationshipException(String.format("Cannot delete genre '%s', because it is currently associated with other entities.", nameGenre),e);
+			throw new EntityRelationshipException(String.format("Cannot delete genre '%s'", nameGenre),e);
 		}
 		
 		

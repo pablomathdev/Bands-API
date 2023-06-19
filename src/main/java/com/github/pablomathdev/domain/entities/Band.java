@@ -17,6 +17,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +34,11 @@ public class Band {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotBlank
 	private String name;
-
+    
+	@Valid
+	@NotNull
 	@Embedded
 	private Origin origin;
 	
@@ -41,6 +47,9 @@ public class Band {
 	@OneToMany(mappedBy = "band")
 	private List<Album> albums;
 	
+	
+	@Valid
+	@NotNull
 	@ManyToMany
 	@JoinTable(name = "tb_band_genre",
 	joinColumns = @JoinColumn(name= "band_id"),

@@ -1,14 +1,12 @@
 package com.github.pablomathdev.domain.exceptions.alreadyExistsException;
 
-import com.github.pablomathdev.domain.exceptions.BusinessException;
-
-public class BandAlreadyExistsException extends BusinessException {
+public class BandAlreadyExistsException extends EntityAlreadyExistsException {
 
 	private static final long serialVersionUID = 1L;
 
 	private String bandName;
 
-	private String message = "Band %s Already Exists!";
+	private String message = "Band %s already exists";
 
 	public BandAlreadyExistsException(String bandName) {
 		this.bandName = bandName;
