@@ -47,6 +47,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 			band.getGenres().forEach((g) -> {
 
 				Genre genre = genreRepository.findByName(g.getName());
+								
 				genres.add(genre);
 
 			});

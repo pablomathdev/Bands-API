@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/bands")
@@ -43,31 +43,24 @@ public class BandController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Band band) {
+	public ResponseEntity<?> save(@RequestBody @Valid Band band) {
 
 		try {
 
 			Band bandSaved = bandService.create(band);
 			return ResponseEntity.status(HttpStatus.CREATED).body(bandSaved);
-		} catch (BandAlreadyExistsException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		} catch (EntitySaveException e) {
+		}catch (EntitySaveException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-		} catch (GenreNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+		} 
 
 	}
+
 	@DeleteMapping(value = "/{name}")
-	public ResponseEntity<?> delete(@PathVariable String name){	
-		
-		try {
-			bandService.delete(tranform(name));
-			return ResponseEntity.ok().build();
-		}catch (BandNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
-		
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable String name) {
+  
+	  bandService.delete(tranform(name));
+
 	}
 
 }

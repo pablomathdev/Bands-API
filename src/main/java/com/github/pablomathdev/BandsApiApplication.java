@@ -8,6 +8,8 @@ public class BandsApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BandsApiApplication.class, args);
+		
+		
 	}
 
 

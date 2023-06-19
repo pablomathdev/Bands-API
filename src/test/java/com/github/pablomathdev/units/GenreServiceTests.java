@@ -71,7 +71,7 @@ public class GenreServiceTests {
 
 		Throwable exception = assertThrows(GenreAlreadyExistsException.class, () -> genreService.create(genre));
 
-		assertEquals(String.format("Genre %s Already Exists!", genre.getName()), exception.getMessage());
+		assertEquals(String.format("Genre %s already exists", genre.getName()), exception.getMessage());
 
 	}
 

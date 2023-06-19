@@ -41,7 +41,7 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		if (!result.isEmpty()) {
 			return result.get(0);
 		} else {
-			throw new EntityNotFoundException(String.format("Genre %s Not Found!", name));
+			throw new EntityNotFoundException(String.format("Genre %s not found!", name));
 		}
 
 	}
