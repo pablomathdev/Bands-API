@@ -27,7 +27,7 @@ public class Genre {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@NotBlank
+
 	private String name;
 	
 	@JsonIgnore

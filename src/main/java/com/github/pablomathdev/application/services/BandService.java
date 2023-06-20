@@ -1,8 +1,7 @@
 package com.github.pablomathdev.application.services;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	@Override
 	public Band create(Band band) {
 
-		Set<Genre> genres = new HashSet<>();
+		List<Genre> genres = new ArrayList<>();
 
 		if (bandRepository.exists(band.getName()) == true) {
 

@@ -5,9 +5,5 @@
 		"city": "Huntington Beach",
 		"formationYear": 1999
 	},
-	"genres": [
-		{
-			"name": "Heavy Metal"
-		}
-	]
+	"genres": ["Heavy Metal"]
 }

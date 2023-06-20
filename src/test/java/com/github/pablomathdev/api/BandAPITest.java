@@ -102,14 +102,14 @@ public class BandAPITest {
 	}
 	
 	@Test 
-	public void should_ReturnStatusCode200_WhenBandIsRemoved() {
+	public void should_ReturnStatusCode204_WhenBandIsRemoved() {
 		
 		given()
 		.accept(ContentType.JSON)
 		.when()
 		.delete("/metallica")
 		.then()
-		.statusCode(200);
+		.statusCode(204);
 	}
 	
 	@Test

@@ -5,9 +5,5 @@
 		"city": "Seattle",
 		"formationYear": 1990
 	},
-	"genres": [
-		{
-			"name": "Alternative Rock"
-		}
-	]
+	"genres": ["Alternative Rock"]
 }

@@ -1,6 +1,6 @@
 package com.github.pablomathdev;
 
-import java.util.Set;
+import java.util.List;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
@@ -8,7 +8,7 @@ import com.github.pablomathdev.domain.entities.Origin;
 
 public class Factory {
 
-	public static Band bandFactory(String name, Origin origin, Set<Genre> genres) {
+	public static Band bandFactory(String name, Origin origin, List<Genre> genres) {
 		Band band = new Band();
 		band.setName(name);
 		band.setOrigin(origin);
