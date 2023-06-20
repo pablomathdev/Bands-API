@@ -5,9 +5,5 @@
 		"city": "San Francisco",
 		"formationYear": 1981
 	},
-	"genres": [
-		{
-			"name": "Trash Metal"
-		}
-	]
+	"genres": ["Trash Metal"]
 }

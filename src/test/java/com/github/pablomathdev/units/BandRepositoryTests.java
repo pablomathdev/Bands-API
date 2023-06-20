@@ -13,9 +13,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +56,7 @@ public class BandRepositoryTests {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -71,7 +71,7 @@ public class BandRepositoryTests {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -90,7 +90,7 @@ public class BandRepositoryTests {
 	public void should_FindByNameReturnABand_WhenTheTypedQueryReturnABand() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -112,7 +112,7 @@ public class BandRepositoryTests {
 	public void should_ThrowNoResultException_WhenTypedQueryThrowsNoResultException() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -129,7 +129,7 @@ public class BandRepositoryTests {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -148,7 +148,7 @@ public class BandRepositoryTests {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 
@@ -167,7 +167,7 @@ public class BandRepositoryTests {
 
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Genre genre = genreFactory("any_genre");
-		Set<Genre> set = new HashSet<>();
+		List<Genre> set = new ArrayList<>();
 		set.add(genre);
 		Band band = bandFactory("any_band", origin, set);
 

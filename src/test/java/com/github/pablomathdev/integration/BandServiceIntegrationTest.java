@@ -8,9 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ public class BandServiceIntegrationTest {
 
 		Origin origin = originFactory("Los Angeles", "United States", 1983);
 		Genre genre = genreFactory("Trash Metal");
-		Set<Genre> genres = new HashSet<>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
 
 		Band band = bandFactory("Megadeth", origin, genres);
@@ -70,7 +69,7 @@ public class BandServiceIntegrationTest {
 	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
 		Origin origin = originFactory("Aberdeen", "United States", 1987);
 		Genre genre = genreFactory("Grunge");
-		Set<Genre> genres = new HashSet<>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
 
 		Band band = bandFactory("Nirvana", origin, genres);
@@ -79,7 +78,7 @@ public class BandServiceIntegrationTest {
 			bandService.create(band);
 		});
 
-		assertEquals(String.format("Genre %s Not Found!", genre.getName()), exception.getMessage());
+		assertEquals(String.format("Genre %s not found!", genre.getName()), exception.getMessage());
 
 	}
 
@@ -87,7 +86,7 @@ public class BandServiceIntegrationTest {
 	public void should_ThrowBandAlreadyExistsException_WhenBandAlreadyExists() {
 		Origin origin = originFactory("Los Angeles", "United States", 1981);
 		Genre genre = genreFactory("Trash Metal");
-		Set<Genre> genres = new HashSet<>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
 
 		Band band = bandFactory("Metallica", origin, genres);
@@ -96,7 +95,7 @@ public class BandServiceIntegrationTest {
 			bandService.create(band);
 		});
 
-		assertEquals(String.format("Band %s Already Exists!", band.getName()), exception.getMessage());
+		assertEquals(String.format("Band %s already exists", band.getName()), exception.getMessage());
 
 	}
 

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
+import com.github.pablomathdev.presentation.v1.DTOs.BandRequestDTO;
+import com.github.pablomathdev.presentation.v1.mappers.BandRequestDTOToBand;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +28,10 @@ import jakarta.validation.Valid;
 @RequestMapping(value = "/v1/bands")
 public class BandController {
 
+	@Autowired
+	private BandRequestDTOToBand bandRequestDTOToBand;
+	
+	
 	@Autowired
 	private BandService bandService;
 
@@ -43,11 +49,12 @@ public class BandController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody @Valid Band band) {
+	public ResponseEntity<?> save(@RequestBody @Valid BandRequestDTO bandRequestDTO) {
 
 		try {
-
-			Band bandSaved = bandService.create(band);
+			Band bandMapped = bandRequestDTOToBand.convert(bandRequestDTO);
+              
+			Band bandSaved = bandService.create(bandMapped);
 			return ResponseEntity.status(HttpStatus.CREATED).body(bandSaved);
 		}catch (EntitySaveException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
