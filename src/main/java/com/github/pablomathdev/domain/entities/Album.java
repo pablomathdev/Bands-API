@@ -2,7 +2,6 @@ package com.github.pablomathdev.domain.entities;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +33,7 @@ public class Album extends Release {
 	@JoinTable(name = "tb_album_genre",
 	joinColumns = @JoinColumn(name = "album_id"), 
 	inverseJoinColumns = @JoinColumn(name = "genre_id"))
-	private Set<Genre> genres;
+	private List<Genre> genres;
 	
 	@OneToMany(mappedBy = "album")
 	private List<Track> tracks;
@@ -55,7 +54,6 @@ public class Album extends Release {
 		Album other = (Album) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 
 }
