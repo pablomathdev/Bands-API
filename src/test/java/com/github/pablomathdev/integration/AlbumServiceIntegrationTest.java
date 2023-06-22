@@ -91,7 +91,7 @@ public class AlbumServiceIntegrationTest {
 		
 		
 
-		assertThrows( BandNotFoundException.class, () -> albumService.create(album));
+		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
 
 	}
 }

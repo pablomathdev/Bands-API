@@ -28,19 +28,28 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
+import com.github.pablomathdev.domain.repositories.IBandRepository;
+import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class AlbumServiceTests {
 
 	@Mock
 	private IAlbumRepository albumRepository;
+	
+	@Mock
+	private IBandRepository bandRepository;
+	
+	@Mock
+	private IGenreRepository genreRepository;
 
 	@InjectMocks
 	private AlbumService albumService;
 
 	@Test
-	public void should_InvokeTypedQueryExists_withCorrectArguments() {
+	public void should_InvokeAlbumRepositoryExists_withCorrectArguments() {
 
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
@@ -48,9 +57,10 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
+		
 		albumService.create(album);
-
-		verify(albumRepository).exists(eq(album.getTitle()), eq(album.getBand().getName()));
+		
+		verify(albumRepository).exists(eq(album.getTitle()), eq(band.getName()));
 
 	}
 	@Test
@@ -70,7 +80,6 @@ public class AlbumServiceTests {
 	
 
 	}
-	
 	
 	@Test
 	public void should_InvockAlbumRepositorySave_WithCorrectArguments() {
@@ -103,19 +112,25 @@ public class AlbumServiceTests {
 		assertEquals(album.getTitle(), result.getTitle());
 
 	}
-//	@Test
-//	public void should_InvokeAlbumRepositoryfindByName_withCorrectArguments() {
-//		
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		albumService.create(album);
-//
-//		Mockito.verify(albumRepository).findByName(eq(album.getTitle()));
-//	}
+	@Test
+	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		when(albumRepository.exists(album.getTitle(),album.getBand().getName())).thenReturn(false);
+		
+		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
+		
+		
+		 assertThrows(BandNotFoundException.class,()-> albumService.create(album)); 
+
+	
+
+	}
+
 
 }
