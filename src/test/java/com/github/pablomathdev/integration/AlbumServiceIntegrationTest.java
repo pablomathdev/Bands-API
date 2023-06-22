@@ -2,6 +2,10 @@ package com.github.pablomathdev.integration;
 
 import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +21,7 @@ import com.github.pablomathdev.application.services.AlbumService;
 import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
 @SpringBootTest
@@ -29,6 +34,11 @@ public class AlbumServiceIntegrationTest {
 	@Autowired
 	private AlbumService albumService;
 
+	@BeforeEach
+	public void clearDatabaseTest() {
+		executeSQL.run("clear_database_test.sql");
+	}
+	
 	@BeforeEach
 	public void prepareData() {
 		executeSQL.run("data_test.sql");
@@ -45,10 +55,27 @@ public class AlbumServiceIntegrationTest {
 		album.setGenres(genres);
 		album.setTitle("Master Of Puppets");
 		album.setReleaseDate(LocalDate.parse("1986-03-03"));
-		album.setTracks(null);
+
+		Album albumSaved = albumService.create(album);
+		assertEquals(album.getTitle(), albumSaved.getTitle());
+		assertNotNull(albumSaved.getId());
+		assertFalse(albumSaved.getGenres().isEmpty());
+
+	}
+
+	@Test
+	public void should_ThrowAlbumAlreadyExistsException_WhenAlbumAlreadyExists() {
+		Genre genre = genreFactory("Trash Metal");
+		Band band = bandFactory("Metallica", null, null);
+		Album album = new Album();
+		album.setBand(band);
+		album.setGenres(List.of(genre));
+		album.setTitle("Metallica (The Black Album)");
+		album.setReleaseDate(LocalDate.parse("1991-08-12"));
 		
 		
-		albumService.create(album);
+
+		assertThrows(AlbumAlreadyExistsException.class, () -> albumService.create(album));
 
 	}
 }
