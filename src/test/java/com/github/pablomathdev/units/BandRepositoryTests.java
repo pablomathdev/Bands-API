@@ -222,5 +222,7 @@ public class BandRepositoryTests {
 		bandRepositoryImpl.delete(band1);
 		verify(entityManager).remove(eq(band1));
 	}
+	
+	
 
 }

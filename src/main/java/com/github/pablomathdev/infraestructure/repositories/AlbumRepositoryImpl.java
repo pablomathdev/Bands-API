@@ -4,9 +4,11 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Album;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -35,9 +37,17 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 	}
 
 	@Override
-	public Album findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Album findByName(String title) {
+		String jpql = "select a from Album a where a.title = :title";
+
+		TypedQuery<Album> query = entityManager.createQuery(jpql, Album.class);
+		query.setParameter("title", title);
+
+		try {
+			return query.getSingleResult();
+		}catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Album %s not found", title), e);
+		}
 	}
 
 	@Override
