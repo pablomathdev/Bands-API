@@ -57,7 +57,7 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 	
 	
 	public boolean exists(String albumTitle,String bandName) {
-		String jpql = "select count(a) from  a where a.title = :albumTitle AND a.band.name = :bandName";
+		String jpql = "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
 
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		query.setParameter("albumTitle", albumTitle);
