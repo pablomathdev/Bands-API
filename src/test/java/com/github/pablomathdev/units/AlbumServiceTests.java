@@ -47,5 +47,19 @@ public class AlbumServiceTests {
 		Mockito.verify(albumRepository).save(eq(album));
 
 	}
+	@Test
+	public void should_InvokeGenreRepositoryfindByName_withCorrectArguments() {
+		
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		albumService.create(album);
+
+		Mockito.verify(albumRepository).findByName(eq(album.getTitle()));
+	}
 
 }
