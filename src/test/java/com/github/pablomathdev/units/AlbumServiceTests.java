@@ -4,7 +4,9 @@ import static com.github.pablomathdev.Factory.albumFactory;
 import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,6 +84,23 @@ public class AlbumServiceTests {
 		albumService.create(album);
 
 		Mockito.verify(albumRepository).save(eq(album));
+
+	}
+	
+	@Test
+	public void should_ReturnAlbum_WhenAlbumIsCreated() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+       
+		when(albumRepository.save(any())).thenReturn(album);
+		
+		 Album result = albumService.create(album);
+
+		assertEquals(album.getTitle(), result.getTitle());
 
 	}
 //	@Test

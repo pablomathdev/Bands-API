@@ -13,9 +13,10 @@ public class AlbumService {
 	@Autowired
 	private IAlbumRepository albumRepository;
 
+	
 	public Album create(Album album) {
 
-		if (albumRepository.exists(album.getTitle(), album.getBand().getName()) == true) {
+		if (albumRepository.exists(album.getTitle(), album.getBand().getName())) {
 
 			throw new AlbumAlreadyExistsException(album.getTitle());
 		}
