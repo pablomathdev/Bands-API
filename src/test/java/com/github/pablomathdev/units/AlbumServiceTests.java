@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.pablomathdev.application.services.AlbumService;
@@ -69,20 +70,20 @@ public class AlbumServiceTests {
 	}
 	
 	
-//	@Test
-//	public void should_InvokcAlbumRepositorySave_WithCorrectArguments() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		albumService.create(album);
-//
-//		Mockito.verify(albumRepository).save(eq(album));
-//
-//	}
+	@Test
+	public void should_InvockAlbumRepositorySave_WithCorrectArguments() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		albumService.create(album);
+
+		Mockito.verify(albumRepository).save(eq(album));
+
+	}
 //	@Test
 //	public void should_InvokeAlbumRepositoryfindByName_withCorrectArguments() {
 //		

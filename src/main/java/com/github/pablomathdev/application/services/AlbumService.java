@@ -19,8 +19,9 @@ public class AlbumService {
 
 			throw new AlbumAlreadyExistsException(album.getTitle());
 		}
-
-		return null;
+		
+		return albumRepository.save(album);
+		
 
 	}
 
