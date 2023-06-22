@@ -35,6 +35,11 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		 return object;
 		
 	}
+	@Override
+	public void delete(Album object) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public Album findByName(String title) {
@@ -50,17 +55,21 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		}
 	}
 
-	@Override
-	public boolean exists(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public Album findByName(String AlbumTitle, String BandName) {
+//		String jpql = "select a from Album a where a.title = :title";
+//
+//		TypedQuery<Album> query = entityManager.createQuery(jpql, Album.class);
+//		query.setParameter("title", AlbumTitle);
+//
+//		try {
+//			return query.getSingleResult();
+//		}catch (NoResultException e) {
+//			throw new EntityNotFoundException(String.format("Album %s not found", title), e);
+//		}
+//	}
 
-	@Override
-	public void delete(Album object) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 
 }
