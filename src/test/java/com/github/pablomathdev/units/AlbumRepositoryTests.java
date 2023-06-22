@@ -5,8 +5,10 @@ import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,12 +27,16 @@ import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.infraestructure.repositories.AlbumRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class AlbumRepositoryTests {
 
 	@Mock
 	private EntityManager entityManager;
+	
+	@Mock
+	private TypedQuery<Album> typedQueryAlbum;
 
 	@InjectMocks
 	private AlbumRepositoryImpl albumRepositoryImpl;
@@ -58,7 +64,27 @@ public class AlbumRepositoryTests {
 
 		Album expected = albumRepositoryImpl.save(album);
 
-		assertEquals(expected, album);
+		assertEquals(album,expected);
 
+	}
+	@Test
+	public void should_ReturnListOfBands_WhenEntityManagerGetResultListNotIsEmpty() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+		
+		when(entityManager.createQuery("from Album",Album.class)).thenReturn(typedQueryAlbum);
+		when(typedQueryAlbum.getResultList()).thenReturn(List.of(album));
+		
+		
+		List<Album> result  = albumRepositoryImpl.findAll();
+		
+		
+		assertFalse(result.isEmpty());
+		
+		
+	
 	}
 }

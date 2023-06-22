@@ -8,6 +8,8 @@ import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class AlbumRepositoryImpl implements IAlbumRepository{
@@ -17,11 +19,14 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 
 	@Override
 	public List<Album> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+	TypedQuery<Album> query = entityManager.createQuery("from Album", Album.class);	
+	  return query.getResultList();
+		
 	}
 
 	@Override
+	@Transactional
 	public Album save(Album object) {
 		
 		 entityManager.persist(object);
