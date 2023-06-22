@@ -1,8 +1,8 @@
 package com.github.pablomathdev.domain.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,7 +51,7 @@ public class Track {
 	@JoinTable(name = "tb_track_genre",
 	joinColumns = @JoinColumn(name="track_id"),
 	inverseJoinColumns = @JoinColumn(name ="genre_id"))
-	private Set<Genre> genres;
+	private List<Genre> genres;
 
 	@Override
 	public int hashCode() {

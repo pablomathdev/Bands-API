@@ -1,10 +1,16 @@
 package com.github.pablomathdev;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
+import java.time.LocalDate;
 import java.util.List;
 
+import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
+import com.github.pablomathdev.domain.entities.Single;
+import com.github.pablomathdev.domain.entities.Track;
 
 public class Factory {
 
@@ -30,5 +36,31 @@ public class Factory {
 		Genre genre = new Genre();
 		genre.setName(name);
 		return genre;
+	}
+
+	public static Album albumFactory(String title, Band band, List<Genre> genres, LocalDate releaseDate,
+			List<Track> tracks) {
+		Album album = new Album();
+		album.setTitle(title);
+		album.setBand(band);
+		album.setGenres(genres);
+		album.setReleaseDate(releaseDate);
+		album.setTracks(tracks);
+
+		return album;
+
+	}
+
+	public static Track trackFactory(String title, Band Band, Album album, Single single, LocalDate releaseDate,
+			List<Genre> genres) {
+		Track track = new Track();
+		track.setTitle(title);
+		track.setBand(Band);
+		track.setAlbum(album);
+		track.setGenres(genres);
+		track.setReleaseDate(releaseDate);
+		track.setSingle(single);
+
+		return track;
 	}
 }

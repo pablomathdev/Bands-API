@@ -25,7 +25,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
-import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
+import com.github.pablomathdev.infraestructure.repositories.BandRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
