@@ -6,6 +6,7 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,7 +56,7 @@ public class AlbumRepositoryTests {
 	}
 
 	@Test
-	public void should_ReturnBand_WhenEntityManagerPersistSaveBand() {
+	public void should_ReturnAlbums_WhenEntityManagerPersistSaveAlbums() {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_name", origin, List.of(genre));
@@ -68,7 +69,7 @@ public class AlbumRepositoryTests {
 
 	}
 	@Test
-	public void should_ReturnListOfBands_WhenEntityManagerGetResultListNotIsEmpty() {
+	public void should_ReturnListOfAlbums_WhenEntityManagerGetResultListNotIsEmpty() {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_name", origin, List.of(genre));
@@ -83,6 +84,21 @@ public class AlbumRepositoryTests {
 		
 		
 		assertFalse(result.isEmpty());
+		
+		
+	
+	}
+	@Test
+	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
+		
+		when(entityManager.createQuery("from Album",Album.class)).thenReturn(typedQueryAlbum);
+		when(typedQueryAlbum.getResultList()).thenReturn(List.of());
+		
+		
+		List<Album> result  = albumRepositoryImpl.findAll();
+		
+		
+		assertTrue(result.isEmpty());
 		
 		
 	
