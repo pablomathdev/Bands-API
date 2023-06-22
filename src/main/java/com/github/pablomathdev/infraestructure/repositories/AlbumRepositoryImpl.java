@@ -54,7 +54,22 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 			throw new EntityNotFoundException(String.format("Album %s not found", title), e);
 		}
 	}
+	
+	
+	public boolean exists(String albumTitle,String bandName) {
+		String jpql = "select count(a) from  a where a.title = :albumTitle AND a.band.name = :bandName";
 
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		query.setParameter("albumTitle", albumTitle);
+		query.setParameter("bandName",bandName);
+
+		if (query.getSingleResult() == 1L) {
+			return true;
+		}
+
+		return false;
+
+	}
 //	@Override
 //	public Album findByName(String AlbumTitle, String BandName) {
 //		String jpql = "select a from Album a where a.title = :title";

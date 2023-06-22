@@ -11,14 +11,12 @@ public class AlbumService {
 
 	@Autowired
 	private IAlbumRepository albumRepository;
-	
-	
+
 	public Album create(Album album) {
-		
-		albumRepository.findByName(album.getTitle());
-		
-		albumRepository.save(album);
+
+		albumRepository.exists(album.getTitle(), album.getBand().getName());
 		return null;
+
 	}
-	
+
 }
