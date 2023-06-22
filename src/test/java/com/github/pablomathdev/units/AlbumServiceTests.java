@@ -48,7 +48,7 @@ public class AlbumServiceTests {
 
 	}
 	@Test
-	public void should_InvokeGenreRepositoryfindByName_withCorrectArguments() {
+	public void should_InvokeAlbumRepositoryfindByName_withCorrectArguments() {
 		
 
 		Genre genre = genreFactory("any_genre");
