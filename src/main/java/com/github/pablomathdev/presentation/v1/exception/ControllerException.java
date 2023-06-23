@@ -24,6 +24,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.github.pablomathdev.domain.exceptions.EntityRelationshipException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
@@ -116,6 +117,14 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
 					.message(subEx.getMessage())
 					.detail("Cannot create the given genre because it already exists. Please choose a different genre.")
+					.build();
+		}else if(ex instanceof AlbumAlreadyExistsException subEx) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(CONFLICT.value())
+					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
+					.message(subEx.getMessage())
+					.detail("Cannot create the given album because it already exists. Please choose a other album.")
 					.build();
 		}
 		

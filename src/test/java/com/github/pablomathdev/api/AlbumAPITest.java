@@ -25,6 +25,7 @@ public class AlbumAPITest {
 
 	static final String CREATE_ALBUM_SUCCESS = "classpath:data/create_album_test_success.json";
 	static final String CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_GENRE = "classpath:data/create_album_test_error_non-existent_genre.json";
+	static final String CREATE_ALBUM_ERROR_ALBUM_EXISTING = "classpath:data/create_album_test_error_album_existing.json";
 	
 	@LocalServerPort
 	private int port;
@@ -63,6 +64,15 @@ public class AlbumAPITest {
 
 		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
 				.then().statusCode(400);
+
+	}
+	@Test
+	public void should_ReturnStatusCode409_WhenAlbumAlreadyExist() throws IOException {
+
+		Resource resource = resourceLoader.getResource(CREATE_ALBUM_ERROR_ALBUM_EXISTING);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(409);
 
 	}
 }
