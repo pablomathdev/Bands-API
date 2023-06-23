@@ -4,8 +4,8 @@ package com.github.pablomathdev.presentation.v1.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +67,22 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 			
 			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
 		}
+		
+		if (request.getDescription(false).indexOf("albums") != -1) {
+
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Genre is invalid")
+					.detail("The provided album genre is invalid. Please provide a valid genre.")
+					.build();
+			 
+			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+			
+		}
+		
+		
 		   errorMessage = ControllerErrorMessage
 				    .builder()
 				    .code(NOT_FOUND.value())
