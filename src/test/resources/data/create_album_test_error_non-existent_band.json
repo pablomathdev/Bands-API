@@ -1,0 +1,12 @@
+{
+	"title": "Paranoid",
+	"releaseDate": "1970-09-18",
+	 "band":{
+		 "name": "Black Sabbath"
+	 },
+	 "genres":[
+		 {
+			 "name": "Heavy Metal"
+		 }
+	 ] 
+}

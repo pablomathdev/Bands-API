@@ -40,8 +40,22 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(BandNotFoundException.class)
 	public ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
 
+		ControllerErrorMessage errorMessage = null;
+		
+		if(request.getDescription(false).indexOf("albums") != -1) {
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message(ex.getMessage())
+					.detail("The provided band is invalid. Please provide a valid band.")
+					.build();
 
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+		}
+		
+
+		 errorMessage = ControllerErrorMessage
 				.builder()
 				.code(NOT_FOUND.value())
 				.type(ErrorType.RESOURCE_NOT_FOUND.toString())
