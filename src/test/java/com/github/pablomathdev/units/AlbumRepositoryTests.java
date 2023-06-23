@@ -32,7 +32,7 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class AlbumRepositoryTests {
-	static final String COUNT_ALBUM =  "select count(a) from  a where a.title = :albumTitle AND a.band.name = :bandName";
+	static final String COUNT_ALBUM =  "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
 	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
 	
 	@Mock
