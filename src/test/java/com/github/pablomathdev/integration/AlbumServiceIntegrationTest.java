@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class AlbumServiceIntegrationTest {
 	public void clearDatabaseTest() {
 		executeSQL.run("clear_database_test.sql");
 	}
-	
+
 	@BeforeEach
 	public void prepareData() {
 		executeSQL.run("data_test.sql");
@@ -73,12 +74,11 @@ public class AlbumServiceIntegrationTest {
 		album.setGenres(List.of(genre));
 		album.setTitle("Metallica (The Black Album)");
 		album.setReleaseDate(LocalDate.parse("1991-08-12"));
-		
-		
 
 		assertThrows(AlbumAlreadyExistsException.class, () -> albumService.create(album));
 
 	}
+
 	@Test
 	public void should_ThrowBandNotFoundException_WhenBandOfAlbumNotExists() {
 		Genre genre = genreFactory("Trash Metal");
@@ -88,21 +88,28 @@ public class AlbumServiceIntegrationTest {
 		album.setGenres(List.of(genre));
 		album.setTitle("Nevermind");
 		album.setReleaseDate(LocalDate.parse("1991-09-24"));
-		
-		
 
 		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
 
 	}
-	
+
 	@Test
 	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
-		
-	  List<Album> result = albumService.findAll();
-	  
-	  
-      assertEquals(1, result.size()); 	  
-				
+
+		List<Album> result = albumService.findAll();
+
+		assertEquals(1, result.size());
+
+	}
+
+	@Test
+	public void should_ReturnResultListEmptyOfAlbums_WhenAlbumsNotExists() {
+
+		clearDatabaseTest();
+
+		List<Album> result = albumService.findAll();
+
+		assertTrue(result.isEmpty());
 
 	}
 }
