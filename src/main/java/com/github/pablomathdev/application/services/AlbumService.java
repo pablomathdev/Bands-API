@@ -35,6 +35,10 @@ public class AlbumService {
 	   return albumRepository.findAll();
 	}
 	
+	public void delete(Album album) {
+		albumRepository.delete(album);
+	}
+	
 
 	public Album create(Album album) {
 

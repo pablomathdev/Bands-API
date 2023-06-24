@@ -180,5 +180,20 @@ public class AlbumServiceTests {
 	   assertTrue(result.isEmpty());
 
 	}
+	
+	@Test
+	public void should_InvokeAlbumRepositoryDelete_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+		
+		albumService.delete(album);
+		
+		verify(albumRepository).delete(eq(album));
+		
+	}
+	
 
 }
