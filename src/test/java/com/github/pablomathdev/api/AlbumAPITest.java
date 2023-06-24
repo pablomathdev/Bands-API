@@ -95,7 +95,17 @@ public class AlbumAPITest {
 		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",Matchers.is(1));
 
 		
-	}		
+	}
+	@Test
+	public void should_ReturnStatusCode204_WhenAlbumsNotExists() {
+		
+		clearDatabase();
+		
+		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+		
+	}	
+	
 	public void clearDatabase() {
 		executeSQL.run("clear_database_test.sql");
 	}
