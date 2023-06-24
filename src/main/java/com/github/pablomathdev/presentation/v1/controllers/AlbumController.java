@@ -1,8 +1,11 @@
 package com.github.pablomathdev.presentation.v1.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +21,19 @@ public class AlbumController {
 	@Autowired
 	private AlbumService albumService;
 	
-//	@PostMapping
-//	public ResponseEntity<List<Album>> findAllAlbums(){
-//		
-//		
-//	}
-//	
+	@GetMapping
+	public ResponseEntity<List<Album>> findAllAlbums(){
+		
+	   List<Album> albums = albumService.findAll();
+	   
+	   if(albums.isEmpty()) {
+		   return ResponseEntity.status(HttpStatus.NO_CONTENT).body(albums);
+	   }
+	   
+	   return ResponseEntity.ok(albums);
+	   
+	}
+	
 
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Album album) {

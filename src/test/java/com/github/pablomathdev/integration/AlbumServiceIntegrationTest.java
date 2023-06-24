@@ -94,4 +94,15 @@ public class AlbumServiceIntegrationTest {
 		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
 
 	}
+	
+	@Test
+	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
+		
+	  List<Album> result = albumService.findAll();
+	  
+	  
+      assertEquals(1, result.size()); 	  
+				
+
+	}
 }
