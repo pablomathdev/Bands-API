@@ -36,8 +36,9 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		
 	}
 	@Override
+	@Transactional
 	public void delete(Album object) {
-	
+	     entityManager.remove(object);
 	}
 
 	@Override
