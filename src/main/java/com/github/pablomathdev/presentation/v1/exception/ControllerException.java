@@ -4,8 +4,8 @@ package com.github.pablomathdev.presentation.v1.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +24,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.github.pablomathdev.domain.exceptions.EntityRelationshipException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
@@ -39,8 +40,22 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(BandNotFoundException.class)
 	public ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
 
+		ControllerErrorMessage errorMessage = null;
+		
+		if(request.getDescription(false).indexOf("albums") != -1) {
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message(ex.getMessage())
+					.detail("The provided band is invalid. Please provide a valid band.")
+					.build();
 
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+		}
+		
+
+		 errorMessage = ControllerErrorMessage
 				.builder()
 				.code(NOT_FOUND.value())
 				.type(ErrorType.RESOURCE_NOT_FOUND.toString())
@@ -67,6 +82,22 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 			
 			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
 		}
+		
+		if (request.getDescription(false).indexOf("albums") != -1) {
+
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Genre is invalid")
+					.detail("The provided album genre is invalid. Please provide a valid genre.")
+					.build();
+			 
+			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+			
+		}
+		
+		
 		   errorMessage = ControllerErrorMessage
 				    .builder()
 				    .code(NOT_FOUND.value())
@@ -100,6 +131,14 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
 					.message(subEx.getMessage())
 					.detail("Cannot create the given genre because it already exists. Please choose a different genre.")
+					.build();
+		}else if(ex instanceof AlbumAlreadyExistsException subEx) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(CONFLICT.value())
+					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
+					.message(subEx.getMessage())
+					.detail("Cannot create the given album because it already exists. Please choose a other album.")
 					.build();
 		}
 		

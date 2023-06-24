@@ -13,8 +13,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +25,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
-import com.github.pablomathdev.infraestructure.BandRepositoryImpl;
+import com.github.pablomathdev.infraestructure.repositories.BandRepositoryImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -224,5 +222,7 @@ public class BandRepositoryTests {
 		bandRepositoryImpl.delete(band1);
 		verify(entityManager).remove(eq(band1));
 	}
+	
+	
 
 }

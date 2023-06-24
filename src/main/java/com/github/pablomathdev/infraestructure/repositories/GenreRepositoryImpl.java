@@ -1,4 +1,4 @@
-package com.github.pablomathdev.infraestructure;
+package com.github.pablomathdev.infraestructure.repositories;
 
 import java.util.List;
 
