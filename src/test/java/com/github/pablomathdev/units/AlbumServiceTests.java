@@ -5,6 +5,7 @@ import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -150,6 +151,22 @@ public class AlbumServiceTests {
 		 assertThrows(BandNotFoundException.class,()-> albumService.create(album)); 
 
 	
+
+	}
+	@Test
+	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		when(albumRepository.findAll()).thenReturn(List.of(album));
+		
+	  List<Album> result = albumService.findAll();
+				
+	   assertFalse(result.isEmpty());
 
 	}
 

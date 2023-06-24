@@ -28,6 +28,13 @@ public class AlbumService {
 
 	@Autowired
 	private IGenreRepository genreRepository;
+	
+	
+	public List<Album> findAll(){
+		
+	   return albumRepository.findAll();
+	}
+	
 
 	public Album create(Album album) {
 

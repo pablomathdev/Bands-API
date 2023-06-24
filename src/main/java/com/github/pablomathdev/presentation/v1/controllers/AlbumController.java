@@ -17,6 +17,13 @@ public class AlbumController {
 
 	@Autowired
 	private AlbumService albumService;
+	
+//	@PostMapping
+//	public ResponseEntity<List<Album>> findAllAlbums(){
+//		
+//		
+//	}
+//	
 
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Album album) {
