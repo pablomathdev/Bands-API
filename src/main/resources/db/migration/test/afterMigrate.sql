@@ -43,7 +43,7 @@ INSERT INTO tb_band_member (band_id,member_id) VALUES (1,1);
 INSERT INTO tb_band_member (band_id,member_id) VALUES (1,2);
 INSERT INTO tb_band_member (band_id,member_id) VALUES (1,3);
 INSERT INTO tb_band_member (band_id,member_id) VALUES (1,4);
-
+*/
 -- Albums of Metallica
 
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1983-07-25', "Kill 'Em All");
@@ -58,7 +58,7 @@ INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '2008-09-12', 'De
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '2016-11-18', 'Hardwired... to Self-Destruct');
 
 -- Exemples inserts to musics of album "Master of Puppets"
-
+/*
 INSERT INTO tb_track (band_id, album_id, release_date, title) VALUES (1, 3, '1986-03-03', 'Battery');
 
 INSERT INTO tb_track (band_id, album_id, release_date, title) VALUES (1, 3, '1986-03-03', 'Master of Puppets');

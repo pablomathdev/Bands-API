@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 
 import java.io.IOException;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +28,28 @@ public class AlbumAPITest {
 	static final String CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_BAND = "classpath:data/create_album_test_error_non-existent_band.json";
 	static final String CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_GENRE = "classpath:data/create_album_test_error_non-existent_genre.json";
 	static final String CREATE_ALBUM_ERROR_ALBUM_EXISTING = "classpath:data/create_album_test_error_album_existing.json";
-	
+
 	@LocalServerPort
 	private int port;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
-	
+
 	@Autowired
 	private ExecuteSQL executeSQL;
-	
+
 	@BeforeEach
 	private void setUp() {
-		
-		RestAssured.basePath="/v1/albums";
-		RestAssured.port=port;
-		
-		executeSQL.run("data_test.sql");
-		
+
+		RestAssured.basePath = "/v1/albums";
+		RestAssured.port = port;
+
+		clearDatabase();
+
+		prepareData();
+
 	}
-	
-	
+
 	@Test
 	public void should_ReturnStatusCode201_WhenAlbumIsCreated() throws IOException {
 
@@ -57,7 +59,7 @@ public class AlbumAPITest {
 				.then().statusCode(201);
 
 	}
-	
+
 	@Test
 	public void should_ReturnStatusCode400_WhenGenreInAlbumNotExists() throws IOException {
 
@@ -67,6 +69,7 @@ public class AlbumAPITest {
 				.then().statusCode(400);
 
 	}
+
 	@Test
 	public void should_ReturnStatusCode400_WhenBandInAlbumNotExists() throws IOException {
 
@@ -76,6 +79,7 @@ public class AlbumAPITest {
 				.then().statusCode(400);
 
 	}
+
 	@Test
 	public void should_ReturnStatusCode409_WhenAlbumAlreadyExist() throws IOException {
 
@@ -85,4 +89,19 @@ public class AlbumAPITest {
 				.then().statusCode(409);
 
 	}
+
+	@Test
+	public void should_ReturnStatusCode200_WhenAlbumsExists() {
+		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",Matchers.is(1));
+
+		
+	}		
+	public void clearDatabase() {
+		executeSQL.run("clear_database_test.sql");
+	}
+
+	public void prepareData() {
+		executeSQL.run("data_test.sql");
+	}
+
 }

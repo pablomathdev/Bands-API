@@ -3,6 +3,8 @@ package com.github.pablomathdev.domain.entities;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +37,7 @@ public class Album extends Release {
 	inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private List<Genre> genres;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "album")
 	private List<Track> tracks;
 
