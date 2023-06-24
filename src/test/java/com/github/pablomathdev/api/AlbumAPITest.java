@@ -40,7 +40,8 @@ public class AlbumAPITest {
 
 	@BeforeEach
 	private void setUp() {
-
+        
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.basePath = "/v1/albums";
 		RestAssured.port = port;
 

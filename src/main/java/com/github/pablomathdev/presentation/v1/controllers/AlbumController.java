@@ -13,10 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.AlbumService;
 import com.github.pablomathdev.domain.entities.Album;
+import com.github.pablomathdev.presentation.v1.DTOs.AlbumRequestDTO;
+import com.github.pablomathdev.presentation.v1.mappers.AlbumRequestDTOToAlbum;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/albums")
 public class AlbumController {
+	
+	@Autowired
+	private AlbumRequestDTOToAlbum albumRequestDTOToAlbum;
 
 	@Autowired
 	private AlbumService albumService;
@@ -36,8 +43,11 @@ public class AlbumController {
 	
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Album album) {
-
+	public ResponseEntity<?> save(@RequestBody @Valid AlbumRequestDTO albumRequestDTO) {
+        
+	     Album album = albumRequestDTOToAlbum.convert(albumRequestDTO);
+		
+		
 		Album albumSaved = albumService.create(album);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(albumSaved);

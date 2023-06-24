@@ -1,12 +1,6 @@
 {
 	"title": "Metallica (The Black Album)",
 	"releaseDate": "1991-08-12",
-	 "band":{
-		 "name": "Metallica"
-	 },
-	 "genres":[
-		 {
-			 "name": "Trash Metal"
-		 }
-	 ] 
+	"band":"Metallica",
+	"genres": ["Trash Metal"]
 }

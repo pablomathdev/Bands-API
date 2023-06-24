@@ -1,12 +1,6 @@
 {
 	"title": "Death Magnetic",
 	"releaseDate": "2008-09-12",
-	 "band":{
-		 "name": "Metallica"
-	 },
-	 "genres":[
-		 {
-			 "name": "Heavy Metal"
-		 }
-	 ] 
+	 "band":"Metallica",
+	 "genres":["Heavy Metal"] 
 }

@@ -48,6 +48,7 @@ INSERT INTO tb_band_member (band_id,member_id) VALUES (1,4);
 
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1983-07-25', "Kill 'Em All");
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1984-07-27', 'Ride the Lightning');
+/*
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1986-09-08', 'Master of Puppets');
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1988-08-25', '...And Justice for All');
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1991-08-12', 'Metallica (The Black Album)');
@@ -56,6 +57,12 @@ INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '1997-11-18', 'Re
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '2003-06-05', 'St. Anger');
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '2008-09-12', 'Death Magnetic');
 INSERT INTO tb_album (band_id, release_date, title) VALUES (1, '2016-11-18', 'Hardwired... to Self-Destruct');
+*/
+
+
+INSERT INTO tb_album_genre (album_id,genre_id) VALUES (1,1);
+INSERT INTO tb_album_genre (album_id,genre_id) VALUES (1,2);
+
 
 -- Exemples inserts to musics of album "Master of Puppets"
 /*
