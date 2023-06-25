@@ -4,7 +4,6 @@ package com.github.pablomathdev.presentation.v1.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
@@ -28,6 +27,7 @@ import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlr
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 
@@ -65,6 +65,23 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(errorMessage, new HttpHeaders(), NOT_FOUND);
 	}
+	
+	
+	@ExceptionHandler(AlbumNotFoundException.class)
+	public ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
+
+
+		ControllerErrorMessage errorMessage = ControllerErrorMessage
+				.builder()
+				.code(NOT_FOUND.value())
+				.type(ErrorType.RESOURCE_NOT_FOUND.toString())
+				.message(ex.getMessage())
+				.detail("The provided album is invalid. Please provide a valid album.")
+				.build();
+
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), NOT_FOUND);
+	}
+
 
 	@ExceptionHandler(GenreNotFoundException.class)
 	public ResponseEntity<Object> handleGenreNotFoundException(GenreNotFoundException ex, WebRequest request) {
@@ -198,20 +215,20 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	}
 	
 	
-	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
-		
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
-			    .builder()
-			    .code(INTERNAL_SERVER_ERROR.value())
-			    .type(ErrorType.SERVER_ERROR.toString())
-			    .message("An internal error occurred in the application.")
-			    .build();
-	
-
-	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
-		
-	}
+//	
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
+//		
+//		ControllerErrorMessage errorMessage = ControllerErrorMessage
+//			    .builder()
+//			    .code(INTERNAL_SERVER_ERROR.value())
+//			    .type(ErrorType.SERVER_ERROR.toString())
+//			    .message("An internal error occurred in the application.")
+//			    .build();
+//	
+//
+//	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
+//		
+//	}
 	
 }

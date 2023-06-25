@@ -38,7 +38,7 @@ import jakarta.persistence.TypedQuery;
 public class AlbumRepositoryTests {
 	static final String COUNT_ALBUM =  "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
 	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
-	
+	static final String FIND_ALBUM_BY_TITLE_AND_BAND_NAME = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
 	@Mock
 	private EntityManager entityManager;
 	
@@ -199,6 +199,22 @@ public class AlbumRepositoryTests {
 
 	    verify(entityManager).remove(eq(album));
 
+	}
+	
+	@Test
+	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameInvokeTypedQuery_WithCorrectArguments() {
+		
+		when(entityManager.createQuery(FIND_ALBUM_BY_TITLE_AND_BAND_NAME, Album.class)).thenReturn(typedQueryAlbum);
+
+		String albumTitle = "any_album_title";
+		String bandName = "any_band_name";
+		
+		albumRepositoryImpl.findAlbumByTitleAndBandName(albumTitle,bandName);
+
+		verify(typedQueryAlbum).setParameter(eq("albumTitle"), eq(albumTitle));
+		verify(typedQueryAlbum).setParameter(eq("bandName"), eq(bandName));
+		
+		
 	}
 	
 	

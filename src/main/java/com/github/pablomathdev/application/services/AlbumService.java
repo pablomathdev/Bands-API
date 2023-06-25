@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
@@ -28,17 +30,24 @@ public class AlbumService {
 
 	@Autowired
 	private IGenreRepository genreRepository;
-	
-	
-	public List<Album> findAll(){
-		
-	   return albumRepository.findAll();
+
+	public List<Album> findAll() {
+
+		return albumRepository.findAll();
 	}
-	
-	public void delete(Album album) {
-		albumRepository.delete(album);
+
+	@Transactional
+	public void delete(String albumTitle, String bandName) {
+
+		try {
+			Album album = albumRepository.findAlbumByTitleAndBandName(albumTitle, bandName);
+			albumRepository.delete(album);
+		} catch (EntityNotFoundException e) {
+
+			throw new AlbumNotFoundException(e.getMessage(), e);
+		}
+
 	}
-	
 
 	public Album create(Album album) {
 
@@ -46,15 +55,15 @@ public class AlbumService {
 
 			throw new AlbumAlreadyExistsException(album.getTitle());
 		}
-		
+
 		Band band = findBandOrThrow(album.getBand().getName());
-        List<Genre> genres = findGenreOrThrow(album.getGenres());
-        
-        album.setBand(band);
-        album.setGenres(genres);
-        
-        return albumRepository.save(album);
-	
+		List<Genre> genres = findGenreOrThrow(album.getGenres());
+
+		album.setBand(band);
+		album.setGenres(genres);
+
+		return albumRepository.save(album);
+
 	}
 
 	private Band findBandOrThrow(String bandName) {
