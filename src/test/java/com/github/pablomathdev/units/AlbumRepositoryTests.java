@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,19 +37,18 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class AlbumRepositoryTests {
-	static final String COUNT_ALBUM =  "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
+	static final String COUNT_ALBUM = "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
 	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
 	static final String FIND_ALBUM_BY_TITLE_AND_BAND_NAME = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
 	@Mock
 	private EntityManager entityManager;
-	
+
 	@Mock
 	private TypedQuery<Album> typedQueryAlbum;
 
-
 	@Mock
 	private TypedQuery<Long> typedQueryLong;
-	
+
 	@InjectMocks
 	private AlbumRepositoryImpl albumRepositoryImpl;
 
@@ -75,9 +75,10 @@ public class AlbumRepositoryTests {
 
 		Album expected = albumRepositoryImpl.save(album);
 
-		assertEquals(album,expected);
+		assertEquals(album, expected);
 
 	}
+
 	@Test
 	public void should_ReturnListOfAlbums_WhenEntityManagerGetResultListNotIsEmpty() {
 		Genre genre = genreFactory("any_genre");
@@ -85,19 +86,16 @@ public class AlbumRepositoryTests {
 		Band band = bandFactory("any_name", origin, List.of(genre));
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
-		
-		when(entityManager.createQuery("from Album",Album.class)).thenReturn(typedQueryAlbum);
+
+		when(entityManager.createQuery("from Album", Album.class)).thenReturn(typedQueryAlbum);
 		when(typedQueryAlbum.getResultList()).thenReturn(List.of(album));
-		
-		
-		List<Album> result  = albumRepositoryImpl.findAll();
-		
-		
+
+		List<Album> result = albumRepositoryImpl.findAll();
+
 		assertFalse(result.isEmpty());
-		
-		
-	
+
 	}
+
 	@Test
 	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
 		
@@ -113,7 +111,7 @@ public class AlbumRepositoryTests {
 		
 	
 	}
-	
+
 	@Test
 	public void should_InvokeTypedQueryExists_withCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
@@ -121,19 +119,18 @@ public class AlbumRepositoryTests {
 		Band band = bandFactory("any_name", origin, List.of(genre));
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
-		
 
 		when(typedQueryLong.getSingleResult()).thenReturn(1L);
 
 		when(entityManager.createQuery(COUNT_ALBUM, Long.class)).thenReturn(typedQueryLong);
 
-		albumRepositoryImpl.exists(album.getTitle(),album.getBand().getName());
+		albumRepositoryImpl.exists(album.getTitle(), album.getBand().getName());
 
 		verify(typedQueryLong).setParameter(eq("albumTitle"), eq(album.getTitle()));
 		verify(typedQueryLong).setParameter(eq("bandName"), eq(album.getBand().getName()));
 
 	}
-	
+
 	@Test
 	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
@@ -141,7 +138,6 @@ public class AlbumRepositoryTests {
 		Band band = bandFactory("any_name", origin, List.of(genre));
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
-		
 
 		List<Album> result = new ArrayList<>();
 		result.add(album);
@@ -153,6 +149,7 @@ public class AlbumRepositoryTests {
 		verify(typedQueryAlbum).setParameter(eq("title"), eq(album.getTitle()));
 
 	}
+
 	@Test
 	public void should_FindByNameReturnAAlbum_WhenTheTypedQueryReturnAAlbum() {
 		Genre genre = genreFactory("any_genre");
@@ -160,17 +157,17 @@ public class AlbumRepositoryTests {
 		Band band = bandFactory("any_name", origin, List.of(genre));
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
-		
 
 		when(entityManager.createQuery(SELECT_ALBUM_BY_NAME, Album.class)).thenReturn(typedQueryAlbum);
 
 		when(typedQueryAlbum.getSingleResult()).thenReturn(album);
 
-	  Album result = albumRepositoryImpl.findByName(album.getTitle());
+		Album result = albumRepositoryImpl.findByName(album.getTitle());
 
 		assertEquals(album.getTitle(), result.getTitle());
 
 	}
+
 	@Test
 	public void should_ThrowNoResultException_WhenTypedQueryThrowsNoResultException() {
 		Genre genre = genreFactory("any_genre");
@@ -186,6 +183,7 @@ public class AlbumRepositoryTests {
 		assertThrows(EntityNotFoundException.class, () -> albumRepositoryImpl.findByName(album.getTitle()));
 
 	}
+
 	@Test
 	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
@@ -194,13 +192,12 @@ public class AlbumRepositoryTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-
 		albumRepositoryImpl.delete(album);
 
-	    verify(entityManager).remove(eq(album));
+		verify(entityManager).remove(eq(album));
 
 	}
-	
+
 	@Test
 	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameInvokeTypedQuery_WithCorrectArguments() {
 		
@@ -216,6 +213,27 @@ public class AlbumRepositoryTests {
 		
 		
 	}
+
+	@Test
+	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameReturnAlbum_WhenAlbumExists() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		when(entityManager.createQuery(FIND_ALBUM_BY_TITLE_AND_BAND_NAME, Album.class)).thenReturn(typedQueryAlbum);
+
+		when(typedQueryAlbum.getSingleResult()).thenReturn(album);
+
 	
+
+	  Album result = albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(),anyString());
+		
 	
+		assertEquals(album.getTitle(), result.getTitle());
+		assertEquals(album.getBand().getName(), result.getBand().getName());
+
+	}
+
 }
