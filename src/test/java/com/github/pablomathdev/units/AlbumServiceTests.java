@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -183,9 +184,12 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
+		
+		when(albumRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenReturn(album);
+		
 		albumService.delete(album.getTitle(), band.getName());
 
-		verify(albumRepository).findAlbumByTitleAndBandName(eq(album.getTitle()), eq(band.getName()));
+		verify(albumRepository).delete(eq(album));
 
 	}
 
