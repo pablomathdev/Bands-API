@@ -58,7 +58,7 @@ public class AlbumController {
 	}
 	
 	@DeleteMapping
-	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@RequestParam String albumTitle,@RequestParam String bandName) {
 		
 		albumService.delete(albumTitle, bandName);

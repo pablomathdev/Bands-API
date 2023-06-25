@@ -107,6 +107,21 @@ public class AlbumAPITest {
 		
 	}	
 	
+	@Test
+	public void should_ReturnStatusCode204_WhenAlbumIsRemoved() {
+		
+		given()
+		.queryParam("albumTitle", "Metallica (The Black Album)")
+		.queryParam("bandName", "Metallica")
+		.accept(ContentType.JSON)
+		.when()
+		.delete()
+		.then()
+		.statusCode(204);
+
+		
+	}	
+	
 	public void clearDatabase() {
 		executeSQL.run("clear_database_test.sql");
 	}
