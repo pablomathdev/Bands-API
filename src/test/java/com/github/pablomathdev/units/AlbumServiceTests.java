@@ -41,10 +41,10 @@ public class AlbumServiceTests {
 
 	@Mock
 	private IAlbumRepository albumRepository;
-	
+
 	@Mock
 	private IBandRepository bandRepository;
-	
+
 	@Mock
 	private IGenreRepository genreRepository;
 
@@ -60,12 +60,12 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		
 		albumService.create(album);
-		
+
 		verify(albumRepository).exists(eq(album.getTitle()), eq(band.getName()));
 
 	}
+
 	@Test
 	public void should_ThrowAlbumAlreadyExistsException_WhenAlbumAlreadyExists() {
 
@@ -75,15 +75,12 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		when(albumRepository.exists(album.getTitle(),album.getBand().getName())).thenReturn(true);
-		
-		
-		 assertThrows(AlbumAlreadyExistsException.class,()-> albumService.create(album)); 
+		when(albumRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(true);
 
-	
+		assertThrows(AlbumAlreadyExistsException.class, () -> albumService.create(album));
 
 	}
-	
+
 	@Test
 	public void should_InvockAlbumRepositorySave_WithCorrectArguments() {
 
@@ -98,7 +95,7 @@ public class AlbumServiceTests {
 		Mockito.verify(albumRepository).save(eq(album));
 
 	}
-	
+
 	@Test
 	public void should_ReturnAlbum_WhenAlbumIsCreated() {
 
@@ -107,14 +104,15 @@ public class AlbumServiceTests {
 		Band band = bandFactory("any_name", origin, List.of(genre));
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
-       
+
 		when(albumRepository.save(any())).thenReturn(album);
-		
-		 Album result = albumService.create(album);
+
+		Album result = albumService.create(album);
 
 		assertEquals(album.getTitle(), result.getTitle());
 
 	}
+
 	@Test
 	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
 
@@ -124,14 +122,11 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		when(albumRepository.exists(album.getTitle(),album.getBand().getName())).thenReturn(false);
-		
-		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
-		
-		
-		 assertThrows(BandNotFoundException.class,()-> albumService.create(album)); 
+		when(albumRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(false);
 
-	
+		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
+
+		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
 
 	}
 
@@ -144,16 +139,14 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		when(albumRepository.exists(album.getTitle(),album.getBand().getName())).thenReturn(false);
-		
-		when(bandRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
-		
-		
-		 assertThrows(BandNotFoundException.class,()-> albumService.create(album)); 
+		when(albumRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(false);
 
-	
+		when(bandRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
+
+		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
 
 	}
+
 	@Test
 	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
 
@@ -164,12 +157,13 @@ public class AlbumServiceTests {
 				List.of(new Track()));
 
 		when(albumRepository.findAll()).thenReturn(List.of(album));
-		
-	  List<Album> result = albumService.findAll();
-				
-	   assertFalse(result.isEmpty());
+
+		List<Album> result = albumService.findAll();
+
+		assertFalse(result.isEmpty());
 
 	}
+
 	@Test
 	public void should_ReturnResultListEmpty_WhenAlbumsNotExists() {
 
@@ -180,20 +174,19 @@ public class AlbumServiceTests {
 	   assertTrue(result.isEmpty());
 
 	}
-	
-//	@Test
-//	public void should_InvokeAlbumRepositoryDelete_WithCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//		
-//		albumService.delete(album);
-//		
-//		verify(albumRepository).delete(eq(album));
-//		
-//	}
-	
+
+	@Test
+	public void should_InvokeAlbumRepositoryFindAlbumByTitleAndBandName_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		albumService.delete(album.getTitle(), band.getName());
+
+		verify(albumRepository).findAlbumByTitleAndBandName(eq(album.getTitle()), eq(band.getName()));
+
+	}
 
 }
