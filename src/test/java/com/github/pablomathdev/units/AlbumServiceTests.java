@@ -31,7 +31,9 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
@@ -184,12 +186,24 @@ public class AlbumServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		
 		when(albumRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenReturn(album);
-		
+
 		albumService.delete(album.getTitle(), band.getName());
 
 		verify(albumRepository).delete(eq(album));
+
+	}
+
+	@Test
+	public void should_ThrowAlbumNotFoundException_WhenAlbumNotFound() {
+	
+	
+		when(albumRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
+		
+	
+
+		assertThrows(AlbumNotFoundException.class,()-> 	albumService.delete(anyString(),anyString()));
+	
 
 	}
 
