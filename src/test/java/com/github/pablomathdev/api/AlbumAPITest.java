@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+@Tag("API")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
 public class AlbumAPITest {
@@ -93,7 +95,14 @@ public class AlbumAPITest {
 
 	@Test
 	public void should_ReturnStatusCode200_WhenAlbumsExists() {
-		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",Matchers.is(1));
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.get()
+		.then()
+		.statusCode(200)
+		.assertThat()
+		.body("size()",Matchers.is(1));
 
 		
 	}

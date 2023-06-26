@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,6 +25,7 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+@Tag("API")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
 @ExtendWith(MockitoExtension.class)
@@ -89,7 +91,7 @@ public class GenreAPITest {
 
 	}
 	@Test
-	public void should_ReturnStatusCode200_WhenGenreIsRemoved() {
+	public void should_ReturnStatusCode204_WhenGenreIsRemoved() {
 
 
 
@@ -98,7 +100,7 @@ public class GenreAPITest {
 		.when()
 		.delete("/trash-metal")
 		.then()
-		.statusCode(200);
+		.statusCode(204);
 
 	}
 	@Test

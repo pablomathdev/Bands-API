@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,7 @@ import com.github.pablomathdev.application.services.GenreService;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.utils.ExecuteSQL;
+
 
 @SpringBootTest
 @TestPropertySource(value = "/application-test.properties")

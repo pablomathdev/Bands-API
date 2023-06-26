@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,7 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
+
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")

@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -24,6 +25,7 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+@Tag("API")
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")

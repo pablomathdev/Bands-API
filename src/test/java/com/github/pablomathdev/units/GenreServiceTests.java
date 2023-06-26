@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,7 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoun
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;
+
 
 @ExtendWith(MockitoExtension.class)
 public class GenreServiceTests {
