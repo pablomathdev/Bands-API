@@ -121,6 +121,20 @@ public class AlbumAPITest {
 
 		
 	}	
+	@Test
+	public void should_ReturnStatusCode404_WhenAlbumNotFound() {
+		
+		given()
+		.queryParam("albumTitle", "Master Of Puppets")
+		.queryParam("bandName", "Metallica")
+		.accept(ContentType.JSON)
+		.when()
+		.delete()
+		.then()
+		.statusCode(404);
+
+		
+	}	
 	
 	public void clearDatabase() {
 		executeSQL.run("clear_database_test.sql");
