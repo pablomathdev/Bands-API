@@ -34,7 +34,7 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class TrackRepositoryTests {
-	static final String COUNT_ALBUM = "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
+	static final String COUNT_TRACK= "select count(a) from Track a where a.title = :trackTitle AND a.band.name = :bandName";
 	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
 	static final String FIND_ALBUM_BY_TITLE_AND_BAND_NAME = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
 	@Mock
@@ -117,25 +117,27 @@ public class TrackRepositoryTests {
 	
 	}
 
-//	@Test
-//	public void should_InvokeTypedQueryExists_withCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(typedQueryLong.getSingleResult()).thenReturn(1L);
-//
-//		when(entityManager.createQuery(COUNT_ALBUM, Long.class)).thenReturn(typedQueryLong);
-//
-//		albumRepositoryImpl.exists(album.getTitle(), album.getBand().getName());
-//
-//		verify(typedQueryLong).setParameter(eq("albumTitle"), eq(album.getTitle()));
-//		verify(typedQueryLong).setParameter(eq("bandName"), eq(album.getBand().getName()));
-//
-//	}
-//
+	@Test
+	public void should_InvokeTypedQueryExists_withCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city","any_country",1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
+		
+		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+
+
+		when(typedQueryLong.getSingleResult()).thenReturn(1L);
+
+		when(entityManager.createQuery(COUNT_TRACK, Long.class)).thenReturn(typedQueryLong);
+
+		trackRepositoryImpl.exists(track.getTitle(), track.getBand().getName());
+
+		verify(typedQueryLong).setParameter(eq("trackTitle"), eq(track.getTitle()));
+		verify(typedQueryLong).setParameter(eq("bandName"), eq(track.getBand().getName()));
+
+	}
+
 //	@Test
 //	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
 //		Genre genre = genreFactory("any_genre");
