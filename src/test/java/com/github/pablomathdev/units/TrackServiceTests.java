@@ -8,6 +8,7 @@ import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -176,16 +177,16 @@ public class TrackServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListEmpty_WhenAlbumsNotExists() {
-//
-//		when(trackRepository.findAll()).thenReturn(List.of());
-//		
-//	  List<Album> result = albumService.findAll();
-//				
-//	   assertTrue(result.isEmpty());
-//
-//	}
+	@Test
+	public void should_ReturnResultListEmpty_WhenTrackNotExists() {
+
+		when(trackRepository.findAll()).thenReturn(List.of());
+		
+	    List<Track> result = trackService.findAll();
+				
+	    assertTrue(result.isEmpty());
+
+	}
 
 //	@Test
 //	public void should_InvokeAlbumRepositoryFindAlbumByTitleAndBandName_WithCorrectArguments() {
