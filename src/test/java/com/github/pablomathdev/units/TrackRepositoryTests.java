@@ -6,8 +6,10 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -79,22 +81,24 @@ public class TrackRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnListOfAlbums_WhenEntityManagerGetResultListNotIsEmpty() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(entityManager.createQuery("from Album", Album.class)).thenReturn(typedQueryAlbum);
-//		when(typedQueryAlbum.getResultList()).thenReturn(List.of(album));
-//
-//		List<Album> result = albumRepositoryImpl.findAll();
-//
-//		assertFalse(result.isEmpty());
-//
-//	}
+	@Test
+	public void should_ReturnListOfTracks_WhenEntityManagerGetResultListNotIsEmpty() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city","any_country",1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
+		
+		
+		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+
+		when(entityManager.createQuery("from Track", Track.class)).thenReturn(typedQueryTrack);
+		when(typedQueryTrack.getResultList()).thenReturn(List.of(track));
+
+		List<Track> result = trackRepositoryImpl.findAll();
+
+		assertFalse(result.isEmpty());
+
+	}
 
 //	@Test
 //	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
