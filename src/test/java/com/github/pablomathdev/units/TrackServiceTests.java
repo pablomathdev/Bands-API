@@ -31,10 +31,11 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
+import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ITrackRepository;
@@ -47,6 +48,9 @@ public class TrackServiceTests {
 
 	@Mock
 	private IBandRepository bandRepository;
+	
+	@Mock
+	private IAlbumRepository albumRepository;
 
 	@Mock
 	private IGenreRepository genreRepository;
@@ -63,7 +67,7 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title", album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 
 		trackService.create(track);
 
@@ -79,11 +83,11 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title", album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 
 		
 
-		when(trackRepository.exists(track.getTitle(), track.getBand().getName())).thenReturn(true);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(true);
 
 		assertThrows(TrackAlreadyExistsException.class, () -> trackService.create(track));
 
@@ -97,7 +101,7 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 
 	
 		trackService.create(track);
@@ -114,7 +118,7 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
 		when(trackRepository.save(any())).thenReturn(track);
 		
@@ -133,14 +137,14 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
 
-		when(trackRepository.exists(track.getTitle(), track.getBand().getName())).thenReturn(false);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(false);
 
-		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
+		when(albumRepository.findAlbumByTitleAndBandName(anyString(),anyString())).thenThrow(AlbumNotFoundException.class);
 
-		assertThrows(BandNotFoundException.class, () ->trackService.create(track));
+		assertThrows(AlbumNotFoundException.class, () ->trackService.create(track));
 
 	}
 
@@ -152,9 +156,9 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
-		when(trackRepository.exists(track.getTitle(), track.getBand().getName())).thenReturn(false);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(false);
 
 		when(genreRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
 
@@ -170,7 +174,7 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
 		when(trackRepository.findAll()).thenReturn(List.of(track));
 
@@ -199,11 +203,11 @@ public class TrackServiceTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
 				List.of(new Track()));
 
-		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 
 		when(trackRepository.findTrackByTitleAndBandName(anyString(), anyString())).thenReturn(track);
 
-		trackService.delete(track.getTitle(), band.getName());
+		trackService.delete(track.getTitle(), track.getAlbum().getBand().getName());
 
 		verify(trackRepository).delete(eq(track));
 

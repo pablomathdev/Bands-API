@@ -43,7 +43,7 @@ public class TrackRepositoryImpl implements ITrackRepository{
 
 	@Override
 	public Track findByName(String title) {
-		String jpql = "select a from Track a where a.title = :title";
+		String jpql = "select t from Track t where t.title = :title";
 
 		TypedQuery<Track> query = entityManager.createQuery(jpql, Track.class);
 		query.setParameter("title", title);
@@ -57,7 +57,7 @@ public class TrackRepositoryImpl implements ITrackRepository{
 	
 	
 	public boolean exists(String trackTitle,String bandName) {
-		String jpql = "select count(a) from Track a where a.title = :trackTitle AND a.band.name = :bandName";
+		String jpql = "select count(t) from Track t where t.title = :trackTitle AND t.album.band.name = :bandName";
 
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		query.setParameter("trackTitle", trackTitle);
@@ -73,7 +73,7 @@ public class TrackRepositoryImpl implements ITrackRepository{
 	
 	public Track findTrackByTitleAndBandName(String trackTitle, String bandName) {
 		
-		String jpql = "select a from Track a where a.title =:trackTitle AND a.band.name =:bandName";
+		String jpql = "select t from Track t where t.title =:trackTitle AND t.album.band.name =:bandName";
 		TypedQuery<Track> query = entityManager.createQuery(jpql, Track.class);
 		query.setParameter("trackTitle",trackTitle);
 		query.setParameter("bandName",bandName);

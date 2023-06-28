@@ -38,9 +38,9 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class TrackRepositoryTests {
-	static final String COUNT_TRACK= "select count(a) from Track a where a.title = :trackTitle AND a.band.name = :bandName";
-	static final String SELECT_TRACK_BY_NAME = "select a from Track a where a.title = :title";
-	static final String FIND_TRACK_BY_TITLE_AND_BAND_NAME = "select a from Track a where a.title =:trackTitle AND a.band.name =:bandName";
+	static final String COUNT_TRACK= "select count(t) from Track t where t.title = :trackTitle AND t.album.band.name = :bandName";
+	static final String SELECT_TRACK_BY_NAME = "select t from Track t where t.title = :title";
+	static final String FIND_TRACK_BY_TITLE_AND_BAND_NAME = "select t from Track t where t.title =:trackTitle AND t.album.band.name =:bandName";
 	@Mock
 	private EntityManager entityManager;
 
@@ -63,7 +63,7 @@ public class TrackRepositoryTests {
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		trackRepositoryImpl.save(track);
 
@@ -78,7 +78,7 @@ public class TrackRepositoryTests {
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		Track result = trackRepositoryImpl.save(track);
 
@@ -94,7 +94,7 @@ public class TrackRepositoryTests {
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		when(entityManager.createQuery("from Track", Track.class)).thenReturn(typedQueryTrack);
 		when(typedQueryTrack.getResultList()).thenReturn(List.of(track));
@@ -128,17 +128,17 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 
 		when(typedQueryLong.getSingleResult()).thenReturn(1L);
 
 		when(entityManager.createQuery(COUNT_TRACK, Long.class)).thenReturn(typedQueryLong);
 
-		trackRepositoryImpl.exists(track.getTitle(), track.getBand().getName());
+		trackRepositoryImpl.exists(track.getTitle(), track.getAlbum().getBand().getName());
 
 		verify(typedQueryLong).setParameter(eq("trackTitle"), eq(track.getTitle()));
-		verify(typedQueryLong).setParameter(eq("bandName"), eq(track.getBand().getName()));
+		verify(typedQueryLong).setParameter(eq("bandName"), eq(track.getAlbum().getBand().getName()));
 
 	}
 
@@ -149,7 +149,7 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		when(entityManager.createQuery(SELECT_TRACK_BY_NAME, Track.class)).thenReturn(typedQueryTrack);
 
@@ -166,7 +166,7 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		when(entityManager.createQuery(SELECT_TRACK_BY_NAME, Track.class)).thenReturn(typedQueryTrack);
 
@@ -185,7 +185,7 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		when(entityManager.createQuery(SELECT_TRACK_BY_NAME, Track.class)).thenReturn(typedQueryTrack);
 
@@ -202,7 +202,7 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		trackRepositoryImpl.delete(track);
 
@@ -233,7 +233,7 @@ public class TrackRepositoryTests {
 		Band band = bandFactory("any_band", origin, List.of(genre));
 		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
 		
-		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+		Track track = trackFactory("any_title",album,null,LocalDate.parse("1999-09-09"),List.of(genre));
 
 		when(entityManager.createQuery(FIND_TRACK_BY_TITLE_AND_BAND_NAME, Track.class)).thenReturn(typedQueryTrack);
 
@@ -245,7 +245,7 @@ public class TrackRepositoryTests {
 		
 	
 		assertEquals(track.getTitle(), result.getTitle());
-		assertEquals(track.getBand().getName(), result.getBand().getName());
+		assertEquals(track.getAlbum().getBand().getName(), result.getAlbum().getBand().getName());
 
 	}
 	@Test

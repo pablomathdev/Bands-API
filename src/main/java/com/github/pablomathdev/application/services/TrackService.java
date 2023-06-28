@@ -7,26 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pablomathdev.domain.entities.Track;
-import com.github.pablomathdev.domain.entities.Band;
+import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Genre;
+import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
-import com.github.pablomathdev.domain.repositories.ITrackRepository;
-import com.github.pablomathdev.domain.repositories.IBandRepository;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
+import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
+import com.github.pablomathdev.domain.repositories.ITrackRepository;
 
 @Service
 public class TrackService {
 
 	@Autowired
 	private ITrackRepository trackRepository;
-
+	
 	@Autowired
-	private IBandRepository bandRepository;
+	private IAlbumRepository albumRepository;
 
 	@Autowired
 	private IGenreRepository genreRepository;
@@ -51,27 +51,27 @@ public class TrackService {
 
 	public Track create(Track track) {
 
-		if (trackRepository.exists(track.getTitle(), track.getBand().getName())) {
+		if (trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())) {
 
 			throw new TrackAlreadyExistsException(track.getTitle());
 		}
 
-		Band band = findBandOrThrow(track.getBand().getName());
+		Album album = findAlbumOrThrow(track.getAlbum().getTitle(),track.getAlbum().getBand().getName());
 		List<Genre> genres = findGenreOrThrow(track.getGenres());
 
-		track.setBand(band);
+		track.setAlbum(album);
 		track.setGenres(genres);
 
 		return trackRepository.save(track);
 
 	}
 
-	private Band findBandOrThrow(String bandName) {
+	private Album findAlbumOrThrow(String albumTitle,String bandName) {
 		try {
-			return bandRepository.findByName(bandName);
+			return albumRepository.findAlbumByTitleAndBandName(albumTitle, bandName);
 
 		} catch (EntityNotFoundException e) {
-			throw new BandNotFoundException(e.getMessage(), e);
+			throw new AlbumNotFoundException(e.getMessage(), e);
 
 		}
 	}

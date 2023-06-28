@@ -28,12 +28,7 @@ public class Track {
 	
 	
 	private String title;
-	
-	@ManyToOne
-	@JoinColumn(name = "band_id")
-	private Band band;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "album_id")
 	private Album album;
@@ -43,7 +38,7 @@ public class Track {
 	@JoinColumn(name = "single_id")
 	private Single single;
 	
-	
+	@JoinColumn(name = "release_date")
 	private LocalDate releaseDate;
 	
 	

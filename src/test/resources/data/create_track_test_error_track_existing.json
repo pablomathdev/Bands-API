@@ -1,0 +1,13 @@
+{
+	"title": "Enter Sandman",
+	"releaseDate": "1991-07-29",
+	"album": {
+		"title": "Metallica (The Black Album)",
+		"band": {
+			"name": "Metallica"
+		},
+		"genres": [
+			"Heavy Metal"
+		]
+	}
+}

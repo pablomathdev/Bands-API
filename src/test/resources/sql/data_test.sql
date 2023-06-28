@@ -47,3 +47,8 @@ VALUES
    1,
    1
 );
+
+
+INSERT INTO tb_track (album_id, release_date, title) VALUES (1, '1991-07-29', 'Enter Sandman');
+
+INSERT INTO tb_track_genre (track_id,genre_id) VALUES (1,1);

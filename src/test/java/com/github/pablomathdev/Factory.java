@@ -49,11 +49,10 @@ public class Factory {
 
 	}
 
-	public static Track trackFactory(String title, Band Band, Album album, Single single, LocalDate releaseDate,
+	public static Track trackFactory(String title, Album album, Single single, LocalDate releaseDate,
 			List<Genre> genres) {
 		Track track = new Track();
 		track.setTitle(title);
-		track.setBand(Band);
 		track.setAlbum(album);
 		track.setGenres(genres);
 		track.setReleaseDate(releaseDate);
