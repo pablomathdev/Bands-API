@@ -79,22 +79,24 @@ public class TrackServiceTests {
 		assertThrows(TrackAlreadyExistsException.class, () -> trackService.create(track));
 
 	}
-//
-//	@Test
-//	public void should_InvockAlbumRepositorySave_WithCorrectArguments() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		albumService.create(album);
-//
-//		Mockito.verify(trackRepository).save(eq(album));
-//
-//	}
-//
+
+	@Test
+	public void should_InvockTrackRepositorySave_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+
+	
+		trackService.create(track);
+
+		verify(trackRepository).save(eq(track));
+
+	}
+
 //	@Test
 //	public void should_ReturnAlbum_WhenAlbumIsCreated() {
 //
