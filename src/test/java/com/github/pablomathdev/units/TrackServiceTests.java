@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -188,22 +189,24 @@ public class TrackServiceTests {
 
 	}
 
-//	@Test
-//	public void should_InvokeAlbumRepositoryFindAlbumByTitleAndBandName_WithCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(trackRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenReturn(album);
-//
-//		albumService.delete(album.getTitle(), band.getName());
-//
-//		verify(trackRepository).delete(eq(album));
-//
-//	}
-//
+	@Test
+	public void should_InvokeTrackRepositoryFindTrackByTitleAndBandName_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+
+		when(trackRepository.findTrackByTitleAndBandName(anyString(), anyString())).thenReturn(track);
+
+		trackService.delete(track.getTitle(), band.getName());
+
+		verify(trackRepository).delete(eq(track));
+
+	}
+
 //	@Test
 //	public void should_ThrowAlbumNotFoundException_WhenAlbumNotFound() {
 //	
