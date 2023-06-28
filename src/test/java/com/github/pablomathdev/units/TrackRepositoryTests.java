@@ -248,16 +248,16 @@ public class TrackRepositoryTests {
 		assertEquals(track.getBand().getName(), result.getBand().getName());
 
 	}
-//	@Test
-//	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameThrowEntityNotFoundException_WhenAlbumNotFound() {
-//		
-//		when(entityManager.createQuery(FIND_ALBUM_BY_TITLE_AND_BAND_NAME, Album.class)).thenReturn(typedQueryAlbum);
-//
-//		when(typedQueryAlbum.getSingleResult()).thenThrow(NoResultException.class);
-//
-//
-//	   assertThrows(EntityNotFoundException.class,()->albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(),anyString()) );
-//
-//	}
+	@Test
+	public void should_TrackRepositoryFindTrackByTitleAndBandNameThrowEntityNotFoundException_WhenTrackNotFound() {
+		
+		when(entityManager.createQuery(FIND_TRACK_BY_TITLE_AND_BAND_NAME, Track.class)).thenReturn(typedQueryTrack);
+
+		when(typedQueryTrack.getSingleResult()).thenThrow(NoResultException.class);
+
+
+	   assertThrows(EntityNotFoundException.class,()->trackRepositoryImpl.findTrackByTitleAndBandName(anyString(),anyString()) );
+
+	}
 
 }
