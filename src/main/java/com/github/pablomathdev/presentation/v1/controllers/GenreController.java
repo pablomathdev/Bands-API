@@ -1,6 +1,6 @@
 package com.github.pablomathdev.presentation.v1.controllers;
 
-import static com.github.pablomathdev.presentation.v1.utils.TransformeString.tranform;
+
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class GenreController {
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String name) {
 
-		genreService.delete(tranform(name));
+		genreService.delete(name);
 
 	}
 }
