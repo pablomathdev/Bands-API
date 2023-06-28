@@ -19,6 +19,7 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
+
 @SpringBootTest
 @TestPropertySource(value = "/application-test.properties")
 public class GenreServiceIntegrationTest {

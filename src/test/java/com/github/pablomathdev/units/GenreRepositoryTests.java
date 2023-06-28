@@ -27,6 +27,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
+
 @ExtendWith(MockitoExtension.class)
 public class GenreRepositoryTests {
 

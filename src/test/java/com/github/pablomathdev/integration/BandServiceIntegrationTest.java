@@ -27,6 +27,7 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFound
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
+
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -26,6 +26,7 @@ import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlr
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
+
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 public class AlbumServiceIntegrationTest {
@@ -111,5 +112,20 @@ public class AlbumServiceIntegrationTest {
 
 		assertTrue(result.isEmpty());
 
+	}
+	
+	@Test
+	public void should_DeleteAlbum_WhenALbumExists() {
+		
+		
+		albumService.delete("Metallica (The Black Album)","Metallica");
+		
+		List< Album> albums =albumService.findAll();
+		
+		boolean albumIsRemoved = albums.stream().noneMatch(album -> album.getTitle()
+				.equals("Metallica (The Black Album)") && album.getBand().getName()
+				.equals("Metallica"));
+		
+		assertTrue(albumIsRemoved);
 	}
 }

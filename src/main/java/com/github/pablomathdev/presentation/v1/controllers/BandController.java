@@ -1,7 +1,5 @@
 package com.github.pablomathdev.presentation.v1.controllers;
 
-import static com.github.pablomathdev.presentation.v1.utils.TransformeString.tranform;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +64,7 @@ public class BandController {
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String name) {
   
-	  bandService.delete(tranform(name));
+	  bandService.delete(name);
 
 	}
 

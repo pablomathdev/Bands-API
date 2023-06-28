@@ -36,8 +36,9 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		
 	}
 	@Override
+	@Transactional
 	public void delete(Album object) {
-	
+	     entityManager.remove(object);
 	}
 
 	@Override
@@ -68,6 +69,20 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 
 		return false;
 
+	}
+	
+	public Album findAlbumByTitleAndBandName(String albumTitle, String bandName) {
+		
+		String jpql = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
+		TypedQuery<Album> query = entityManager.createQuery(jpql, Album.class);
+		query.setParameter("albumTitle",albumTitle);
+		query.setParameter("bandName",bandName);
+		
+		try {
+			return query.getSingleResult();
+		}catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Album %s of band %s not found", albumTitle,bandName), e);
+		}
 	}
 
 	

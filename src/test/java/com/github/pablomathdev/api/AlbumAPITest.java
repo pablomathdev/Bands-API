@@ -20,6 +20,7 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
 public class AlbumAPITest {
@@ -93,7 +94,14 @@ public class AlbumAPITest {
 
 	@Test
 	public void should_ReturnStatusCode200_WhenAlbumsExists() {
-		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",Matchers.is(1));
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.get()
+		.then()
+		.statusCode(200)
+		.assertThat()
+		.body("size()",Matchers.is(1));
 
 		
 	}
@@ -103,6 +111,35 @@ public class AlbumAPITest {
 		clearDatabase();
 		
 		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+		
+	}	
+	
+	@Test
+	public void should_ReturnStatusCode204_WhenAlbumIsRemoved() {
+		
+		given()
+		.queryParam("albumTitle", "Metallica (The Black Album)")
+		.queryParam("bandName", "Metallica")
+		.accept(ContentType.JSON)
+		.when()
+		.delete()
+		.then()
+		.statusCode(204);
+
+		
+	}	
+	@Test
+	public void should_ReturnStatusCode404_WhenAlbumNotFound() {
+		
+		given()
+		.queryParam("albumTitle", "Master Of Puppets")
+		.queryParam("bandName", "Metallica")
+		.accept(ContentType.JSON)
+		.when()
+		.delete()
+		.then()
+		.statusCode(404);
 
 		
 	}	

@@ -38,6 +38,7 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;;
 
+
 @ExtendWith(MockitoExtension.class)
 class BandServiceTests {
 

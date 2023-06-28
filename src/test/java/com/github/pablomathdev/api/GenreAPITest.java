@@ -24,6 +24,7 @@ import com.github.pablomathdev.utils.ExecuteSQL;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties")
 @ExtendWith(MockitoExtension.class)
@@ -89,7 +90,7 @@ public class GenreAPITest {
 
 	}
 	@Test
-	public void should_ReturnStatusCode200_WhenGenreIsRemoved() {
+	public void should_ReturnStatusCode204_WhenGenreIsRemoved() {
 
 
 
@@ -98,7 +99,7 @@ public class GenreAPITest {
 		.when()
 		.delete("/trash-metal")
 		.then()
-		.statusCode(200);
+		.statusCode(204);
 
 	}
 	@Test
