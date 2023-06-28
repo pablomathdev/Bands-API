@@ -5,7 +5,9 @@ import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -97,23 +99,23 @@ public class TrackServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnAlbum_WhenAlbumIsCreated() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(trackRepository.save(any())).thenReturn(album);
-//
-//		Album result = albumService.create(album);
-//
-//		assertEquals(album.getTitle(), result.getTitle());
-//
-//	}
-//
+	@Test
+	public void should_ReturnTrack_WhenTrackIsCreated() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		when(trackRepository.save(any())).thenReturn(track);
+
+		Track result = trackService.create(track);
+
+		assertEquals(track.getTitle(), result.getTitle());
+
+	}
+
 //	@Test
 //	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
 //
