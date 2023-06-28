@@ -145,9 +145,9 @@ public class AlbumServiceTests {
 
 		when(albumRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(false);
 
-		when(bandRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
+		when(genreRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
 
-		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
+		assertThrows(GenreNotFoundException.class, () -> albumService.create(album));
 
 	}
 
