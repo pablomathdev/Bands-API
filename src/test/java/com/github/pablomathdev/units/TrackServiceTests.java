@@ -28,6 +28,7 @@ import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ITrackRepository;
@@ -108,7 +109,9 @@ public class TrackServiceTests {
 				List.of(new Track()));
 
 		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		
 		when(trackRepository.save(any())).thenReturn(track);
+		
 
 		Track result = trackService.create(track);
 
@@ -116,23 +119,25 @@ public class TrackServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(trackRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(false);
-//
-//		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
-//
-//		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
-//
-//	}
-//
+	@Test
+	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
+				List.of(new Track()));
+
+		Track track = trackFactory("any_title", band, album, null, LocalDate.parse("1999-09-09"), List.of(genre));
+		
+
+		when(trackRepository.exists(track.getTitle(), album.getBand().getName())).thenReturn(false);
+
+		when(bandRepository.findByName(any())).thenThrow(BandNotFoundException.class);
+
+		assertThrows(BandNotFoundException.class, () ->trackService.create(track));
+
+	}
+
 //	@Test
 //	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
 //
