@@ -95,15 +95,15 @@ public class TrackAPITest {
 				Matchers.is(1));
 
 	}
-//	@Test
-//	public void should_ReturnStatusCode204_WhenTracksNotExists() {
-//		
-//		clearDatabase();
-//		
-//		given().accept(ContentType.JSON).when().get().then().statusCode(204);
-//
-//		
-//	}	
+	@Test
+	public void should_ReturnStatusCode204_WhenTracksNotExists() {
+		
+		clearDatabase();
+		
+		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+		
+	}	
 	
 //	@Test
 //	public void should_ReturnStatusCode204_WhenTrackIsRemoved() {
