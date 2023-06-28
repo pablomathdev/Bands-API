@@ -35,7 +35,7 @@ import jakarta.persistence.TypedQuery;
 @ExtendWith(MockitoExtension.class)
 public class TrackRepositoryTests {
 	static final String COUNT_TRACK= "select count(a) from Track a where a.title = :trackTitle AND a.band.name = :bandName";
-	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
+	static final String SELECT_TRACK_BY_NAME = "select a from Track a where a.title = :title";
 	static final String FIND_ALBUM_BY_TITLE_AND_BAND_NAME = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
 	@Mock
 	private EntityManager entityManager;
@@ -138,25 +138,23 @@ public class TrackRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		List<Album> result = new ArrayList<>();
-//		result.add(album);
-//
-//		when(entityManager.createQuery(SELECT_ALBUM_BY_NAME, Album.class)).thenReturn(typedQueryAlbum);
-//
-//		albumRepositoryImpl.findByName(album.getTitle());
-//
-//		verify(typedQueryAlbum).setParameter(eq("title"), eq(album.getTitle()));
-//
-//	}
-//
+	@Test
+	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city","any_country",1999);
+		Band band = bandFactory("any_band", origin, List.of(genre));
+		Album album = albumFactory("any_title",band, List.of(genre),LocalDate.parse("1999-09-09"), List.of(new Track()));
+		
+		Track track = trackFactory("any_title",band,album,null,LocalDate.parse("1999-09-09"),List.of(genre));
+
+		when(entityManager.createQuery(SELECT_TRACK_BY_NAME, Track.class)).thenReturn(typedQueryTrack);
+
+		trackRepositoryImpl.findByName(track.getTitle());
+
+		verify(typedQueryTrack).setParameter(eq("title"), eq(track.getTitle()));
+
+	}
+
 //	@Test
 //	public void should_FindByNameReturnAAlbum_WhenTheTypedQueryReturnAAlbum() {
 //		Genre genre = genreFactory("any_genre");
