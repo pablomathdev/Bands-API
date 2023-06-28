@@ -7,6 +7,7 @@ import static com.github.pablomathdev.Factory.originFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -100,21 +101,21 @@ public class TrackRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
-//		
-//		when(entityManager.createQuery("from Album",Album.class)).thenReturn(typedQueryAlbum);
-//		when(typedQueryAlbum.getResultList()).thenReturn(List.of());
-//		
-//		
-//		List<Album> result  = albumRepositoryImpl.findAll();
-//		
-//		
-//		assertTrue(result.isEmpty());
-//		
-//		
-//	
-//	}
+	@Test
+	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
+		
+		when(entityManager.createQuery("from Track",Track.class)).thenReturn(typedQueryTrack);
+		when(typedQueryTrack.getResultList()).thenReturn(List.of());
+		
+		
+		List<Track> result  = trackRepositoryImpl.findAll();
+		
+		
+		assertTrue(result.isEmpty());
+		
+		
+	
+	}
 
 //	@Test
 //	public void should_InvokeTypedQueryExists_withCorrectArguments() {
