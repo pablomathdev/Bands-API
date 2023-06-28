@@ -32,7 +32,9 @@ import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ITrackRepository;
@@ -207,17 +209,17 @@ public class TrackServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ThrowAlbumNotFoundException_WhenAlbumNotFound() {
-//	
-//	
-//		when(trackRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
-//		
-//	
-//
-//		assertThrows(AlbumNotFoundException.class,()-> 	albumService.delete(anyString(),anyString()));
-//	
-//
-//	}
+	@Test
+	public void should_ThrowTrackNotFoundException_WhenTrackNotFound() {
+	
+	
+		when(trackRepository.findTrackByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
+		
+	
+
+		assertThrows(TrackNotFoundException.class,()-> trackService.delete(anyString(),anyString()));
+	
+
+	}
 
 }
