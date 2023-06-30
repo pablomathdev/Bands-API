@@ -7,6 +7,7 @@ import static com.github.pablomathdev.Factory.singleFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -97,22 +99,22 @@ public class SingleRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
-//		
-//		when(entityManager.createQuery("from Album",Album.class)).thenReturn(typedQueryAlbum);
-//		when(typedQueryAlbum.getResultList()).thenReturn(List.of());
-//		
-//		
-//		List<Album> result  = albumRepositoryImpl.findAll();
-//		
-//		
-//		assertTrue(result.isEmpty());
-//		
-//		
-//	
-//	}
-//
+	@Test
+	public void should_ReturnEmptyList_WhenTypedQueryGetResultListIsEmpty() {
+		
+		when(entityManager.createQuery("from Single",Single.class)).thenReturn(typedQuerySingle);
+		when(typedQuerySingle.getResultList()).thenReturn(List.of());
+		
+		
+		List<Single> result  = singleRepositoryImpl.findAll();
+		
+		
+		assertTrue(result.isEmpty());
+		
+		
+	
+	}
+
 //	@Test
 //	public void should_InvokeTypedQueryExists_withCorrectArguments() {
 //		Genre genre = genreFactory("any_genre");
