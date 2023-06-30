@@ -95,7 +95,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.builder()
 					.code(BAD_REQUEST.value())
 					.type(ErrorType.INVALID_PARAM.toString())
-					.message("Band is invalid")
+					.message("Album is invalid")
 					.detail("The provided band album is invalid. Please provide a valid band.")
 					.build();
 			

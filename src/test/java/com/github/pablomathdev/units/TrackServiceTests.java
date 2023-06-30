@@ -71,7 +71,7 @@ public class TrackServiceTests {
 
 		trackService.create(track);
 
-		verify(trackRepository).exists(eq(track.getTitle()), eq(band.getName()));
+		verify(trackRepository).exists(eq(track.getTitle()), eq(album.getTitle()));
 
 	}
 
@@ -87,7 +87,7 @@ public class TrackServiceTests {
 
 		
 
-		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(true);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getTitle())).thenReturn(true);
 
 		assertThrows(TrackAlreadyExistsException.class, () -> trackService.create(track));
 
@@ -140,7 +140,7 @@ public class TrackServiceTests {
 		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
 
-		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(false);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getTitle())).thenReturn(false);
 
 		when(albumRepository.findAlbumByTitleAndBandName(anyString(),anyString())).thenThrow(AlbumNotFoundException.class);
 
@@ -158,7 +158,7 @@ public class TrackServiceTests {
 
 		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 		
-		when(trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())).thenReturn(false);
+		when(trackRepository.exists(track.getTitle(), track.getAlbum().getTitle())).thenReturn(false);
 
 		when(genreRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
 

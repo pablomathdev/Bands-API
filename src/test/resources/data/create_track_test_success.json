@@ -3,14 +3,8 @@
 	"releaseDate": "1991-10-28",
 	"album": {
 		"title": "Metallica (The Black Album)",
-		"band": {
-			"name": "Metallica"
-		}
+		"band": "Metallica"
 	},
-	"genres": [
-		{
-			"name": "Heavy metal"
-		}
-	],
+	"genres": ["Heavy metal"],
 	"single": null
 }

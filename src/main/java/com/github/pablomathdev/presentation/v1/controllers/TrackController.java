@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.TrackService;
 import com.github.pablomathdev.domain.entities.Track;
+import com.github.pablomathdev.presentation.v1.DTOs.TrackRequestDTO;
+import com.github.pablomathdev.presentation.v1.mappers.TrackRequestDTOToTrack;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/tracks")
 public class TrackController {
 	
-//	@Autowired
-//	private AlbumRequestDTOToAlbum albumRequestDTOToAlbum;
+	@Autowired
+	private TrackRequestDTOToTrack trackRequestDTOToTrack;
 
 	@Autowired
 	private TrackService trackService;
@@ -42,8 +46,9 @@ public class TrackController {
 	
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Track track) {
+	public ResponseEntity<?> save(@RequestBody @Valid TrackRequestDTO trackRequestDTO) {
         
+		Track track = trackRequestDTOToTrack.convert(trackRequestDTO);
 			
 		Track trackSaved = trackService.create(track);
 
