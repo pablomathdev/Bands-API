@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Track;
-import com.github.pablomathdev.presentation.v1.DTOs.TrackRequestDTO;
+import com.github.pablomathdev.presentation.v1.DTOs.request.TrackRequestDTO;
 
 @Component
 public class TrackRequestDTOToTrack {

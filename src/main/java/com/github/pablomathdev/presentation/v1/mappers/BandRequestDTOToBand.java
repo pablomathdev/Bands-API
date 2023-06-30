@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.presentation.v1.DTOs.BandRequestDTO;
+import com.github.pablomathdev.presentation.v1.DTOs.request.BandRequestDTO;
 
 @Component
 public class BandRequestDTOToBand {

@@ -1,4 +1,4 @@
-package com.github.pablomathdev.presentation.v1.DTOs;
+package com.github.pablomathdev.presentation.v1.DTOs.request;
 
 import java.util.List;
 

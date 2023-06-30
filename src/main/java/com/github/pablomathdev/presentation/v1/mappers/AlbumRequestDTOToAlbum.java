@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.presentation.v1.DTOs.AlbumRequestDTO;
+import com.github.pablomathdev.presentation.v1.DTOs.request.AlbumRequestDTO;
 
 @Component
 public class AlbumRequestDTOToAlbum {

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
-import com.github.pablomathdev.presentation.v1.DTOs.BandRequestDTO;
+import com.github.pablomathdev.presentation.v1.DTOs.request.BandRequestDTO;
 import com.github.pablomathdev.presentation.v1.mappers.BandRequestDTOToBand;
 
 import jakarta.validation.Valid;
