@@ -21,7 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -34,9 +33,10 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class SingleRepositoryTests {
-	static final String COUNT_ALBUM = "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
-	static final String SELECT_ALBUM_BY_NAME = "select a from Album a where a.title = :title";
-	static final String FIND_ALBUM_BY_TITLE_AND_BAND_NAME = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
+	static final String COUNT_SINGLE = "select count(s) from Single s where s.title = :singleTitle AND s.band.name = :bandName";
+	static final String SELECT_SINGLE_BY_NAME = "select s from Single s where s.title = :title";
+	static final String FIND_SINGLE_BY_TITLE_AND_BAND_NAME = "select s from Single s where s.title =:singleTitle AND s.band.name =:bandName";
+	
 	@Mock
 	private EntityManager entityManager;
 
@@ -115,25 +115,26 @@ public class SingleRepositoryTests {
 	
 	}
 
-//	@Test
-//	public void should_InvokeTypedQueryExists_withCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(typedQueryLong.getSingleResult()).thenReturn(1L);
-//
-//		when(entityManager.createQuery(COUNT_ALBUM, Long.class)).thenReturn(typedQueryLong);
-//
-//		albumRepositoryImpl.exists(album.getTitle(), album.getBand().getName());
-//
-//		verify(typedQueryLong).setParameter(eq("albumTitle"), eq(album.getTitle()));
-//		verify(typedQueryLong).setParameter(eq("bandName"), eq(album.getBand().getName()));
-//
-//	}
-//
+	@Test
+	public void should_InvokeTypedQueryExists_withCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+		when(typedQueryLong.getSingleResult()).thenReturn(1L);
+
+		when(entityManager.createQuery(COUNT_SINGLE, Long.class)).thenReturn(typedQueryLong);
+
+		singleRepositoryImpl.exists(single.getTitle(), single.getBand().getName());
+
+		verify(typedQueryLong).setParameter(eq("singleTitle"), eq(single.getTitle()));
+		verify(typedQueryLong).setParameter(eq("bandName"), eq(single.getBand().getName()));
+
+	}
+
 //	@Test
 //	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
 //		Genre genre = genreFactory("any_genre");
