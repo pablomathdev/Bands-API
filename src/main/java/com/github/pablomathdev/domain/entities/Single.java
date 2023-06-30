@@ -2,7 +2,6 @@ package com.github.pablomathdev.domain.entities;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,9 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "tb_single")
 public class Single extends Release{
@@ -27,14 +30,14 @@ public class Single extends Release{
 	private Band band;
 	
 	
-	@OneToMany(mappedBy = "single")
-	private List<Track> tracks;
+	@OneToOne(mappedBy = "single")
+	private Track track;
 
 	@ManyToMany
 	@JoinTable(name = "tb_single_genre",
 	joinColumns = @JoinColumn(name = "single_id"), 
 	inverseJoinColumns = @JoinColumn(name = "genre_id"))
-	private Set<Genre> genres;
+	private List<Genre> genres;
 
 	@Override
 	public int hashCode() {
