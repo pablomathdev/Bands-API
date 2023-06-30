@@ -92,14 +92,14 @@ public class TrackServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
-//
-//		List<Album> result = albumService.findAll();
-//
-//		assertEquals(1, result.size());
-//
-//	}
+	@Test
+	public void should_ReturnResultListOfTracks_WhenTracksExists() {
+
+		List<Track> result = trackService.findAll();
+
+		assertEquals(1, result.size());
+
+	}
 
 //	@Test
 //	public void should_ReturnResultListEmptyOfAlbums_WhenAlbumsNotExists() {
