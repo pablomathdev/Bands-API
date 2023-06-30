@@ -5,7 +5,7 @@ CREATE TABLE tb_track
    album_id BIGINT,
    single_id BIGINT,
    release_date DATE NOT NULL,
-   FOREIGN KEY (album_id) REFERENCES tb_album (id) ON DELETE CASCADE,
+   FOREIGN KEY (album_id) REFERENCES tb_album (id),
    FOREIGN KEY (single_id) REFERENCES tb_single (id),
    PRIMARY KEY (id)
 )

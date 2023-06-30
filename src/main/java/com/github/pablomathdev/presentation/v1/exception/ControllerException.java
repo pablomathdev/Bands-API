@@ -5,7 +5,6 @@ package com.github.pablomathdev.presentation.v1.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +27,11 @@ import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlr
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
 
 @RestControllerAdvice
 public class ControllerException extends ResponseEntityExceptionHandler {
@@ -68,11 +69,40 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	}
 	
 	
+	@ExceptionHandler(TrackNotFoundException.class)
+	public ResponseEntity<Object> handleTrackNotFoundException(TrackNotFoundException ex, WebRequest request) {
+
+		ControllerErrorMessage  errorMessage = ControllerErrorMessage
+					.builder()
+					.code(NOT_FOUND.value())
+					.type(ErrorType.RESOURCE_NOT_FOUND.toString())
+					.message(ex.getMessage())
+					.detail("The provided track is invalid. Please provide a valid track.")
+					.build();
+
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), NOT_FOUND);
+		}
+
+	
+	
+	
 	@ExceptionHandler(AlbumNotFoundException.class)
 	public ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
+		ControllerErrorMessage errorMessage = null;
+		
+		if (request.getDescription(false).indexOf("tracks") != -1) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Band is invalid")
+					.detail("The provided band album is invalid. Please provide a valid band.")
+					.build();
+			
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+		}
 
-
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
+             errorMessage = ControllerErrorMessage
 				.builder()
 				.code(NOT_FOUND.value())
 				.type(ErrorType.RESOURCE_NOT_FOUND.toString())
@@ -109,6 +139,20 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.type(ErrorType.INVALID_PARAM.toString())
 					.message("Genre is invalid")
 					.detail("The provided album genre is invalid. Please provide a valid genre.")
+					.build();
+			 
+			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+			
+		}
+		
+		if (request.getDescription(false).indexOf("tracks") != -1) {
+
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Genre is invalid")
+					.detail("The provided track genre is invalid. Please provide a valid genre.")
 					.build();
 			 
 			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
@@ -157,6 +201,14 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
 					.message(subEx.getMessage())
 					.detail("Cannot create the given album because it already exists. Please choose a other album.")
+					.build();
+		}else if(ex instanceof TrackAlreadyExistsException subEx) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(CONFLICT.value())
+					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
+					.message(subEx.getMessage())
+					.detail("Cannot create the given track because it already exists. Please choose a other track.")
 					.build();
 		}
 		
@@ -217,19 +269,19 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	
 	
 	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
-		
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
-			    .builder()
-			    .code(INTERNAL_SERVER_ERROR.value())
-			    .type(ErrorType.SERVER_ERROR.toString())
-			    .message("An internal error occurred in the application.")
-			    .build();
-	
-
-	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
-		
-	}
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
+//		
+//		ControllerErrorMessage errorMessage = ControllerErrorMessage
+//			    .builder()
+//			    .code(INTERNAL_SERVER_ERROR.value())
+//			    .type(ErrorType.SERVER_ERROR.toString())
+//			    .message("An internal error occurred in the application.")
+//			    .build();
+//	
+//
+//	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
+//		
+//	}
 	
 }

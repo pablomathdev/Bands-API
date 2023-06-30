@@ -26,7 +26,6 @@ public class Track {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	
 	private String title;
 
 	@ManyToOne
@@ -50,9 +49,8 @@ public class Track {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(title);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -63,8 +61,10 @@ public class Track {
 		if (getClass() != obj.getClass())
 			return false;
 		Track other = (Track) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(title, other.title);
 	}
+
+
 
 	
 }

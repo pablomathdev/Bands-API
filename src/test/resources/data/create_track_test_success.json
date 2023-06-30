@@ -1,6 +1,6 @@
 {
-	"title": "Enter Sandman",
-	"releaseDate": "1991-07-29",
+	"title": "The Unforgiven",
+	"releaseDate": "1991-10-28",
 	"album": {
 		"title": "Metallica (The Black Album)",
 		"band": {
@@ -9,8 +9,8 @@
 	},
 	"genres": [
 		{
-			"name":"Heavy Metal"
+			"name": "Heavy metal"
 		}
 	],
-	"single":null
+	"single": null
 }

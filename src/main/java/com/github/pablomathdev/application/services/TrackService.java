@@ -37,10 +37,10 @@ public class TrackService {
 	}
 
 	@Transactional
-	public void delete(String trackTitle, String bandName) {
+	public void delete(String trackTitle, String albumTitle) {
 
 		try {
-			Track track = trackRepository.findTrackByTitleAndBandName(trackTitle, bandName);
+			Track track = trackRepository.findTrackByTitleAndAlbumTitle(trackTitle, albumTitle);
 			trackRepository.delete(track);
 		} catch (EntityNotFoundException e) {
 

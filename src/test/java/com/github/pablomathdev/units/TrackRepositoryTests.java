@@ -38,9 +38,9 @@ import jakarta.persistence.TypedQuery;
 
 @ExtendWith(MockitoExtension.class)
 public class TrackRepositoryTests {
-	static final String COUNT_TRACK= "select count(t) from Track t where t.title = :trackTitle AND t.album.band.name = :bandName";
+	static final String COUNT_TRACK= "select count(t) from Track t where t.title = :trackTitle AND t.album.title = :albumTitle";
 	static final String SELECT_TRACK_BY_NAME = "select t from Track t where t.title = :title";
-	static final String FIND_TRACK_BY_TITLE_AND_BAND_NAME = "select t from Track t where t.title =:trackTitle AND t.album.band.name =:bandName";
+	static final String FIND_TRACK_BY_TITLE_AND_BAND_NAME = "select t from Track t where t.title =:trackTitle AND t.album.title =:albumTitle";
 	@Mock
 	private EntityManager entityManager;
 
@@ -135,10 +135,10 @@ public class TrackRepositoryTests {
 
 		when(entityManager.createQuery(COUNT_TRACK, Long.class)).thenReturn(typedQueryLong);
 
-		trackRepositoryImpl.exists(track.getTitle(), track.getAlbum().getBand().getName());
+		trackRepositoryImpl.exists(track.getTitle(), track.getAlbum().getTitle());
 
 		verify(typedQueryLong).setParameter(eq("trackTitle"), eq(track.getTitle()));
-		verify(typedQueryLong).setParameter(eq("bandName"), eq(track.getAlbum().getBand().getName()));
+		verify(typedQueryLong).setParameter(eq("albumTitle"), eq(track.getAlbum().getTitle()));
 
 	}
 
@@ -216,12 +216,12 @@ public class TrackRepositoryTests {
 		when(entityManager.createQuery(FIND_TRACK_BY_TITLE_AND_BAND_NAME, Track.class)).thenReturn(typedQueryTrack);
 
 		String trackTitle = "any_track_title";
-		String bandName = "any_band_name";
+		String albumTitle = "any_album_title";
 		
-		trackRepositoryImpl.findTrackByTitleAndBandName(trackTitle,bandName);
+		trackRepositoryImpl.findTrackByTitleAndAlbumTitle(trackTitle,albumTitle);
 
 		verify(typedQueryTrack).setParameter(eq("trackTitle"), eq(trackTitle));
-		verify(typedQueryTrack).setParameter(eq("bandName"), eq(bandName));
+		verify(typedQueryTrack).setParameter(eq("albumTitle"), eq(albumTitle));
 		
 		
 	}
@@ -241,7 +241,7 @@ public class TrackRepositoryTests {
 
 	
 
-	 Track result = trackRepositoryImpl.findTrackByTitleAndBandName(anyString(),anyString());
+	 Track result = trackRepositoryImpl.findTrackByTitleAndAlbumTitle(anyString(),anyString());
 		
 	
 		assertEquals(track.getTitle(), result.getTitle());
@@ -249,14 +249,14 @@ public class TrackRepositoryTests {
 
 	}
 	@Test
-	public void should_TrackRepositoryFindTrackByTitleAndBandNameThrowEntityNotFoundException_WhenTrackNotFound() {
+	public void should_TrackRepositoryFindTrackByTitleAndAlbumTitleThrowEntityNotFoundException_WhenTrackNotFound() {
 		
 		when(entityManager.createQuery(FIND_TRACK_BY_TITLE_AND_BAND_NAME, Track.class)).thenReturn(typedQueryTrack);
 
 		when(typedQueryTrack.getSingleResult()).thenThrow(NoResultException.class);
 
 
-	   assertThrows(EntityNotFoundException.class,()->trackRepositoryImpl.findTrackByTitleAndBandName(anyString(),anyString()) );
+	   assertThrows(EntityNotFoundException.class,()->trackRepositoryImpl.findTrackByTitleAndAlbumTitle(anyString(),anyString()) );
 
 	}
 

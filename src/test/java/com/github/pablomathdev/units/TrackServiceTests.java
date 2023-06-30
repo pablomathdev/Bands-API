@@ -196,7 +196,7 @@ public class TrackServiceTests {
 	}
 
 	@Test
-	public void should_InvokeTrackRepositoryFindTrackByTitleAndBandName_WithCorrectArguments() {
+	public void should_InvokeTrackRepositoryFindTrackByTitleAndAlbumTitle_WithCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_band", origin, List.of(genre));
@@ -205,9 +205,9 @@ public class TrackServiceTests {
 
 		Track track = trackFactory("any_title",album, null, LocalDate.parse("1999-09-09"), List.of(genre));
 
-		when(trackRepository.findTrackByTitleAndBandName(anyString(), anyString())).thenReturn(track);
+		when(trackRepository.findTrackByTitleAndAlbumTitle(anyString(), anyString())).thenReturn(track);
 
-		trackService.delete(track.getTitle(), track.getAlbum().getBand().getName());
+		trackService.delete(track.getTitle(), track.getAlbum().getTitle());
 
 		verify(trackRepository).delete(eq(track));
 
@@ -217,7 +217,7 @@ public class TrackServiceTests {
 	public void should_ThrowTrackNotFoundException_WhenTrackNotFound() {
 	
 	
-		when(trackRepository.findTrackByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
+		when(trackRepository.findTrackByTitleAndAlbumTitle(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
 		
 	
 

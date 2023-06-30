@@ -56,12 +56,12 @@ public class TrackRepositoryImpl implements ITrackRepository{
 	}
 	
 	
-	public boolean exists(String trackTitle,String bandName) {
-		String jpql = "select count(t) from Track t where t.title = :trackTitle AND t.album.band.name = :bandName";
+	public boolean exists(String trackTitle,String albumTitle) {
+		String jpql = "select count(t) from Track t where t.title = :trackTitle AND t.album.title = :albumTitle";
 
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		query.setParameter("trackTitle", trackTitle);
-		query.setParameter("bandName",bandName);
+		query.setParameter("albumTitle",albumTitle);
 
 		if (query.getSingleResult() == 1L) {
 			return true;
@@ -71,19 +71,20 @@ public class TrackRepositoryImpl implements ITrackRepository{
 
 	}
 	
-	public Track findTrackByTitleAndBandName(String trackTitle, String bandName) {
+	public Track findTrackByTitleAndAlbumTitle(String trackTitle, String albumTitle) {
 		
-		String jpql = "select t from Track t where t.title =:trackTitle AND t.album.band.name =:bandName";
+		String jpql = "select t from Track t where t.title =:trackTitle AND t.album.title =:albumTitle";
 		TypedQuery<Track> query = entityManager.createQuery(jpql, Track.class);
 		query.setParameter("trackTitle",trackTitle);
-		query.setParameter("bandName",bandName);
+		query.setParameter("albumTitle",albumTitle);
 		
 		try {
 			return query.getSingleResult();
 		}catch (NoResultException e) {
-			throw new EntityNotFoundException(String.format("Track %s of band %s not found", trackTitle,bandName), e);
+			throw new EntityNotFoundException(String.format("Track %s of album %s not found", trackTitle,albumTitle), e);
 		}
 	}
+
 
 	
 	

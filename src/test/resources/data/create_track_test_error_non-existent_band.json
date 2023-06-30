@@ -1,0 +1,16 @@
+{
+	"title": "Sad But True",
+	"releaseDate": "1993-01-08",
+	"album": {
+		"title": "Metallica (The Black Album)",
+		"band": {
+			"name": "Invalid Band"
+		}
+	},
+	"genres": [
+		{
+			"name": "Heavy Metal"
+		}
+	],
+	"single": null
+}
