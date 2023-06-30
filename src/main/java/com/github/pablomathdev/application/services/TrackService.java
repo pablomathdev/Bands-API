@@ -51,7 +51,7 @@ public class TrackService {
 
 	public Track create(Track track) {
 
-		if (trackRepository.exists(track.getTitle(), track.getAlbum().getBand().getName())) {
+		if (trackRepository.exists(track.getTitle(), track.getAlbum().getTitle())) {
 
 			throw new TrackAlreadyExistsException(track.getTitle());
 		}

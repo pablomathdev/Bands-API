@@ -4,6 +4,7 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,8 +20,8 @@ import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Track;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
 import com.github.pablomathdev.utils.ExecuteSQL;
-
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
@@ -50,31 +51,30 @@ public class TrackServiceIntegrationTest {
 		band.setName("Metallica");
 		album.setTitle("Metallica (The Black Album)");
 		album.setBand(band);
-		Track track = trackFactory("Sad But true",album,null,LocalDate.parse("1993-02-08"), List.of(genre));
-		
+		Track track = trackFactory("Sad But true", album, null, LocalDate.parse("1993-02-08"), List.of(genre));
 
 		Track trackSaved = trackService.create(track);
-		assertEquals(album.getTitle(),trackSaved.getAlbum().getTitle());
-		assertEquals(genre.getName(),trackSaved.getGenres().stream().findFirst().get().getName());
+		assertEquals(album.getTitle(), trackSaved.getAlbum().getTitle());
+		assertEquals(genre.getName(), trackSaved.getGenres().stream().findFirst().get().getName());
 		assertNotNull(trackSaved.getId());
-		
 
 	}
 
-//	@Test
-//	public void should_ThrowAlbumAlreadyExistsException_WhenAlbumAlreadyExists() {
-//		Genre genre = genreFactory("Trash Metal");
-//		Band band = bandFactory("Metallica", null, null);
-//		Album album = new Album();
-//		album.setBand(band);
-//		album.setGenres(List.of(genre));
-//		album.setTitle("Metallica (The Black Album)");
-//		album.setReleaseDate(LocalDate.parse("1991-08-12"));
-//
-//		assertThrows(AlbumAlreadyExistsException.class, () -> albumService.create(album));
-//
-//	}
-//
+	@Test
+	public void should_ThrowTrackAlreadyExistsException_WhenTrackAlreadyExists() {
+		Genre genre = genreFactory("Heavy Metal");
+		Album album = new Album();
+		album.setTitle("Metallica (The Black Album)");
+		Band band = new Band();
+		band.setName("Metallica");
+
+		album.setBand(band);
+		Track track = trackFactory("Enter Sandman", album, null, LocalDate.parse("1991-07-29"), List.of(genre));
+
+		assertThrows(TrackAlreadyExistsException.class, () -> trackService.create(track));
+
+	}
+
 //	@Test
 //	public void should_ThrowBandNotFoundException_WhenBandOfAlbumNotExists() {
 //		Genre genre = genreFactory("Trash Metal");
@@ -108,7 +108,7 @@ public class TrackServiceIntegrationTest {
 //		assertTrue(result.isEmpty());
 //
 //	}
-	
+
 //	@Test
 //	public void should_DeleteAlbum_WhenALbumExists() {
 //		
