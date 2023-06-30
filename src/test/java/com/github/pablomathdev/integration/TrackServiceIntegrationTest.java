@@ -21,6 +21,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
 @SpringBootTest
@@ -75,19 +76,21 @@ public class TrackServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ThrowBandNotFoundException_WhenBandOfAlbumNotExists() {
-//		Genre genre = genreFactory("Trash Metal");
-//		Band band = bandFactory("Nirvana", null, null);
-//		Album album = new Album();
-//		album.setBand(band);
-//		album.setGenres(List.of(genre));
-//		album.setTitle("Nevermind");
-//		album.setReleaseDate(LocalDate.parse("1991-09-24"));
-//
-//		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
-//
-//	}
+	@Test
+	public void should_ThrowAlbumNotFoundException_WhenAlbumOfTrackNotExists() {
+		Genre genre = genreFactory("Heavy Metal");
+		Album album = new Album();
+		album.setTitle("Master of Puppets");
+		Band band = new Band();
+		band.setName("Metallica");
+
+		album.setBand(band);
+		Track track = trackFactory("Master of Puppets", album, null, LocalDate.parse("1938-03-03"), List.of(genre));
+
+
+		assertThrows(AlbumNotFoundException.class, () -> trackService.create(track));
+
+	}
 
 //	@Test
 //	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
