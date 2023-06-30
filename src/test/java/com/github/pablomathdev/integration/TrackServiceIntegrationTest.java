@@ -5,6 +5,7 @@ import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -101,16 +102,16 @@ public class TrackServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListEmptyOfAlbums_WhenAlbumsNotExists() {
-//
-//		clearDatabaseTest();
-//
-//		List<Album> result = albumService.findAll();
-//
-//		assertTrue(result.isEmpty());
-//
-//	}
+	@Test
+	public void should_ReturnResultListEmptyOfTracks_WhenTracksNotExists() {
+
+		clearDatabaseTest();
+
+		List<Track> result = trackService.findAll();
+
+		assertTrue(result.isEmpty());
+
+	}
 
 //	@Test
 //	public void should_DeleteAlbum_WhenALbumExists() {
