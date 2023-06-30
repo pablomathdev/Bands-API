@@ -113,18 +113,18 @@ public class TrackServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_DeleteAlbum_WhenALbumExists() {
-//		
-//		
-//		albumService.delete("Metallica (The Black Album)","Metallica");
-//		
-//		List< Album> albums =albumService.findAll();
-//		
-//		boolean albumIsRemoved = albums.stream().noneMatch(album -> album.getTitle()
-//				.equals("Metallica (The Black Album)") && album.getBand().getName()
-//				.equals("Metallica"));
-//		
-//		assertTrue(albumIsRemoved);
-//	}
+	@Test
+	public void should_DeleteTrack_WhenTrackExists() {
+		
+		
+		trackService.delete("Enter Sandman","Metallica (The Black Album)");
+		
+		List<Track> tracks = trackService.findAll();
+		
+		boolean trackIsRemoved = tracks.stream().noneMatch(track -> track.getTitle()
+				.equals("Enter Sandman") && track.getAlbum().getTitle()
+				.equals("Metallica (The Black Album)"));
+		
+		assertTrue(trackIsRemoved);
+	}
 }
