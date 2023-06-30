@@ -1,0 +1,16 @@
+{
+	"title": "The Unforgiven",
+	"releaseDate": "1991-10-28",
+	"album": {
+		"title": "Metallica (The Black Album)",
+		"band": {
+			"name": "Metallica"
+		}
+	},
+	"genres": [
+		{
+			"name": "Invalid Genre"
+		}
+	],
+	"single": null
+}

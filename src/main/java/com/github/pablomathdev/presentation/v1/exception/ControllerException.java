@@ -16,6 +16,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,9 +29,11 @@ import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlr
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.TrackNotFoundException;
 
 @RestControllerAdvice
 public class ControllerException extends ResponseEntityExceptionHandler {
@@ -39,7 +42,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 	
 	@ExceptionHandler(BandNotFoundException.class)
-	public ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
 		
@@ -68,11 +71,41 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	}
 	
 	
+	@ExceptionHandler(TrackNotFoundException.class)
+	private ResponseEntity<Object> handleTrackNotFoundException(TrackNotFoundException ex, WebRequest request) {
+
+		ControllerErrorMessage  errorMessage = ControllerErrorMessage
+					.builder()
+					.code(NOT_FOUND.value())
+					.type(ErrorType.RESOURCE_NOT_FOUND.toString())
+					.message(ex.getMessage())
+					.detail("The provided track is invalid. Please provide a valid track.")
+					.build();
+
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), NOT_FOUND);
+		}
+
+	
+	
+	
 	@ExceptionHandler(AlbumNotFoundException.class)
-	public ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
+		ControllerErrorMessage errorMessage = null;
+		
+		
+		if (request.getDescription(false).indexOf("tracks") != -1) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Album is invalid")
+					.detail("The provided band album is invalid. Please provide a valid band.")
+					.build();
+			
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+		}
 
-
-		ControllerErrorMessage errorMessage = ControllerErrorMessage
+             errorMessage = ControllerErrorMessage
 				.builder()
 				.code(NOT_FOUND.value())
 				.type(ErrorType.RESOURCE_NOT_FOUND.toString())
@@ -85,7 +118,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
 
 	@ExceptionHandler(GenreNotFoundException.class)
-	public ResponseEntity<Object> handleGenreNotFoundException(GenreNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleGenreNotFoundException(GenreNotFoundException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
 
@@ -115,6 +148,20 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 			
 		}
 		
+		if (request.getDescription(false).indexOf("tracks") != -1) {
+
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Genre is invalid")
+					.detail("The provided track genre is invalid. Please provide a valid genre.")
+					.build();
+			 
+			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+			
+		}
+		
 		
 		   errorMessage = ControllerErrorMessage
 				    .builder()
@@ -129,7 +176,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(EntityAlreadyExistsException.class)
-	public ResponseEntity<Object> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex, WebRequest request) {
+	private ResponseEntity<Object> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
       
@@ -158,6 +205,14 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.message(subEx.getMessage())
 					.detail("Cannot create the given album because it already exists. Please choose a other album.")
 					.build();
+		}else if(ex instanceof TrackAlreadyExistsException subEx) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(CONFLICT.value())
+					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
+					.message(subEx.getMessage())
+					.detail("Cannot create the given track because it already exists. Please choose a other track.")
+					.build();
 		}
 		
 
@@ -168,7 +223,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
 	
 	@ExceptionHandler(EntityRelationshipException.class)
-	public ResponseEntity<Object> handleEntityRelationshipException(EntityRelationshipException ex,WebRequest request){
+	private ResponseEntity<Object> handleEntityRelationshipException(EntityRelationshipException ex,WebRequest request){
 		
 		
 		ControllerErrorMessage errorMessage = ControllerErrorMessage
@@ -184,6 +239,26 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 		
 		
 	}
+	
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		
+
+		ControllerErrorMessage errorMessage = ControllerErrorMessage
+				    .builder()
+				    .code(status.value())
+				    .type(ErrorType.BODY_REQUEST_SINTAX_ERROR.toString())
+				    .message("Body request with sintax error")
+				    .detail("Check if the request body format is correct.")
+				    .build();
+		
+		
+		
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(),status);
+	}
+	
 	
 	@Override
 	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -218,7 +293,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
+	private ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
 		
 		ControllerErrorMessage errorMessage = ControllerErrorMessage
 			    .builder()
@@ -231,5 +306,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
 		
 	}
+	
+	
 	
 }

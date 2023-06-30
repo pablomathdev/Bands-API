@@ -97,7 +97,7 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/trash-metal")
+		.delete("/trash metal")
 		.then()
 		.statusCode(204);
 
@@ -110,7 +110,7 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/alternative-rock")
+		.delete("/alternative rock")
 		.then()
 		.statusCode(404);
 
@@ -123,7 +123,7 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/heavy-metal")
+		.delete("/heavy metal")
 		.then()
 		.statusCode(409);
 
