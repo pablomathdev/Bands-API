@@ -5,6 +5,7 @@ package com.github.pablomathdev.presentation.v1.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,7 +42,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 	
 	@ExceptionHandler(BandNotFoundException.class)
-	public ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
 		
@@ -70,7 +72,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	
 	
 	@ExceptionHandler(TrackNotFoundException.class)
-	public ResponseEntity<Object> handleTrackNotFoundException(TrackNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleTrackNotFoundException(TrackNotFoundException ex, WebRequest request) {
 
 		ControllerErrorMessage  errorMessage = ControllerErrorMessage
 					.builder()
@@ -87,8 +89,9 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	
 	
 	@ExceptionHandler(AlbumNotFoundException.class)
-	public ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleAlbumNotFoundException(AlbumNotFoundException ex, WebRequest request) {
 		ControllerErrorMessage errorMessage = null;
+		
 		
 		if (request.getDescription(false).indexOf("tracks") != -1) {
 			errorMessage = ControllerErrorMessage
@@ -115,7 +118,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
 
 	@ExceptionHandler(GenreNotFoundException.class)
-	public ResponseEntity<Object> handleGenreNotFoundException(GenreNotFoundException ex, WebRequest request) {
+	private ResponseEntity<Object> handleGenreNotFoundException(GenreNotFoundException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
 
@@ -173,7 +176,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(EntityAlreadyExistsException.class)
-	public ResponseEntity<Object> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex, WebRequest request) {
+	private ResponseEntity<Object> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex, WebRequest request) {
 
 		ControllerErrorMessage errorMessage = null;
       
@@ -220,7 +223,7 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
 	
 	@ExceptionHandler(EntityRelationshipException.class)
-	public ResponseEntity<Object> handleEntityRelationshipException(EntityRelationshipException ex,WebRequest request){
+	private ResponseEntity<Object> handleEntityRelationshipException(EntityRelationshipException ex,WebRequest request){
 		
 		
 		ControllerErrorMessage errorMessage = ControllerErrorMessage
@@ -236,6 +239,26 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 		
 		
 	}
+	
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		
+
+		ControllerErrorMessage errorMessage = ControllerErrorMessage
+				    .builder()
+				    .code(status.value())
+				    .type(ErrorType.BODY_REQUEST_SINTAX_ERROR.toString())
+				    .message("Body request with sintax error")
+				    .detail("Check if the request body format is correct.")
+				    .build();
+		
+		
+		
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(),status);
+	}
+	
 	
 	@Override
 	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -269,19 +292,21 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 	
 	
 	
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
-//		
-//		ControllerErrorMessage errorMessage = ControllerErrorMessage
-//			    .builder()
-//			    .code(INTERNAL_SERVER_ERROR.value())
-//			    .type(ErrorType.SERVER_ERROR.toString())
-//			    .message("An internal error occurred in the application.")
-//			    .build();
-//	
-//
-//	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
-//		
-//	}
+	@ExceptionHandler(Exception.class)
+	private ResponseEntity<Object> handleNoCapturedException(Exception ex,WebRequest request){
+		
+		ControllerErrorMessage errorMessage = ControllerErrorMessage
+			    .builder()
+			    .code(INTERNAL_SERVER_ERROR.value())
+			    .type(ErrorType.SERVER_ERROR.toString())
+			    .message("An internal error occurred in the application.")
+			    .build();
+	
+
+	    return new ResponseEntity<>(errorMessage, new HttpHeaders(),INTERNAL_SERVER_ERROR);
+		
+	}
+	
+	
 	
 }

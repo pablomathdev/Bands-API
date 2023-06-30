@@ -1,6 +1,5 @@
 package com.github.pablomathdev.presentation.v1.DTOs;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.github.pablomathdev.domain.entities.Single;
@@ -23,7 +22,8 @@ public class TrackRequestDTO {
 	
 	private Single single;
 
-	private LocalDate releaseDate;
+	@NotBlank
+	private String releaseDate;
 	
 	@Valid
 	@NotNull

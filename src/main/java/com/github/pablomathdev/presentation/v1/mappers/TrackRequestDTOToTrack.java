@@ -1,5 +1,6 @@
 package com.github.pablomathdev.presentation.v1.mappers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class TrackRequestDTOToTrack {
 				
 				mapper.<String>map(src -> src.getAlbum().getBand(), (Dest, v) -> Dest.getAlbum().getBand().setName(v));
 				
-
+				mapper.<String>map(src -> src.getReleaseDate(), (Dest, v) -> Dest.setReleaseDate(LocalDate.parse(v)));
 			});
 		}
 
