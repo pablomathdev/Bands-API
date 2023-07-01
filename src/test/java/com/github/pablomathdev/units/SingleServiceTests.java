@@ -80,21 +80,23 @@ public class SingleServiceTests {
 
 	}
 
-//	@Test
-//	public void should_InvockAlbumRepositorySave_WithCorrectArguments() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		albumService.create(album);
-//
-//		Mockito.verify(albumRepository).save(eq(album));
-//
-//	}
-//
+	@Test
+	public void should_InvockSingleRepositorySave_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+		
+
+		singleService.create(single);
+
+		verify(singleRepository).save(eq(single));
+
+	}
+
 //	@Test
 //	public void should_ReturnAlbum_WhenAlbumIsCreated() {
 //
