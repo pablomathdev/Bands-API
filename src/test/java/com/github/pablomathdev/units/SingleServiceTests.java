@@ -8,6 +8,7 @@ import static com.github.pablomathdev.Factory.trackFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -171,17 +172,17 @@ public class SingleServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListEmpty_WhenAlbumsNotExists() {
-//
-//		when(albumRepository.findAll()).thenReturn(List.of());
-//		
-//	  List<Album> result = albumService.findAll();
-//				
-//	   assertTrue(result.isEmpty());
-//
-//	}
-//
+	@Test
+	public void should_ReturnResultListEmpty_WhenSingleNotExists() {
+
+		when(singleRepository.findAll()).thenReturn(List.of());
+		
+	  List<Single> result = singleService.findAll();
+				
+	   assertTrue(result.isEmpty());
+
+	}
+
 //	@Test
 //	public void should_InvokeAlbumRepositoryFindAlbumByTitleAndBandName_WithCorrectArguments() {
 //		Genre genre = genreFactory("any_genre");
