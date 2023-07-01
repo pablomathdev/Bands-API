@@ -11,7 +11,7 @@ import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Single;
-import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
@@ -58,7 +58,7 @@ public class SingleService {
 
 		if (singleRepository.exists(single.getTitle(), single.getBand().getName())) {
 
-			throw new AlbumAlreadyExistsException(single.getTitle());
+			throw new SingleAlreadyExistsException(single.getTitle());
 		}
 
 		Band band = findBandOrThrow(single.getBand().getName());
