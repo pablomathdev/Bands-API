@@ -1,20 +1,12 @@
 package com.github.pablomathdev.units;
 
-import static com.github.pablomathdev.Factory.albumFactory;
 import static com.github.pablomathdev.Factory.bandFactory;
 import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static com.github.pablomathdev.Factory.singleFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,21 +15,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.pablomathdev.application.services.SingleService;
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Single;
 import com.github.pablomathdev.domain.entities.Track;
-import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ISingleRepository;

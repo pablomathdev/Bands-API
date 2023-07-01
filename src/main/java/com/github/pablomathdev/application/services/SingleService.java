@@ -26,6 +26,9 @@ public class SingleService {
 
 	@Autowired
 	private IAlbumRepository albumRepository;
+	
+	@Autowired
+	private IBandRepository  bandRepository;
 
 	@Autowired
 	private ISingleRepository singleRepository;
