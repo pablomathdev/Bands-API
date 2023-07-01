@@ -32,7 +32,9 @@ import com.github.pablomathdev.domain.entities.Single;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.SingleNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
@@ -205,17 +207,17 @@ public class SingleServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ThrowAlbumNotFoundException_WhenAlbumNotFound() {
-//	
-//	
-//		when(albumRepository.findAlbumByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
-//		
-//	
-//
-//		assertThrows(AlbumNotFoundException.class,()-> 	albumService.delete(anyString(),anyString()));
-//	
-//
-//	}
+	@Test
+	public void should_ThrowSingleNotFoundException_WhenSingleNotFound() {
+	
+	
+		when(singleRepository.findSingleByTitleAndBandName(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
+		
+	
+
+		assertThrows(SingleNotFoundException.class,()-> singleService.delete(anyString(),anyString()));
+	
+
+	}
 
 }
