@@ -36,9 +36,9 @@ public class SingleService {
 	@Autowired
 	private IGenreRepository genreRepository;
 
-	public List<Album> findAll() {
+	public List<Single> findAll() {
 
-		return albumRepository.findAll();
+		return singleRepository.findAll();
 	}
 
 	@Transactional
