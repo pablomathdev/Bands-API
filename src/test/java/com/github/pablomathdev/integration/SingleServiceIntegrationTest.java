@@ -3,6 +3,7 @@ package com.github.pablomathdev.integration;
 import static com.github.pablomathdev.Factory.singleFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import com.github.pablomathdev.application.services.SingleService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Single;
-import com.github.pablomathdev.domain.entities.Track;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
 
@@ -49,12 +50,8 @@ public class SingleServiceIntegrationTest {
 		band.setName("Metallica");
 		Genre genre = new Genre();
 		genre.setName("Trash Metal");
-		Track track = new Track();
-		track.setTitle("Master of Puppets");
 		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
-		
-		track.setGenres(genres);
 		
 		Single single = singleFactory("Master of Puppets",band,genres,LocalDate.parse("1986-07-02"),null);
 
@@ -66,21 +63,24 @@ public class SingleServiceIntegrationTest {
 		
 
 	}
-//
-//	@Test
-//	public void should_ThrowAlbumAlreadyExistsException_WhenAlbumAlreadyExists() {
-//		Genre genre = genreFactory("Trash Metal");
-//		Band band = bandFactory("Metallica", null, null);
-//		Album album = new Album();
-//		album.setBand(band);
-//		album.setGenres(List.of(genre));
-//		album.setTitle("Metallica (The Black Album)");
-//		album.setReleaseDate(LocalDate.parse("1991-08-12"));
-//
-//		assertThrows(AlbumAlreadyExistsException.class, () -> albumService.create(album));
-//
-//	}
-//
+
+	@Test
+	public void should_ThrowSingleAlreadyExistsException_WhenSingleAlreadyExists() {
+		
+		Band band = new Band();
+		band.setName("Metallica");
+		Genre genre = new Genre();
+		genre.setName("Trash Metal");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		Single single = singleFactory("Whiplash",band,genres,LocalDate.parse("1983-11-08"),null);
+		
+		
+		assertThrows(SingleAlreadyExistsException.class, () -> singleService.create(single));
+
+	}
+
 //	@Test
 //	public void should_ThrowBandNotFoundException_WhenBandOfAlbumNotExists() {
 //		Genre genre = genreFactory("Trash Metal");
