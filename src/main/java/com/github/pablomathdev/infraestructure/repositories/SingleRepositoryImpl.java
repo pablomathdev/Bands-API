@@ -43,7 +43,7 @@ public class SingleRepositoryImpl implements ISingleRepository{
 
 	@Override
 	public Single findByName(String title) {
-		String jpql = "select a from Single a where a.title = :title";
+		String jpql = "select s from Single s where s.title = :title";
 
 		TypedQuery<Single> query = entityManager.createQuery(jpql, Single.class);
 		query.setParameter("title", title);

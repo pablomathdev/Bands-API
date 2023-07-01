@@ -135,25 +135,24 @@ public class SingleRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		List<Album> result = new ArrayList<>();
-//		result.add(album);
-//
-//		when(entityManager.createQuery(SELECT_ALBUM_BY_NAME, Album.class)).thenReturn(typedQueryAlbum);
-//
-//		albumRepositoryImpl.findByName(album.getTitle());
-//
-//		verify(typedQueryAlbum).setParameter(eq("title"), eq(album.getTitle()));
-//
-//	}
-//
+	@Test
+	public void should_InvokeTypedQueryFindByName_withCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+
+		when(entityManager.createQuery(SELECT_SINGLE_BY_NAME, Single.class)).thenReturn(typedQuerySingle);
+
+		singleRepositoryImpl.findByName(single.getTitle());
+
+		verify(typedQuerySingle).setParameter(eq("title"), eq(single.getTitle()));
+
+	}
+
 //	@Test
 //	public void should_FindByNameReturnAAlbum_WhenTheTypedQueryReturnAAlbum() {
 //		Genre genre = genreFactory("any_genre");
