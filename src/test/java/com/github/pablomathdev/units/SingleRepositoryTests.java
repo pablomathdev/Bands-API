@@ -22,7 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -194,20 +193,22 @@ public class SingleRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		albumRepositoryImpl.delete(album);
-//
-//		verify(entityManager).remove(eq(album));
-//
-//	}
-//
+	@Test
+	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+		
+		singleRepositoryImpl.delete(single);
+
+		verify(entityManager).remove(eq(single));
+
+	}
+
 //	@Test
 //	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameInvokeTypedQuery_WithCorrectArguments() {
 //		
