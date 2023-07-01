@@ -5,7 +5,9 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static com.github.pablomathdev.Factory.singleFactory;
 import static com.github.pablomathdev.Factory.trackFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.pablomathdev.application.services.SingleService;
+import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -97,23 +100,23 @@ public class SingleServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnAlbum_WhenAlbumIsCreated() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(albumRepository.save(any())).thenReturn(album);
-//
-//		Album result = albumService.create(album);
-//
-//		assertEquals(album.getTitle(), result.getTitle());
-//
-//	}
-//
+	@Test
+	public void should_ReturnSingle_WhenSingleIsCreated() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+		when(singleRepository.save(any())).thenReturn(single);
+
+		Single result = singleService.create(single);
+
+		assertEquals(single.getTitle(), result.getTitle());
+
+	}
+
 //	@Test
 //	public void should_ThrowBandNotFoundException_WhenbandNotExists() {
 //
