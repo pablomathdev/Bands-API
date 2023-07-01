@@ -15,7 +15,6 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFound
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.SingleNotFoundException;
-import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ISingleRepository;
@@ -24,7 +23,7 @@ import com.github.pablomathdev.domain.repositories.ISingleRepository;
 public class SingleService {
 
 	@Autowired
-	private IBandRepository  bandRepository;
+	private IBandRepository bandRepository;
 
 	@Autowired
 	private ISingleRepository singleRepository;
@@ -50,6 +49,7 @@ public class SingleService {
 
 	}
 
+	@Transactional
 	public Single create(Single single) {
 
 		if (singleRepository.exists(single.getTitle(), single.getBand().getName())) {
