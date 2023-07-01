@@ -23,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -249,16 +248,16 @@ public class SingleRepositoryTests {
 		assertEquals(single.getBand().getName(), result.getBand().getName());
 
 	}
-//	@Test
-//	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameThrowEntityNotFoundException_WhenAlbumNotFound() {
-//		
-//		when(entityManager.createQuery(FIND_ALBUM_BY_TITLE_AND_BAND_NAME, Album.class)).thenReturn(typedQueryAlbum);
-//
-//		when(typedQueryAlbum.getSingleResult()).thenThrow(NoResultException.class);
-//
-//
-//	   assertThrows(EntityNotFoundException.class,()->albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(),anyString()) );
-//
-//	}
+	@Test
+	public void should_SingleRepositoryFindSingleByTitleAndBandNameThrowEntityNotFoundException_WhenSingleNotFound() {
+		
+		when(entityManager.createQuery(FIND_SINGLE_BY_TITLE_AND_BAND_NAME, Single.class)).thenReturn(typedQuerySingle);
+
+		when(typedQuerySingle.getSingleResult()).thenThrow(NoResultException.class);
+
+
+	   assertThrows(EntityNotFoundException.class,()-> singleRepositoryImpl.findSingleByTitleAndBandName(anyString(),anyString()) );
+
+	}
 
 }
