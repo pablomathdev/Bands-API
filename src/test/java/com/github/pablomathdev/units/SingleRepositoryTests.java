@@ -22,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
@@ -209,22 +210,22 @@ public class SingleRepositoryTests {
 
 	}
 
-//	@Test
-//	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameInvokeTypedQuery_WithCorrectArguments() {
-//		
-//		when(entityManager.createQuery(FIND_ALBUM_BY_TITLE_AND_BAND_NAME, Album.class)).thenReturn(typedQueryAlbum);
-//
-//		String albumTitle = "any_album_title";
-//		String bandName = "any_band_name";
-//		
-//		albumRepositoryImpl.findAlbumByTitleAndBandName(albumTitle,bandName);
-//
-//		verify(typedQueryAlbum).setParameter(eq("albumTitle"), eq(albumTitle));
-//		verify(typedQueryAlbum).setParameter(eq("bandName"), eq(bandName));
-//		
-//		
-//	}
-//
+	@Test
+	public void should_SingleRepositoryFindSingleByTitleAndBandNameInvokeTypedQuery_WithCorrectArguments() {
+		
+		when(entityManager.createQuery(FIND_SINGLE_BY_TITLE_AND_BAND_NAME, Single.class)).thenReturn(typedQuerySingle);
+
+		String singleTitle = "any_single_title";
+		String bandName = "any_band_name";
+		
+		singleRepositoryImpl.findSingleByTitleAndBandName(singleTitle,bandName);
+
+		verify(typedQuerySingle).setParameter(eq("singleTitle"), eq(singleTitle));
+		verify(typedQuerySingle).setParameter(eq("bandName"), eq(bandName));
+		
+		
+	}
+
 //	@Test
 //	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameReturnAlbum_WhenAlbumExists() {
 //		Genre genre = genreFactory("any_genre");
