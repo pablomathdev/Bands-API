@@ -20,6 +20,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Single;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
 
@@ -81,20 +82,21 @@ public class SingleServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ThrowBandNotFoundException_WhenBandOfAlbumNotExists() {
-//		Genre genre = genreFactory("Trash Metal");
-//		Band band = bandFactory("Nirvana", null, null);
-//		Album album = new Album();
-//		album.setBand(band);
-//		album.setGenres(List.of(genre));
-//		album.setTitle("Nevermind");
-//		album.setReleaseDate(LocalDate.parse("1991-09-24"));
-//
-//		assertThrows(BandNotFoundException.class, () -> albumService.create(album));
-//
-//	}
-//
+	@Test
+	public void should_ThrowBandNotFoundException_WhenBandOfSingleNotExists() {
+		Band band = new Band();
+		band.setName("Iron Maiden");
+		Genre genre = new Genre();
+		genre.setName("Heavy Metal");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		Single single = singleFactory("Run to the Hills",band,genres,LocalDate.parse("1982-12-12"),null);
+
+		assertThrows(BandNotFoundException.class, () -> singleService.create(single));
+
+	}
+
 //	@Test
 //	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
 //
