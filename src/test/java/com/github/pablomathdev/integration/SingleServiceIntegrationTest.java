@@ -4,6 +4,7 @@ import static com.github.pablomathdev.Factory.singleFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -106,17 +107,17 @@ public class SingleServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListEmptyOfAlbums_WhenAlbumsNotExists() {
-//
-//		clearDatabaseTest();
-//
-//		List<Album> result = albumService.findAll();
-//
-//		assertTrue(result.isEmpty());
-//
-//	}
-//	
+	@Test
+	public void should_ReturnResultListEmptyOfSingles_WhenSinglesNotExists() {
+
+		clearDatabaseTest();
+
+		List<Single> result = singleService.findAll();
+
+		assertTrue(result.isEmpty());
+
+	}
+	
 //	@Test
 //	public void should_DeleteAlbum_WhenALbumExists() {
 //		
