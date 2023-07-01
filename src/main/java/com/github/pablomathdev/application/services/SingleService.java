@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Single;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.SingleNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
@@ -24,9 +23,6 @@ import com.github.pablomathdev.domain.repositories.ISingleRepository;
 @Service
 public class SingleService {
 
-	@Autowired
-	private IAlbumRepository albumRepository;
-	
 	@Autowired
 	private IBandRepository  bandRepository;
 
@@ -42,14 +38,14 @@ public class SingleService {
 	}
 
 	@Transactional
-	public void delete(String albumTitle, String bandName) {
+	public void delete(String singleTitle, String bandName) {
 
 		try {
-			Album album = albumRepository.findAlbumByTitleAndBandName(albumTitle, bandName);
-			albumRepository.delete(album);
+			Single single = singleRepository.findSingleByTitleAndBandName(singleTitle, bandName);
+			singleRepository.delete(single);
 		} catch (EntityNotFoundException e) {
 
-			throw new AlbumNotFoundException(e.getMessage(), e);
+			throw new SingleNotFoundException(e.getMessage(), e);
 		}
 
 	}
