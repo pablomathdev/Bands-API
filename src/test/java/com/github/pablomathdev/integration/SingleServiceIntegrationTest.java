@@ -97,15 +97,15 @@ public class SingleServiceIntegrationTest {
 
 	}
 
-//	@Test
-//	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
-//
-//		List<Album> result = albumService.findAll();
-//
-//		assertEquals(1, result.size());
-//
-//	}
-//
+	@Test
+	public void should_ReturnResultListOfSingles_WhenSinglesExists() {
+
+		List<Single> result = singleService.findAll();
+
+		assertEquals(1, result.size());
+
+	}
+
 //	@Test
 //	public void should_ReturnResultListEmptyOfAlbums_WhenAlbumsNotExists() {
 //
