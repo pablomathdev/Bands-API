@@ -118,18 +118,18 @@ public class SingleServiceIntegrationTest {
 
 	}
 	
-//	@Test
-//	public void should_DeleteAlbum_WhenALbumExists() {
-//		
-//		
-//		albumService.delete("Metallica (The Black Album)","Metallica");
-//		
-//		List< Album> albums =albumService.findAll();
-//		
-//		boolean albumIsRemoved = albums.stream().noneMatch(album -> album.getTitle()
-//				.equals("Metallica (The Black Album)") && album.getBand().getName()
-//				.equals("Metallica"));
-//		
-//		assertTrue(albumIsRemoved);
-//	}
+	@Test
+	public void should_DeleteSingle_WhenSingleExists() {
+		
+		
+		singleService.delete("Whiplash","Metallica");
+		
+		List<Single> singles = singleService.findAll();
+		
+		boolean singleIsRemoved = singles.stream().noneMatch(single -> single.getTitle()
+				.equals("Whiplash") && single.getBand().getName()
+				.equals("Metallica"));
+		
+		assertTrue(singleIsRemoved);
+	}
 }
