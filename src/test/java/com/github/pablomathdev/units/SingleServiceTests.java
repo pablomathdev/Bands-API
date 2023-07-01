@@ -29,6 +29,7 @@ import com.github.pablomathdev.domain.entities.Single;
 import com.github.pablomathdev.domain.entities.Track;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.repositories.ISingleRepository;
@@ -134,23 +135,23 @@ public class SingleServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
-//
-//		Genre genre = genreFactory("any_genre");
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band = bandFactory("any_name", origin, List.of(genre));
-//		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"),
-//				List.of(new Track()));
-//
-//		when(albumRepository.exists(album.getTitle(), album.getBand().getName())).thenReturn(false);
-//
-//		when(genreRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
-//
-//		assertThrows(GenreNotFoundException.class, () -> albumService.create(album));
-//
-//	}
-//
+	@Test
+	public void should_ThrowGenreNotFoundException_WhenGenreNotExists() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_title", origin, List.of(genre));
+		Track track = trackFactory("any_title", null, null, null, null);
+		
+		Single single = singleFactory("any_title", band,List.of(genre),LocalDate.parse("1999-09-09"),track);
+
+		when(singleRepository.exists(single.getTitle(), single.getBand().getName())).thenReturn(false);
+
+		when(genreRepository.findByName(any())).thenThrow(GenreNotFoundException.class);
+
+		assertThrows(GenreNotFoundException.class, () -> singleService.create(single));
+
+	}
+
 //	@Test
 //	public void should_ReturnResultListOfAlbums_WhenAlbumsExists() {
 //
