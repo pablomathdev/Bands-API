@@ -67,7 +67,7 @@ public class AlbumRepositoryTests {
 	}
 
 	@Test
-	public void should_ReturnAlbums_WhenEntityManagerPersistSaveAlbums() {
+	public void should_ReturnAlbum_WhenEntityManagerPersistSaveAlbum() {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_name", origin, List.of(genre));

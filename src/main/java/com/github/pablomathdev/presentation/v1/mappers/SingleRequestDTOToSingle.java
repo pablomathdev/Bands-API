@@ -10,21 +10,21 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.presentation.v1.DTOs.request.BandRequestDTO;
+import com.github.pablomathdev.domain.entities.Single;
+import com.github.pablomathdev.presentation.v1.DTOs.request.SingleRequestDTO;
 
 @Component
-public class BandRequestDTOToBand {
+public class SingleRequestDTOToSingle {
 
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Band convert(BandRequestDTO bandRequestDTO) {
+	public Single convert(SingleRequestDTO singleRequestDTO) {
 	
-		TypeMap<BandRequestDTO, Band> bandTypeMap = modelMapper.getTypeMap(BandRequestDTO.class, Band.class);
+		TypeMap<SingleRequestDTO, Single> singleTypeMap = modelMapper.getTypeMap(SingleRequestDTO.class, Single.class);
 
-        if (bandTypeMap == null) {
+        if (singleTypeMap == null) {
             Converter<List<String>, List<Genre>> genreConverter = new Converter<List<String>, List<Genre>>() {
                 @Override
                 public List<Genre> convert(MappingContext<List<String>, List<Genre>> context) {
@@ -37,11 +37,15 @@ public class BandRequestDTOToBand {
                 }
             };
 
-            bandTypeMap = modelMapper.createTypeMap(BandRequestDTO.class, Band.class);
-            bandTypeMap.addMappings(mapper -> mapper.using(genreConverter).map(BandRequestDTO::getGenres, Band::setGenres));
+            singleTypeMap = modelMapper.createTypeMap(SingleRequestDTO.class, Single.class);
+            singleTypeMap.addMappings(mapper -> {
+            	mapper.using(genreConverter).map(SingleRequestDTO::getGenres, Single::setGenres);
+                mapper.<String>map(src -> src.getBand(),(Dest,v) -> Dest.getBand().setName(v));
+            });
+           
         }
 
-        return modelMapper.map(bandRequestDTO, Band.class);
+        return modelMapper.map(singleRequestDTO, Single.class);
 	
 	}
 }

@@ -20,3 +20,11 @@ INSERT INTO tb_track (album_id, release_date, title) VALUES (1, '1991-07-29', 'E
 
 -- Track_Genre
 INSERT INTO tb_track_genre (track_id,genre_id) VALUES (1,1);
+
+-- Single
+INSERT INTO tb_single(band_id,release_date,title)VALUES(1,'1983-11-08','Whiplash');
+
+-- Album_Genre -- 
+INSERT INTO tb_single_genre (single_id,genre_id) VALUES(1,2);
+
+
