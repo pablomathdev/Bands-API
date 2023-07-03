@@ -58,6 +58,18 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
 		}
 		
+		if(request.getDescription(false).indexOf("singles") != -1) {
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message(ex.getMessage())
+					.detail("The provided band is invalid. Please provide a valid band.")
+					.build();
+
+			return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+		}
+		
 
 		 errorMessage = ControllerErrorMessage
 				.builder()

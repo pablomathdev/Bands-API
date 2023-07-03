@@ -26,7 +26,7 @@ import io.restassured.http.ContentType;
 public class SingleAPITest {
 
 	static final String CREATE_SINGLE_SUCCESS = "classpath:data/create_single_test_success.json";
-	static final String CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_BAND = "classpath:data/create_album_test_error_non-existent_band.json";
+	static final String CREATE_SINGLE_ERROR_SINGLE_WITH_NON_EXISTENT_BAND = "classpath:data/create_single_test_error_non-existent_band.json";
 	static final String CREATE_SINGLE_ERROR_SINGLE_WITH_NON_EXISTENT_GENRE = "classpath:data/create_single_test_error_non-existent_genre.json";
 	static final String CREATE_ALBUM_ERROR_ALBUM_EXISTING = "classpath:data/create_album_test_error_album_existing.json";
 
@@ -72,16 +72,16 @@ public class SingleAPITest {
 
 	}
 
-//	@Test
-//	public void should_ReturnStatusCode400_WhenBandInAlbumNotExists() throws IOException {
-//
-//		Resource resource = resourceLoader.getResource(CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_BAND);
-//
-//		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
-//				.then().statusCode(400);
-//
-//	}
-//
+	@Test
+	public void should_ReturnStatusCode400_WhenBandInSingleNotExists() throws IOException {
+
+		Resource resource = resourceLoader.getResource(CREATE_SINGLE_ERROR_SINGLE_WITH_NON_EXISTENT_BAND);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(400);
+
+	}
+
 //	@Test
 //	public void should_ReturnStatusCode409_WhenAlbumAlreadyExist() throws IOException {
 //
