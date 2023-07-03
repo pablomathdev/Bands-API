@@ -105,16 +105,16 @@ public class SingleAPITest {
 
 		
 	}
-//	@Test
-//	public void should_ReturnStatusCode204_WhenAlbumsNotExists() {
-//		
-//		clearDatabase();
-//		
-//		given().accept(ContentType.JSON).when().get().then().statusCode(204);
-//
-//		
-//	}	
-//	
+	@Test
+	public void should_ReturnStatusCode204_WhenSinglesNotExists() {
+		
+		clearDatabase();
+		
+		given().accept(ContentType.JSON).when().get().then().statusCode(204);
+
+		
+	}	
+	
 //	@Test
 //	public void should_ReturnStatusCode204_WhenAlbumIsRemoved() {
 //		
