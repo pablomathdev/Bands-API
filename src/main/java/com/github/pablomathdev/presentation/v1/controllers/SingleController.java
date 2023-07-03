@@ -1,25 +1,15 @@
 package com.github.pablomathdev.presentation.v1.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.SingleService;
-import com.github.pablomathdev.domain.entities.Album;
 import com.github.pablomathdev.domain.entities.Single;
-import com.github.pablomathdev.presentation.v1.DTOs.request.AlbumRequestDTO;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/singles")
@@ -45,18 +35,18 @@ public class SingleController {
 //	}
 //	
 //
-//	@PostMapping
-//	public ResponseEntity<?> save(@RequestBody @Valid AlbumRequestDTO albumRequestDTO) {
-//        
-//	     Album album = albumRequestDTOToAlbum.convert(albumRequestDTO);
-//		
-//		
-//		Album albumSaved = albumService.create(album);
-//
-//		return ResponseEntity.status(HttpStatus.CREATED).body(albumSaved);
-//
-//	}
-//	
+	@PostMapping
+	public ResponseEntity<?> save(@RequestBody Single single) {
+        
+	  
+		
+		
+		Single singleSaved = singleService.create(single);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(singleSaved);
+
+	}
+	
 //	@DeleteMapping
 //	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 //	public void delete(@RequestParam String albumTitle,@RequestParam String bandName) {
