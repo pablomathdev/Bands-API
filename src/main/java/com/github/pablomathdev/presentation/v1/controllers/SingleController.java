@@ -1,8 +1,11 @@
 package com.github.pablomathdev.presentation.v1.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,20 +24,20 @@ public class SingleController {
 	@Autowired
 	private SingleService singleService;
 	
-//	@GetMapping
-//	public ResponseEntity<List<Single>> findAllSingles(){
-//		
-//	   List<Single> singles = singleService.findAll();
-//	   
-//	   if(singles.isEmpty()) {
-//		   return ResponseEntity.status(HttpStatus.NO_CONTENT).body(singles);
-//	   }
-//	   
-//	   return ResponseEntity.ok(singles);
-//	   
-//	}
-//	
-//
+	@GetMapping
+	public ResponseEntity<List<Single>> findAllSingles(){
+		
+	   List<Single> singles = singleService.findAll();
+	   
+	   if(singles.isEmpty()) {
+		   return ResponseEntity.status(HttpStatus.NO_CONTENT).body(singles);
+	   }
+	   
+	   return ResponseEntity.ok(singles);
+	   
+	}
+	
+
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Single single) {
         

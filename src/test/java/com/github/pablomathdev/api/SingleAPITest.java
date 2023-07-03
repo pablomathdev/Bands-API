@@ -92,19 +92,19 @@ public class SingleAPITest {
 
 	}
 
-//	@Test
-//	public void should_ReturnStatusCode200_WhenAlbumsExists() {
-//		given()
-//		.accept(ContentType.JSON)
-//		.when()
-//		.get()
-//		.then()
-//		.statusCode(200)
-//		.assertThat()
-//		.body("size()",Matchers.is(1));
-//
-//		
-//	}
+	@Test
+	public void should_ReturnStatusCode200_WhenSingleExists() {
+		given()
+		.accept(ContentType.JSON)
+		.when()
+		.get()
+		.then()
+		.statusCode(200)
+		.assertThat()
+		.body("size()",Matchers.is(1));
+
+		
+	}
 //	@Test
 //	public void should_ReturnStatusCode204_WhenAlbumsNotExists() {
 //		
