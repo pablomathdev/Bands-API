@@ -4,8 +4,8 @@ package com.github.pablomathdev.presentation.v1.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +29,7 @@ import com.github.pablomathdev.domain.exceptions.alreadyExistsException.AlbumAlr
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.BandAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.EntityAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.GenreAlreadyExistsException;
+import com.github.pablomathdev.domain.exceptions.alreadyExistsException.SingleAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.alreadyExistsException.TrackAlreadyExistsException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFoundException;
@@ -237,6 +238,14 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
 					.message(subEx.getMessage())
 					.detail("Cannot create the given track because it already exists. Please choose a other track.")
+					.build();
+		}else if(ex instanceof SingleAlreadyExistsException subEx) {
+			errorMessage = ControllerErrorMessage
+					.builder()
+					.code(CONFLICT.value())
+					.type(ErrorType.RESOURCE_ALREADY_EXISTS.toString())
+					.message(subEx.getMessage())
+					.detail("Cannot create the given single because it already exists. Please choose a other single.")
 					.build();
 		}
 		

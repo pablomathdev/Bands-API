@@ -28,7 +28,7 @@ public class SingleAPITest {
 	static final String CREATE_SINGLE_SUCCESS = "classpath:data/create_single_test_success.json";
 	static final String CREATE_SINGLE_ERROR_SINGLE_WITH_NON_EXISTENT_BAND = "classpath:data/create_single_test_error_non-existent_band.json";
 	static final String CREATE_SINGLE_ERROR_SINGLE_WITH_NON_EXISTENT_GENRE = "classpath:data/create_single_test_error_non-existent_genre.json";
-	static final String CREATE_ALBUM_ERROR_ALBUM_EXISTING = "classpath:data/create_album_test_error_album_existing.json";
+	static final String CREATE_SINGLE_ERROR_SINGLE_EXISTING = "classpath:data/create_single_test_error_single_existing.json";
 
 	@LocalServerPort
 	private int port;
@@ -82,16 +82,16 @@ public class SingleAPITest {
 
 	}
 
-//	@Test
-//	public void should_ReturnStatusCode409_WhenAlbumAlreadyExist() throws IOException {
-//
-//		Resource resource = resourceLoader.getResource(CREATE_ALBUM_ERROR_ALBUM_EXISTING);
-//
-//		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
-//				.then().statusCode(409);
-//
-//	}
-//
+	@Test
+	public void should_ReturnStatusCode409_WhenSingleAlreadyExist() throws IOException {
+
+		Resource resource = resourceLoader.getResource(CREATE_SINGLE_ERROR_SINGLE_EXISTING);
+
+		given().body(resource.getInputStream()).contentType(ContentType.JSON).accept(ContentType.JSON).when().post()
+				.then().statusCode(409);
+
+	}
+
 //	@Test
 //	public void should_ReturnStatusCode200_WhenAlbumsExists() {
 //		given()
