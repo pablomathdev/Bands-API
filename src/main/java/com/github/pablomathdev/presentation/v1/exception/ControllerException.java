@@ -161,6 +161,19 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
 			
 		}
+		if (request.getDescription(false).indexOf("singles") != -1) {
+
+			 errorMessage = ControllerErrorMessage
+					.builder()
+					.code(BAD_REQUEST.value())
+					.type(ErrorType.INVALID_PARAM.toString())
+					.message("Genre is invalid")
+					.detail("The provided single genre is invalid. Please provide a valid genre.")
+					.build();
+			 
+			 return new ResponseEntity<>(errorMessage, new HttpHeaders(), BAD_REQUEST);
+			
+		}
 		
 		
 		   errorMessage = ControllerErrorMessage
