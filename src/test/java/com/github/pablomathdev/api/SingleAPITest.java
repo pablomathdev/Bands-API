@@ -115,20 +115,20 @@ public class SingleAPITest {
 		
 	}	
 	
-//	@Test
-//	public void should_ReturnStatusCode204_WhenAlbumIsRemoved() {
-//		
-//		given()
-//		.queryParam("albumTitle", "Metallica (The Black Album)")
-//		.queryParam("bandName", "Metallica")
-//		.accept(ContentType.JSON)
-//		.when()
-//		.delete()
-//		.then()
-//		.statusCode(204);
-//
-//		
-//	}	
+	@Test
+	public void should_ReturnStatusCode204_WhenSingleIsRemoved() {
+		
+		given()
+		.queryParam("singleTitle", "Whiplash")
+		.queryParam("bandName", "Metallica")
+		.accept(ContentType.JSON)
+		.when()
+		.delete()
+		.then()
+		.statusCode(204);
+
+		
+	}	
 //	@Test
 //	public void should_ReturnStatusCode404_WhenAlbumNotFound() {
 //		
