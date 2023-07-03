@@ -1,15 +1,9 @@
 {
 	"title": "The Day That Never Comes",
 	"releaseDate": "2008-11-21",
-	"band": {
-		"name": "Metallica"
-	},
+	"band": "Metallica",
 	"genres": [
-		{
-			"name": "Heavy Metal"
-		},
-		{
-			"name": "Trash Metal"
-		}
+		"Heavy Metal",
+		"Trash Metal"
 	]
 }

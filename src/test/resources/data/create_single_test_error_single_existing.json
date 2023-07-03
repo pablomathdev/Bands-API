@@ -1,12 +1,8 @@
 {
 	"title": "Whiplash",
 	"releaseDate": "1983-11-08",
-	"band": {
-		"name": "Metallica"
-	},
+	"band": "Metallica",
 	"genres": [
-		{
-			"name": "Trash Metal"
-		}
+		"Trash Metal"
 	]
 }

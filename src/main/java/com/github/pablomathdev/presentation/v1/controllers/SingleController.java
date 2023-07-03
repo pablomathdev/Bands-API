@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.SingleService;
 import com.github.pablomathdev.domain.entities.Single;
+import com.github.pablomathdev.presentation.v1.DTOs.request.SingleRequestDTO;
+import com.github.pablomathdev.presentation.v1.mappers.SingleRequestDTOToSingle;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/singles")
 public class SingleController {
-//	
-//	@Autowired
-//	private AlbumRequestDTOToAlbum albumRequestDTOToAlbum;
+	
+	@Autowired
+	private SingleRequestDTOToSingle singleRequestDTOToSingle;
 
 	@Autowired
 	private SingleService singleService;
@@ -42,9 +46,9 @@ public class SingleController {
 	
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Single single) {
+	public ResponseEntity<?> save(@RequestBody @Valid SingleRequestDTO singleRequestDTO) {
         
-	  
+	    Single single = singleRequestDTOToSingle.convert(singleRequestDTO);
 		
 		
 		Single singleSaved = singleService.create(single);
