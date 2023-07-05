@@ -81,10 +81,17 @@ public class BandRepositoryImpl implements IBandRepository {
 		return entityManager.merge(object);
 
 	}
-	
+
 	public Band findById(Integer id) {
-		
-		return entityManager.find(Band.class, id);
+
+		Band band = entityManager.find(Band.class, id);
+
+		if (band == null) {
+
+			throw new EntityNotFoundException(String.format("Band with id %d not found", id));
+		}
+
+		return band;
 	}
 
 }

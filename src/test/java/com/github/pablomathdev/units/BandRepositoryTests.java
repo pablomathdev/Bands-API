@@ -247,9 +247,9 @@ public class BandRepositoryTests {
 
 	@Test
 	public void should_InvokeEntityManagerFind_withCorrectArguments() {
-	
+
 		Integer id = 1;
-		
+
 		bandRepositoryImpl.findById(id);
 		verify(entityManager).find(eq(Band.class), eq(id));
 	}
@@ -260,12 +260,23 @@ public class BandRepositoryTests {
 		Band band1 = bandFactory("any_band_1", origin, null);
 
 		Integer id = 1;
-		
-		when(entityManager.find(Band.class,id)).thenReturn(band1);
+
+		when(entityManager.find(Band.class, id)).thenReturn(band1);
 
 		Band result = bandRepositoryImpl.findById(id);
 
 		assertEquals(band1, result);
+
+	}
+
+	@Test
+	public void should_ThrowsEntityNotFoundException_WhenEntityManagerFindDoNotFindBand() {
+		
+		Integer id = 1;
+
+		when(entityManager.find(Band.class, id)).thenReturn(null);
+
+		assertThrows(EntityNotFoundException.class, () -> bandRepositoryImpl.findById(id));
 
 	}
 
