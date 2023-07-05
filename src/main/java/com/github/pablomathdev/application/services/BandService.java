@@ -18,17 +18,21 @@ import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
+import com.github.pablomathdev.infraestructure.mappers.BandUpdateMapper;
 
 import jakarta.persistence.PersistenceException;
 
 @Service
 public class BandService implements ICreateService<Band>, IFindAllService<Band> {
+	
+	@Autowired
+	private BandUpdateMapper bandUpdateMapper;
 
 	@Autowired
-	IBandRepository bandRepository;
+	private IBandRepository bandRepository;
 
 	@Autowired
-	IGenreRepository genreRepository;
+	private IGenreRepository genreRepository;
 
 	@Override
 	public Band create(Band band) {
@@ -83,9 +87,11 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	@Transactional
 	public Band update(Band band, Integer id) {
 		try {
-			bandRepository.findById(id);
+          	Band bandFound = bandRepository.findById(id);
 
-			return null;
+          return bandUpdateMapper.map(bandFound);
+          	
+          	
 		} catch (EntityNotFoundException e) {
 
 			throw new BandNotFoundException(e.getMessage(), e);

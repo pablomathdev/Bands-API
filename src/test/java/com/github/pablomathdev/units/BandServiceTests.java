@@ -35,6 +35,7 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFou
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
+import com.github.pablomathdev.infraestructure.mappers.BandUpdateMapper;
 
 import jakarta.persistence.PersistenceException;;
 
@@ -45,12 +46,15 @@ class BandServiceTests {
 
 	@Captor
 	ArgumentCaptor<String> genreNameCaptor;
+	
+	@Mock
+	private BandUpdateMapper bandUpdateMapper;
 
 	@Mock
-	IBandRepository bandRepository;
+	private IBandRepository bandRepository;
 
 	@Mock
-	IGenreRepository genreRepository;
+	private IGenreRepository genreRepository;
 
 	@InjectMocks
 	private BandService bandService;
@@ -250,6 +254,22 @@ class BandServiceTests {
 		
 
 		assertThrows(BandNotFoundException.class,()-> bandService.update(band, id));
+
+	}
+	
+	@Test
+	public void should_InvokeBandUpdateMapper_WithCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenReturn(band);
+		
+        bandService.update(band, id);
+		
+		verify(bandUpdateMapper).map(eq(band));
 
 	}
 

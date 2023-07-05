@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.AlbumService;
 import com.github.pablomathdev.domain.entities.Album;
+import com.github.pablomathdev.infraestructure.mappers.AlbumRequestDTOToAlbum;
 import com.github.pablomathdev.presentation.v1.DTOs.request.AlbumRequestDTO;
-import com.github.pablomathdev.presentation.v1.mappers.AlbumRequestDTOToAlbum;
 
 import jakarta.validation.Valid;
 

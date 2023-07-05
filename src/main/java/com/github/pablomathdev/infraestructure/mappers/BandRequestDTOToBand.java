@@ -1,4 +1,4 @@
-package com.github.pablomathdev.presentation.v1.mappers;
+package com.github.pablomathdev.infraestructure.mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,21 +10,21 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
-import com.github.pablomathdev.domain.entities.Single;
-import com.github.pablomathdev.presentation.v1.DTOs.request.SingleRequestDTO;
+import com.github.pablomathdev.presentation.v1.DTOs.request.BandRequestDTO;
 
 @Component
-public class SingleRequestDTOToSingle {
+public class BandRequestDTOToBand {
 
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Single convert(SingleRequestDTO singleRequestDTO) {
+	public Band convert(BandRequestDTO bandRequestDTO) {
 	
-		TypeMap<SingleRequestDTO, Single> singleTypeMap = modelMapper.getTypeMap(SingleRequestDTO.class, Single.class);
+		TypeMap<BandRequestDTO, Band> bandTypeMap = modelMapper.getTypeMap(BandRequestDTO.class, Band.class);
 
-        if (singleTypeMap == null) {
+        if (bandTypeMap == null) {
             Converter<List<String>, List<Genre>> genreConverter = new Converter<List<String>, List<Genre>>() {
                 @Override
                 public List<Genre> convert(MappingContext<List<String>, List<Genre>> context) {
@@ -37,15 +37,11 @@ public class SingleRequestDTOToSingle {
                 }
             };
 
-            singleTypeMap = modelMapper.createTypeMap(SingleRequestDTO.class, Single.class);
-            singleTypeMap.addMappings(mapper -> {
-            	mapper.using(genreConverter).map(SingleRequestDTO::getGenres, Single::setGenres);
-                mapper.<String>map(src -> src.getBand(),(Dest,v) -> Dest.getBand().setName(v));
-            });
-           
+            bandTypeMap = modelMapper.createTypeMap(BandRequestDTO.class, Band.class);
+            bandTypeMap.addMappings(mapper -> mapper.using(genreConverter).map(BandRequestDTO::getGenres, Band::setGenres));
         }
 
-        return modelMapper.map(singleRequestDTO, Single.class);
+        return modelMapper.map(bandRequestDTO, Band.class);
 	
 	}
 }

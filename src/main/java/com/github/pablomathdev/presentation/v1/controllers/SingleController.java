@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.SingleService;
 import com.github.pablomathdev.domain.entities.Single;
+import com.github.pablomathdev.infraestructure.mappers.SingleRequestDTOToSingle;
 import com.github.pablomathdev.presentation.v1.DTOs.request.SingleRequestDTO;
-import com.github.pablomathdev.presentation.v1.mappers.SingleRequestDTOToSingle;
 
 import jakarta.validation.Valid;
 
