@@ -31,7 +31,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
-
 @ExtendWith(MockitoExtension.class)
 public class BandRepositoryTests {
 
@@ -214,28 +213,36 @@ public class BandRepositoryTests {
 		assertFalse(listBandExpected.isEmpty());
 
 	}
-	
+
 	@Test
 	public void should_InvokeEntityManagerRemove_withCorrectArguments() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band1 = bandFactory("any_band_1", origin, null);
-		
+
 		bandRepositoryImpl.delete(band1);
 		verify(entityManager).remove(eq(band1));
 	}
-	
-	
+
 	@Test
 	public void should_InvokeEntityManagerMerge_withCorrectArguments() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band1 = bandFactory("any_band_1", origin, null);
-		
+
 		bandRepositoryImpl.update(band1);
 		verify(entityManager).merge(eq(band1));
 	}
-	
-	
-	
-	
+
+	@Test
+	public void should_ReturnBand_whenBandIsUpdated() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+
+		when(entityManager.merge(band1)).thenReturn(band1);
+
+		Band result = bandRepositoryImpl.update(band1);
+
+		assertEquals(band1, result);
+
+	}
 
 }
