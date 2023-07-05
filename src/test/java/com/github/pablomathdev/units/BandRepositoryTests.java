@@ -254,17 +254,19 @@ public class BandRepositoryTests {
 		verify(entityManager).find(eq(Band.class), eq(id));
 	}
 
-//	@Test
-//	public void should_EntityManagerFindReturnBand_WhenBandExists() {
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Band band1 = bandFactory("any_band_1", origin, null);
-//
-//		when(entityManager.merge(band1)).thenReturn(band1);
-//
-//		Band result = bandRepositoryImpl.update(band1);
-//
-//		assertEquals(band1, result);
-//
-//	}
+	@Test
+	public void should_EntityManagerFindReturnBand_WhenFindBand() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+
+		Integer id = 1;
+		
+		when(entityManager.find(Band.class,id)).thenReturn(band1);
+
+		Band result = bandRepositoryImpl.findById(id);
+
+		assertEquals(band1, result);
+
+	}
 
 }
