@@ -81,14 +81,16 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	}
 
 	@Transactional
-	public Band update(Band band,Integer id) {
+	public Band update(Band band, Integer id) {
+		try {
+			bandRepository.findById(id);
 
-	      	bandRepository.findById(id);
-		
-		return null;
-		
-		
-		
+			return null;
+		} catch (EntityNotFoundException e) {
+
+			throw new BandNotFoundException(e.getMessage(), e);
+		}
+
 	}
 
 }

@@ -238,5 +238,19 @@ class BandServiceTests {
 		verify(bandRepository).findById(eq(id));
 
 	}
+	@Test
+	public void should_throwBandNotFoundException_WhenBandRepositoryFindByIdThrowsEntityNotFoundException() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenThrow(EntityNotFoundException.class);
+		
+
+		assertThrows(BandNotFoundException.class,()-> bandService.update(band, id));
+
+	}
 
 }
