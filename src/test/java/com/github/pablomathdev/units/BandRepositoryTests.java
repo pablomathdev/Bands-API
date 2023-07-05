@@ -225,5 +225,17 @@ public class BandRepositoryTests {
 	}
 	
 	
+	@Test
+	public void should_InvokeEntityManagerMerge_withCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band1 = bandFactory("any_band_1", origin, null);
+		
+		bandRepositoryImpl.update(band1);
+		verify(entityManager).merge(eq(band1));
+	}
+	
+	
+	
+	
 
 }

@@ -75,4 +75,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		
 	}
 
+	@Override
+	public Genre update(Genre object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

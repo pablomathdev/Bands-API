@@ -39,10 +39,10 @@ public class BandRepositoryImpl implements IBandRepository {
 
 		try {
 			return query.getSingleResult();
-		}catch (NoResultException e) {
+		} catch (NoResultException e) {
 			throw new EntityNotFoundException(String.format("Band %s not found", name), e);
 		}
-		
+
 	}
 
 	public boolean exists(String name) {
@@ -61,17 +61,24 @@ public class BandRepositoryImpl implements IBandRepository {
 
 	@Override
 	public List<Band> findAll() {
-	
+
 		TypedQuery<Band> query = entityManager.createQuery("from Band", Band.class);
-		
+
 		return query.getResultList();
 	}
 
 	@Override
 	@Transactional
 	public void delete(Band band) {
-	
+
 		entityManager.remove(band);
+	}
+
+	@Override
+	public Band update(Band object) {
+
+		return entityManager.merge(object);
+
 	}
 
 }
