@@ -81,4 +81,10 @@ public class GenreRepositoryImpl implements IGenreRepository {
 		return null;
 	}
 
+	@Override
+	public Genre findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

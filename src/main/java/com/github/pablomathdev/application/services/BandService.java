@@ -83,6 +83,8 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	@Transactional
 	public Band update(Band band,Integer id) {
 
+	      	bandRepository.findById(id);
+		
 		return null;
 		
 		

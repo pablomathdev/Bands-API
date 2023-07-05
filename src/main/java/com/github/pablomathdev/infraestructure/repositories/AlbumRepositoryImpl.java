@@ -91,6 +91,12 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		return null;
 	}
 
+	@Override
+	public Album findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 

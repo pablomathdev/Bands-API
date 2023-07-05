@@ -91,6 +91,12 @@ public class SingleRepositoryImpl implements ISingleRepository{
 		return null;
 	}
 
+	@Override
+	public Single findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 

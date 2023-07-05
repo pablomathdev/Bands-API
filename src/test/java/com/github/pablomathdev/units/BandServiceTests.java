@@ -38,7 +38,6 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;;
 
-
 @ExtendWith(MockitoExtension.class)
 class BandServiceTests {
 
@@ -216,16 +215,28 @@ class BandServiceTests {
 
 	@Test
 	public void should_ThrowBandNotFoundException_WhenBandRepositoryDeleteThrowEntityNotFoundException() {
-		Origin origin = originFactory("any_city","any_country" , 1999);
-		
-		Band band = bandFactory("any_band", origin,null);
-		
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
 		when(bandRepository.findByName(any())).thenThrow(EntityNotFoundException.class);
-		
-		
-		assertThrows(BandNotFoundException.class,()->bandService.delete(band.getName()));
-		
-		
+
+		assertThrows(BandNotFoundException.class, () -> bandService.delete(band.getName()));
+
+	}
+
+	@Test
+	public void should_InvokeBandRepositoryFindById_WithCorrectsArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
+		Integer id = 1;
+
+		bandService.update(band, id);
+
+		verify(bandRepository).findById(eq(id));
+
 	}
 
 }

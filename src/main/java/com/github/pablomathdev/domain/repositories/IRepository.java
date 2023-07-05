@@ -7,5 +7,6 @@ public interface IRepository<T,ID> {
 	T save(T object);
 	void delete(T object);
 	T update(T object);
+	T findById(ID id);
 	
 }
