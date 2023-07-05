@@ -269,7 +269,7 @@ class BandServiceTests {
 		
         bandService.update(band, id);
 		
-		verify(bandUpdateMapper).map(eq(band));
+		verify(bandUpdateMapper).map(eq(band),eq(band));
 
 	}
 

@@ -12,9 +12,11 @@ public class BandUpdateMapper {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Band map(Band band) {
+	public Band map(Band src, Band dest) {
 
-		return modelMapper.map(band, Band.class);
+		modelMapper.map(src, dest);
+
+		return dest;
 	}
 
 }
