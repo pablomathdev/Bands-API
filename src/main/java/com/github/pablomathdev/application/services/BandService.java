@@ -21,7 +21,6 @@ import com.github.pablomathdev.domain.services.IFindAllService;
 
 import jakarta.persistence.PersistenceException;
 
-
 @Service
 public class BandService implements ICreateService<Band>, IFindAllService<Band> {
 
@@ -46,7 +45,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 			band.getGenres().forEach((g) -> {
 
 				Genre genre = genreRepository.findByName(g.getName());
-								
+
 				genres.add(genre);
 
 			});
@@ -67,18 +66,24 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 		return bandRepository.findAll();
 	}
-	
+
 	@Transactional
 	public void delete(String nameBand) {
-		
+
 		try {
 			Band band = bandRepository.findByName(nameBand);
-			
+
 			bandRepository.delete(band);
-		}catch (EntityNotFoundException e) {
-			throw new BandNotFoundException(e.getMessage(),e);
+		} catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(), e);
 		}
-		
+
+	}
+
+	@Transactional
+	public Band update(Band band,Integer id) {
+
+		return null;
 		
 		
 		

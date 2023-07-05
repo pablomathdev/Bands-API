@@ -75,10 +75,16 @@ public class BandRepositoryImpl implements IBandRepository {
 	}
 
 	@Override
+	@Transactional
 	public Band update(Band object) {
 
 		return entityManager.merge(object);
 
+	}
+	
+	public Band findById(Integer id) {
+		
+		return entityManager.find(Band.class, id);
 	}
 
 }
