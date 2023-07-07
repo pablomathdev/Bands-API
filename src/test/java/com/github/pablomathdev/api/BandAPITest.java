@@ -33,7 +33,7 @@ public class BandAPITest {
 	static final String CREATE_BAND_SUCCESS = "classpath:data/create_band_test_success.json";
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";
 	static final String CREATE_BAND_ERROR_BAND_EXISTING = "classpath:data/create_band_test_error_band_existing.json";
-
+	static final String UPDATE_BAND_SUCCESS = "classpath:data/update_band_test_success.json";
 	@Autowired
 	private ResourceLoader resourceLoader;
 
@@ -121,6 +121,21 @@ public class BandAPITest {
 		.delete("/nirvana")
 		.then()
 		.statusCode(404);
+	}
+	
+	@Test
+	public void should_ReturnStatusCode200_WhenBandIsUpdated() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_BAND_SUCCESS);
+
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.put("/1")
+		.then().statusCode(200);
+
 	}
 
 	public void prepareData() {
