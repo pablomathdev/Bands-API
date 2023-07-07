@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -231,20 +230,6 @@ class BandServiceTests {
 	}
 
 	@Test
-	public void should_InvokeBandRepositoryFindById_WithCorrectsArguments() {
-		Origin origin = originFactory("any_city", "any_country", 1999);
-
-		Band band = bandFactory("any_band", origin, null);
-
-		Integer id = 1;
-
-		bandService.update(band, id);
-
-		verify(bandRepository).findById(eq(id));
-
-	}
-
-	@Test
 	public void should_throwBandNotFoundException_WhenBandRepositoryFindByIdThrowsEntityNotFoundException() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
 
@@ -261,59 +246,69 @@ class BandServiceTests {
 	@Test
 	public void should_InvokeBandUpdateMapper_WithCorrectArguments() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
-
-		Band band = bandFactory("any_band", origin, null);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		Band band = bandFactory("any_band", origin, genres);
 
 		Integer id = 1;
 
 		when(bandRepository.findById(id)).thenReturn(band);
-		
-        bandService.update(band, id);
-		
-		verify(bandUpdateMapper).map(eq(band),eq(band));
+
+		bandService.update(band, id);
+
+		verify(bandUpdateMapper).map(eq(band), eq(band));
 
 	}
-	
+
 	@Test
-	public void should_InvokeBandRepositorySave_WithCorrectArguments() {
+	public void should_InvokeBandRepositoryUpdate_WithCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		
+		Band existingBand = bandFactory("any_band", origin, genres);
 
-		Band existingBand = new Band();
-		existingBand.setId(1);
-		existingBand.setName("Existing Band");
+		Band updateBand = bandFactory("update_band", origin, genres);
+		
+		Integer id = 1;
 
-		Band updatedBand = new Band();
-		updatedBand.setName("Updated Band");
+		when(bandRepository.findById(id)).thenReturn(existingBand);
+        when(bandUpdateMapper.map(any(),any())).thenReturn(updateBand);
+		
+		bandService.update(updateBand, id);
 
-		when(bandRepository.findById(anyInt())).thenReturn(existingBand);
-		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(updatedBand);
-		when(bandRepository.save(any())).thenReturn(updatedBand);
+		verify(bandRepository).update(eq(updateBand));
 
-		bandService.update(updatedBand, 1);
-
-	   verify(bandRepository).save(eq(updatedBand));
 
 	}
 
 	@Test
 	public void should_ReturnBandUpdated() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		
+		Band existingBand = bandFactory("any_band", origin, genres);
 
-		Band existingBand = new Band();
-		existingBand.setId(1);
-		existingBand.setName("Existing Band");
+		Band updateBand = bandFactory("update_band", origin, genres);
+		
+		Integer id = 1;
 
-		Band updatedBand = new Band();
-		updatedBand.setName("Updated Band");
+		when(bandRepository.findById(id)).thenReturn(existingBand);
+        when(bandUpdateMapper.map(any(),any())).thenReturn(updateBand);
+		when(bandRepository.update(any())).thenReturn(updateBand);
+        
+		Band updatedBand = bandService.update(updateBand, id);
 
-		when(bandRepository.findById(anyInt())).thenReturn(existingBand);
-		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(updatedBand);
-		when(bandRepository.save(any())).thenReturn(updatedBand);
-
-		Band result = bandService.update(updatedBand, 1);
-
-		assertEquals(updatedBand.getName(), result.getName());
+		
+		assertEquals(updatedBand.getName(), updateBand.getName());
+		
 	}
 	
-
-
 
 }

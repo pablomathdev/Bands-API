@@ -4,7 +4,7 @@ CREATE TABLE tb_single
    title VARCHAR (50) NOT NULL,
    band_id BIGINT NOT NULL,
    release_date DATE NOT NULL,
-   FOREIGN KEY (band_id) REFERENCES tb_band (id),
+   FOREIGN KEY (band_id) REFERENCES tb_band (id) ON DELETE CASCADE,
    PRIMARY KEY (id)
 )
 ENGINE= InnoDB;

@@ -87,15 +87,33 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 	@Transactional
 	public Band update(Band band, Integer id) {
-		
-		Band bandFound = bandRepository.findById(id);
-		
-		List<Genre> genres = new ArrayList<>();
-		
-		try {
-			
 
-			band.getGenres().forEach((g) -> {
+		Band bandFound = findBandByIdOrThrow(id);
+
+		List<Genre> genres = findGenreOrThrow(band.getGenres());
+
+		band.setGenres(genres);
+
+		return bandRepository.update(bandUpdateMapper.map(band, bandFound));
+
+	}
+
+	private Band findBandByIdOrThrow(Integer id) {
+		try {
+			return bandRepository.findById(id);
+
+		} catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(), e);
+
+		}
+	}
+
+	private List<Genre> findGenreOrThrow(List<Genre> genresList) {
+
+		List<Genre> genres = new ArrayList<>();
+		try {
+
+			genresList.forEach((g) -> {
 
 				Genre genre = genreRepository.findByName(g.getName());
 
@@ -103,17 +121,12 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 			});
 
-			band.setGenres(genres);
-			return bandRepository.update(bandUpdateMapper.map(band, bandFound));
-			
-		
-			
+			return genres;
 
 		} catch (EntityNotFoundException e) {
+			throw new GenreNotFoundException(e.getMessage(), e);
 
-			throw new BandNotFoundException(e.getMessage(), e);
 		}
-
 	}
 
 }
