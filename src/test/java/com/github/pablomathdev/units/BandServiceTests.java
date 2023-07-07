@@ -273,6 +273,26 @@ class BandServiceTests {
 		verify(bandUpdateMapper).map(eq(band),eq(band));
 
 	}
+	
+	@Test
+	public void should_InvokeBandRepositorySave_WithCorrectArguments() {
+
+		Band existingBand = new Band();
+		existingBand.setId(1);
+		existingBand.setName("Existing Band");
+
+		Band updatedBand = new Band();
+		updatedBand.setName("Updated Band");
+
+		when(bandRepository.findById(anyInt())).thenReturn(existingBand);
+		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(updatedBand);
+		when(bandRepository.save(any())).thenReturn(updatedBand);
+
+		bandService.update(updatedBand, 1);
+
+	   verify(bandRepository).save(eq(updatedBand));
+
+	}
 
 	@Test
 	public void should_ReturnBandUpdated() {
@@ -285,11 +305,15 @@ class BandServiceTests {
 		updatedBand.setName("Updated Band");
 
 		when(bandRepository.findById(anyInt())).thenReturn(existingBand);
-		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(existingBand);
+		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(updatedBand);
+		when(bandRepository.save(any())).thenReturn(updatedBand);
 
 		Band result = bandService.update(updatedBand, 1);
 
-		assertEquals(existingBand.getName(), result.getName());
+		assertEquals(updatedBand.getName(), result.getName());
 	}
+	
+
+
 
 }
