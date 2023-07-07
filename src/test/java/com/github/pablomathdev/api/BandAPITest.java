@@ -34,6 +34,7 @@ public class BandAPITest {
 	static final String CREATE_BAND_ERROR_BAND_WITH_NON_EXISTENT_GENRE = "classpath:data/create_band_test_error_non-existent_genre.json";
 	static final String CREATE_BAND_ERROR_BAND_EXISTING = "classpath:data/create_band_test_error_band_existing.json";
 	static final String UPDATE_BAND_SUCCESS = "classpath:data/update_band_test_success.json";
+
 	@Autowired
 	private ResourceLoader resourceLoader;
 
@@ -135,6 +136,20 @@ public class BandAPITest {
 		.when()
 		.put("/1")
 		.then().statusCode(200);
+
+	}
+	@Test
+	public void should_ReturnStatusCode404_WhenBandNotFound() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_BAND_SUCCESS);
+
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.put("/90")
+		.then().statusCode(404);
 
 	}
 
