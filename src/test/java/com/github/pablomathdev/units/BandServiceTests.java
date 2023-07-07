@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ class BandServiceTests {
 
 	@Captor
 	ArgumentCaptor<String> genreNameCaptor;
-	
+
 	@Mock
 	private BandUpdateMapper bandUpdateMapper;
 
@@ -242,6 +243,7 @@ class BandServiceTests {
 		verify(bandRepository).findById(eq(id));
 
 	}
+
 	@Test
 	public void should_throwBandNotFoundException_WhenBandRepositoryFindByIdThrowsEntityNotFoundException() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
@@ -251,12 +253,11 @@ class BandServiceTests {
 		Integer id = 1;
 
 		when(bandRepository.findById(id)).thenThrow(EntityNotFoundException.class);
-		
 
-		assertThrows(BandNotFoundException.class,()-> bandService.update(band, id));
+		assertThrows(BandNotFoundException.class, () -> bandService.update(band, id));
 
 	}
-	
+
 	@Test
 	public void should_InvokeBandUpdateMapper_WithCorrectArguments() {
 		Origin origin = originFactory("any_city", "any_country", 1999);
@@ -271,6 +272,24 @@ class BandServiceTests {
 		
 		verify(bandUpdateMapper).map(eq(band),eq(band));
 
+	}
+
+	@Test
+	public void should_ReturnBandUpdated() {
+
+		Band existingBand = new Band();
+		existingBand.setId(1);
+		existingBand.setName("Existing Band");
+
+		Band updatedBand = new Band();
+		updatedBand.setName("Updated Band");
+
+		when(bandRepository.findById(anyInt())).thenReturn(existingBand);
+		when(bandUpdateMapper.map(any(Band.class), any(Band.class))).thenReturn(existingBand);
+
+		Band result = bandService.update(updatedBand, 1);
+
+		assertEquals(existingBand.getName(), result.getName());
 	}
 
 }

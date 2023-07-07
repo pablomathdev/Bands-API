@@ -89,7 +89,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 		try {
           	Band bandFound = bandRepository.findById(id);
 
-          return bandUpdateMapper.map(bandFound,band);
+          return bandUpdateMapper.map(band,bandFound);
           	
           	
 		} catch (EntityNotFoundException e) {
