@@ -24,7 +24,7 @@ import jakarta.persistence.PersistenceException;
 
 @Service
 public class BandService implements ICreateService<Band>, IFindAllService<Band> {
-	
+
 	@Autowired
 	private BandUpdateMapper bandUpdateMapper;
 
@@ -35,6 +35,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 	private IGenreRepository genreRepository;
 
 	@Override
+	@Transactional
 	public Band create(Band band) {
 
 		List<Genre> genres = new ArrayList<>();
@@ -86,14 +87,28 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 	@Transactional
 	public Band update(Band band, Integer id) {
+		
+		Band bandFound = bandRepository.findById(id);
+		
+		List<Genre> genres = new ArrayList<>();
+		
 		try {
-          	Band bandFound = bandRepository.findById(id);
+			
 
-           
-          
-         return bandRepository.save(bandUpdateMapper.map(band,bandFound));
-          	
-          	
+			band.getGenres().forEach((g) -> {
+
+				Genre genre = genreRepository.findByName(g.getName());
+
+				genres.add(genre);
+
+			});
+
+			band.setGenres(genres);
+			return bandRepository.update(bandUpdateMapper.map(band, bandFound));
+			
+		
+			
+
 		} catch (EntityNotFoundException e) {
 
 			throw new BandNotFoundException(e.getMessage(), e);

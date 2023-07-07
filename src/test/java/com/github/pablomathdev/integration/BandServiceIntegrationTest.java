@@ -119,5 +119,23 @@ public class BandServiceIntegrationTest {
 		assertThrows(BandNotFoundException.class, () -> bandService.delete("Nirvana"));
 
 	}
+	
+	@Test
+	public void should_UpdateBandSuccessfully() {
+		Origin origin = originFactory("Los Angeles", "United States", 1981);
+		Genre genre = genreFactory("Trash Metal");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Band band = bandFactory("Metallica Update", origin, genres);
+
+		Band bandSaved = bandService.update(band,1);
+
+		assertNotNull(bandSaved.getId());
+		assertEquals(bandSaved.getName(), band.getName());
+
+	}
+	
+	
 
 }

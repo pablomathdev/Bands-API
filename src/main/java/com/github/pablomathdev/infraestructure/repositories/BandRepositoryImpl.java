@@ -79,6 +79,7 @@ public class BandRepositoryImpl implements IBandRepository {
 	public Band update(Band object) {
 
 		return entityManager.merge(object);
+		
 
 	}
 
@@ -93,5 +94,6 @@ public class BandRepositoryImpl implements IBandRepository {
 
 		return band;
 	}
+
 
 }
