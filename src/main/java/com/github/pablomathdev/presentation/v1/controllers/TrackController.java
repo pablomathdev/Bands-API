@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pablomathdev.application.services.TrackService;
 import com.github.pablomathdev.domain.entities.Track;
+import com.github.pablomathdev.infraestructure.mappers.TrackRequestDTOToTrack;
 import com.github.pablomathdev.presentation.v1.DTOs.request.TrackRequestDTO;
-import com.github.pablomathdev.presentation.v1.mappers.TrackRequestDTOToTrack;
 
 import jakarta.validation.Valid;
 

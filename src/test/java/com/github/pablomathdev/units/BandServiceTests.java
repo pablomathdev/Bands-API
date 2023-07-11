@@ -35,9 +35,9 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFou
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
+import com.github.pablomathdev.infraestructure.mappers.BandUpdateMapper;
 
 import jakarta.persistence.PersistenceException;;
-
 
 @ExtendWith(MockitoExtension.class)
 class BandServiceTests {
@@ -48,10 +48,13 @@ class BandServiceTests {
 	ArgumentCaptor<String> genreNameCaptor;
 
 	@Mock
-	IBandRepository bandRepository;
+	private BandUpdateMapper bandUpdateMapper;
 
 	@Mock
-	IGenreRepository genreRepository;
+	private IBandRepository bandRepository;
+
+	@Mock
+	private IGenreRepository genreRepository;
 
 	@InjectMocks
 	private BandService bandService;
@@ -216,16 +219,96 @@ class BandServiceTests {
 
 	@Test
 	public void should_ThrowBandNotFoundException_WhenBandRepositoryDeleteThrowEntityNotFoundException() {
-		Origin origin = originFactory("any_city","any_country" , 1999);
-		
-		Band band = bandFactory("any_band", origin,null);
-		
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
 		when(bandRepository.findByName(any())).thenThrow(EntityNotFoundException.class);
+
+		assertThrows(BandNotFoundException.class, () -> bandService.delete(band.getName()));
+
+	}
+
+	@Test
+	public void should_throwBandNotFoundException_WhenBandRepositoryFindByIdThrowsEntityNotFoundException() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+
+		Band band = bandFactory("any_band", origin, null);
+
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenThrow(EntityNotFoundException.class);
+
+		assertThrows(BandNotFoundException.class, () -> bandService.update(band, id));
+
+	}
+
+	@Test
+	public void should_InvokeBandUpdateMapper_WithCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		Band band = bandFactory("any_band", origin, genres);
+
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenReturn(band);
+
+		bandService.update(band, id);
+
+		verify(bandUpdateMapper).map(eq(band), eq(band));
+
+	}
+
+	@Test
+	public void should_InvokeBandRepositoryUpdate_WithCorrectArguments() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
 		
 		
-		assertThrows(BandNotFoundException.class,()->bandService.delete(band.getName()));
+		Band existingBand = bandFactory("any_band", origin, genres);
+
+		Band updateBand = bandFactory("update_band", origin, genres);
 		
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenReturn(existingBand);
+        when(bandUpdateMapper.map(any(),any())).thenReturn(updateBand);
+		
+		bandService.update(updateBand, id);
+
+		verify(bandRepository).update(eq(updateBand));
+
+
+	}
+
+	@Test
+	public void should_ReturnBandUpdated() {
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Genre genre = genreFactory("any_genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		
+		Band existingBand = bandFactory("any_band", origin, genres);
+
+		Band updateBand = bandFactory("update_band", origin, genres);
+		
+		Integer id = 1;
+
+		when(bandRepository.findById(id)).thenReturn(existingBand);
+        when(bandUpdateMapper.map(any(),any())).thenReturn(updateBand);
+		when(bandRepository.update(any())).thenReturn(updateBand);
+        
+		Band updatedBand = bandService.update(updateBand, id);
+
+		
+		assertEquals(updatedBand.getName(), updateBand.getName());
 		
 	}
+	
 
 }

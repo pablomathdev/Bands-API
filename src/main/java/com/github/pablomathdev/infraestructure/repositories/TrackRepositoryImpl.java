@@ -85,6 +85,18 @@ public class TrackRepositoryImpl implements ITrackRepository{
 		}
 	}
 
+	@Override
+	public Track update(Track object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Track findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 	

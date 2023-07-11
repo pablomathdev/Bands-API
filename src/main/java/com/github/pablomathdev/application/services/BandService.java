@@ -18,20 +18,24 @@ import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.domain.services.ICreateService;
 import com.github.pablomathdev.domain.services.IFindAllService;
+import com.github.pablomathdev.infraestructure.mappers.BandUpdateMapper;
 
 import jakarta.persistence.PersistenceException;
-
 
 @Service
 public class BandService implements ICreateService<Band>, IFindAllService<Band> {
 
 	@Autowired
-	IBandRepository bandRepository;
+	private BandUpdateMapper bandUpdateMapper;
 
 	@Autowired
-	IGenreRepository genreRepository;
+	private IBandRepository bandRepository;
+
+	@Autowired
+	private IGenreRepository genreRepository;
 
 	@Override
+	@Transactional
 	public Band create(Band band) {
 
 		List<Genre> genres = new ArrayList<>();
@@ -46,7 +50,7 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 			band.getGenres().forEach((g) -> {
 
 				Genre genre = genreRepository.findByName(g.getName());
-								
+
 				genres.add(genre);
 
 			});
@@ -67,21 +71,62 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 		return bandRepository.findAll();
 	}
-	
+
 	@Transactional
 	public void delete(String nameBand) {
-		
+
 		try {
 			Band band = bandRepository.findByName(nameBand);
-			
+
 			bandRepository.delete(band);
-		}catch (EntityNotFoundException e) {
-			throw new BandNotFoundException(e.getMessage(),e);
+		} catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(), e);
 		}
-		
-		
-		
-		
+
+	}
+
+	@Transactional
+	public Band update(Band band, Integer id) {
+
+		Band bandFound = findBandByIdOrThrow(id);
+
+		List<Genre> genres = findGenreOrThrow(band.getGenres());
+
+		band.setGenres(genres);
+
+		return bandRepository.update(bandUpdateMapper.map(band, bandFound));
+
+	}
+
+	private Band findBandByIdOrThrow(Integer id) {
+		try {
+			return bandRepository.findById(id);
+
+		} catch (EntityNotFoundException e) {
+			throw new BandNotFoundException(e.getMessage(), e);
+
+		}
+	}
+
+	private List<Genre> findGenreOrThrow(List<Genre> genresList) {
+
+		List<Genre> genres = new ArrayList<>();
+		try {
+
+			genresList.forEach((g) -> {
+
+				Genre genre = genreRepository.findByName(g.getName());
+
+				genres.add(genre);
+
+			});
+
+			return genres;
+
+		} catch (EntityNotFoundException e) {
+			throw new GenreNotFoundException(e.getMessage(), e);
+
+		}
 	}
 
 }

@@ -27,7 +27,6 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.BandNotFound
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoundException;
 import com.github.pablomathdev.utils.ExecuteSQL;
 
-
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -117,6 +116,46 @@ public class BandServiceIntegrationTest {
 	public void should_ThrowBandNotFoundException_WhenBandNotExists() {
 
 		assertThrows(BandNotFoundException.class, () -> bandService.delete("Nirvana"));
+
+	}
+
+	@Test
+	public void should_UpdateBandSuccessfully() {
+		Origin origin = originFactory("Los Angeles", "United States", 1981);
+		Genre genre = genreFactory("Trash Metal");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Band band = bandFactory("Metallica Update", origin, genres);
+
+		Band bandUpdated = bandService.update(band, 1);
+
+		assertNotNull(bandUpdated.getId());
+		assertEquals(bandUpdated.getName(), band.getName());
+
+	}
+
+	@Test
+	public void should_ThrowGenreNotFoundException_WhenGenreNotFound() {
+		Origin origin = originFactory("Los Angeles", "United States", 1981);
+		Genre genre = genreFactory("invalid genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Band band = bandFactory("Metallica Update", origin, genres);
+
+		assertThrows(GenreNotFoundException.class, () -> bandService.update(band, 1));
+
+	}
+	public void should_ThrowBandNotFoundException_WhenBandNotFound() {
+		Origin origin = originFactory("Los Angeles", "United States", 1981);
+		Genre genre = genreFactory("invalid genre");
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Band band = bandFactory("Metallica Update", origin, genres);
+
+		assertThrows(BandNotFoundException.class, () -> bandService.update(band, 2));
 
 	}
 

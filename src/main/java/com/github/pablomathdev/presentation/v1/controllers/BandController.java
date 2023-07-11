@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pablomathdev.application.services.BandService;
 import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.exceptions.EntitySaveException;
+import com.github.pablomathdev.infraestructure.mappers.BandRequestDTOToBand;
 import com.github.pablomathdev.presentation.v1.DTOs.request.BandRequestDTO;
-import com.github.pablomathdev.presentation.v1.mappers.BandRequestDTOToBand;
 
 import jakarta.validation.Valid;
 
@@ -28,8 +29,7 @@ public class BandController {
 
 	@Autowired
 	private BandRequestDTOToBand bandRequestDTOToBand;
-	
-	
+
 	@Autowired
 	private BandService bandService;
 
@@ -51,20 +51,31 @@ public class BandController {
 
 		try {
 			Band bandMapped = bandRequestDTOToBand.convert(bandRequestDTO);
-              
+
 			Band bandSaved = bandService.create(bandMapped);
 			return ResponseEntity.status(HttpStatus.CREATED).body(bandSaved);
-		}catch (EntitySaveException e) {
+		} catch (EntitySaveException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-		} 
+		}
 
 	}
 
 	@DeleteMapping(value = "/{name}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String name) {
-  
-	  bandService.delete(name);
+
+		bandService.delete(name);
+
+	}
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Band> update(@PathVariable Integer id, @RequestBody @Valid BandRequestDTO bandRequestDTO) {
+
+		Band band = bandRequestDTOToBand.convert(bandRequestDTO);
+
+		Band updatedBand = bandService.update(band, id);
+
+		return ResponseEntity.ok(updatedBand);
 
 	}
 

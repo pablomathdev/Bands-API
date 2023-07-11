@@ -85,6 +85,18 @@ public class SingleRepositoryImpl implements ISingleRepository{
 		}
 	}
 
+	@Override
+	public Single update(Single object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Single findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 

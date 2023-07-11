@@ -85,6 +85,18 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		}
 	}
 
+	@Override
+	public Album update(Album object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Album findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 

@@ -1,4 +1,4 @@
-package com.github.pablomathdev.presentation.v1.mappers;
+package com.github.pablomathdev.infraestructure.mappers;
 
 import java.time.LocalDate;
 import java.util.List;
