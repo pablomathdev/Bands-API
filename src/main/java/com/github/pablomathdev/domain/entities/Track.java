@@ -1,8 +1,8 @@
 package com.github.pablomathdev.domain.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,24 +27,18 @@ public class Track {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	
 	private String title;
-	
-	@ManyToOne
-	@JoinColumn(name = "band_id")
-	private Band band;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "album_id")
 	private Album album;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "single_id")
 	private Single single;
 	
-	
+	@JoinColumn(name = "release_date")
 	private LocalDate releaseDate;
 	
 	
@@ -51,14 +46,14 @@ public class Track {
 	@JoinTable(name = "tb_track_genre",
 	joinColumns = @JoinColumn(name="track_id"),
 	inverseJoinColumns = @JoinColumn(name ="genre_id"))
-	private Set<Genre> genres;
+	private List<Genre> genres;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(title);
 	}
-
-
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -68,8 +63,10 @@ public class Track {
 		if (getClass() != obj.getClass())
 			return false;
 		Track other = (Track) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(title, other.title);
 	}
+
+
 
 	
 }

@@ -1,0 +1,9 @@
+{
+	"name": "Pearl Jam",
+	"origin": {
+		"country": "United States",
+		"city": "Seattle",
+		"formationYear": 1990
+	},
+	"genres": ["Alternative Rock"]
+}

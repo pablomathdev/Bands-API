@@ -9,9 +9,12 @@ import lombok.Setter;
 @Setter
 public class Origin {
  
+
+
 	private String country;
-	
+
 	private String city;
 	
+
 	private Integer formationYear;
 }

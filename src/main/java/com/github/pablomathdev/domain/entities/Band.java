@@ -2,7 +2,8 @@ package com.github.pablomathdev.domain.entities;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,6 +15,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,28 +30,35 @@ public class Band {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotBlank
 	private String name;
 
 	@Embedded
 	private Origin origin;
 	
+	@JsonIgnore
+	@Setter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "band")
 	private List<Album> albums;
 	
 	
+
 	@ManyToMany
 	@JoinTable(name = "tb_band_genre",
 	joinColumns = @JoinColumn(name= "band_id"),
 	inverseJoinColumns = @JoinColumn(name= "genre_id"))
-	private Set<Genre> genres;
+	private List<Genre> genres;
 
-	@ManyToMany
-	@JoinTable(name = "tb_band_member",
-	joinColumns = @JoinColumn(name="band_id"),
-	inverseJoinColumns = @JoinColumn(name="member_id"))
-	private List<Member> members; 
-	
-	
+//	
+//	@JsonIgnore
+//	@Setter(value = AccessLevel.NONE)
+//	@ManyToMany
+//	@JoinTable(name = "tb_band_member",
+//	joinColumns = @JoinColumn(name="band_id"),
+//	inverseJoinColumns = @JoinColumn(name="member_id"))
+//	private List<Member> members = new ArrayList<>();
+//	
+//	
 	
 	@Override
 	public int hashCode() {
