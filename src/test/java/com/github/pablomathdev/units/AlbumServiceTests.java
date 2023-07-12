@@ -283,5 +283,28 @@ public class AlbumServiceTests {
 		assertThrows(BandNotFoundException.class, () -> albumService.update(updateAlbum, id));
 
 	}
+	
+	@Test
+	public void should_ThrowGenreNotFound_WhenGenreInAlbumToUpdateNotExists() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Album existingAlbum = albumFactory("any_album", band, genres, null, null);
+
+		Album updateAlbum = albumFactory("update_album", band, genres, null, null);
+
+		Integer id = 1;
+
+		when(albumRepository.findById(id)).thenReturn(existingAlbum);
+		when(genreRepository.findByName(anyString())).thenThrow(EntityNotFoundException.class);
+		
+
+		assertThrows(GenreNotFoundException.class, () -> albumService.update(updateAlbum, id));
+
+	}
 
 }
