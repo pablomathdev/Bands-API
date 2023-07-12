@@ -29,7 +29,6 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.infraestructure.repositories.AlbumRepositoryImpl;
 
@@ -290,7 +289,7 @@ public class AlbumRepositoryTests {
 
 		when(entityManager.find(Album.class, id)).thenReturn(null);
 
-		assertThrows(AlbumNotFoundException.class, () -> albumRepositoryImpl.findById(id));
+		assertThrows(EntityNotFoundException.class, () -> albumRepositoryImpl.findById(id));
 
 	}
 

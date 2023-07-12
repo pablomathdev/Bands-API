@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Album;
-import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 
@@ -100,7 +99,7 @@ public class AlbumRepositoryImpl implements IAlbumRepository {
 		Album album = entityManager.find(Album.class, id);
 
 		if (album == null) {
-			throw new AlbumNotFoundException(String.format("Album with id %d not found", id));
+			throw new EntityNotFoundException(String.format("Album with id %d not found", id));
 		}
 
 		return album;
