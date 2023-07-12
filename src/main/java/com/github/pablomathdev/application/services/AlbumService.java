@@ -18,9 +18,13 @@ import com.github.pablomathdev.domain.exceptions.notFoundExceptions.GenreNotFoun
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
+import com.github.pablomathdev.infraestructure.mappers.AlbumUpdateMapper;
 
 @Service
 public class AlbumService {
+
+	@Autowired
+	private AlbumUpdateMapper albumUpdateMapper;
 
 	@Autowired
 	private IAlbumRepository albumRepository;
@@ -42,6 +46,38 @@ public class AlbumService {
 		try {
 			Album album = albumRepository.findAlbumByTitleAndBandName(albumTitle, bandName);
 			albumRepository.delete(album);
+		} catch (EntityNotFoundException e) {
+
+			throw new AlbumNotFoundException(e.getMessage(), e);
+		}
+
+	}
+
+	public Album update(Album album, Integer id) {
+
+		Album albumFound = findAlbumByIdOrThrow(id);
+		List<Genre> genres = findGenreOrThrow(album.getGenres());
+
+		var genresToSave = new ArrayList<Genre>();
+
+		for (Genre genre : genres) {
+
+			if (!albumFound.getGenres().contains(genre)) {
+
+				genresToSave.add(genre);
+			}
+		}
+
+		album.setGenres(genresToSave);
+
+		return albumRepository.update(albumUpdateMapper.map(album, albumFound));
+
+	}
+
+	private Album findAlbumByIdOrThrow(Integer id) {
+		try {
+			return albumRepository.findById(id);
+
 		} catch (EntityNotFoundException e) {
 
 			throw new AlbumNotFoundException(e.getMessage(), e);

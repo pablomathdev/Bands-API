@@ -6,7 +6,6 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -285,7 +284,7 @@ public class AlbumRepositoryTests {
 	}
 
 	@Test
-	public void should_ThrowAlbumNotFoundException_WhenAlbumNotExists() {
+	public void should_ThrowAlbumNotFoundException_WhenAlbumbyIdNotExists() {
 
 		Integer id = 1;
 
