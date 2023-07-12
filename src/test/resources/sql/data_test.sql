@@ -8,7 +8,7 @@ INSERT INTO tb_album(band_id,release_date,title)VALUES(1,'1991-08-12','Metallica
 -- Genres --
 INSERT INTO tb_genre (name) VALUES ('Heavy Metal');
 INSERT INTO tb_genre (name) VALUES ('Trash Metal');
-
+INSERT INTO tb_genre (name) VALUES ('Power Metal');
  -- Band_Genre --
 INSERT INTO tb_band_genre (band_id,genre_id) VALUES (1,1);
 

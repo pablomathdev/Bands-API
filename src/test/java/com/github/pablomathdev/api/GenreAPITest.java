@@ -78,7 +78,7 @@ public class GenreAPITest {
 	public void should_ReturnStatusCode200AndAllGenres_WhenGenreExist() {
 
 		given().accept(ContentType.JSON).when().get().then().statusCode(200).assertThat().body("size()",
-				Matchers.is(2));
+				Matchers.is(3));
 
 	}
 	@Test
@@ -97,7 +97,7 @@ public class GenreAPITest {
 		given()
 		.accept(ContentType.JSON)
 		.when()
-		.delete("/trash metal")
+		.delete("/power metal")
 		.then()
 		.statusCode(204);
 

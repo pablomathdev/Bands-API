@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -34,7 +35,6 @@ import com.github.pablomathdev.infraestructure.repositories.AlbumRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
-
 
 @ExtendWith(MockitoExtension.class)
 public class AlbumRepositoryTests {
@@ -227,15 +227,13 @@ public class AlbumRepositoryTests {
 
 		when(typedQueryAlbum.getSingleResult()).thenReturn(album);
 
-	
+		Album result = albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(), anyString());
 
-	  Album result = albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(),anyString());
-		
-	
 		assertEquals(album.getTitle(), result.getTitle());
 		assertEquals(album.getBand().getName(), result.getBand().getName());
 
 	}
+
 	@Test
 	public void should_AlbumRepositoryFindAlbumByTitleAndBandNameThrowEntityNotFoundException_WhenAlbumNotFound() {
 		
@@ -245,6 +243,24 @@ public class AlbumRepositoryTests {
 
 
 	   assertThrows(EntityNotFoundException.class,()->albumRepositoryImpl.findAlbumByTitleAndBandName(anyString(),anyString()) );
+
+	}
+
+	@Test
+	public void should_ReturnAlbumUpdated_WhenAlbumIsUpdated() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"), null);
+
+		when(entityManager.merge(any(Album.class))).thenReturn(album);
+		
+		Album albumUpdated = albumRepositoryImpl.update(album);
+		
+		
+		assertEquals(album.getTitle(), albumUpdated.getTitle());
+		assertEquals(album.getBand(), albumUpdated.getBand());
 
 	}
 
