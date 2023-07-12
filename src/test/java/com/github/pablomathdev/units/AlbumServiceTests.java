@@ -41,7 +41,6 @@ import com.github.pablomathdev.domain.repositories.IBandRepository;
 import com.github.pablomathdev.domain.repositories.IGenreRepository;
 import com.github.pablomathdev.infraestructure.mappers.AlbumUpdateMapper;
 
-
 @ExtendWith(MockitoExtension.class)
 public class AlbumServiceTests {
 
@@ -53,10 +52,9 @@ public class AlbumServiceTests {
 
 	@Mock
 	private IGenreRepository genreRepository;
-	
+
 	@Mock
 	private AlbumUpdateMapper albumUpdateMapper;
-	
 
 	@InjectMocks
 	private AlbumService albumService;
@@ -213,29 +211,28 @@ public class AlbumServiceTests {
 	
 
 	}
-	
+
 	@Test
 	public void should_InvokeAlbumRepositoryUpdate_WithCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_name", origin, List.of(genre));
-		
+
 		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
-		
-		Album existingAlbum = albumFactory("any_album",band,genres,null, null);
 
-		Album updateAlbum = albumFactory("update_album",band,genres,null, null);
-		
+		Album existingAlbum = albumFactory("any_album", band, genres, null, null);
+
+		Album updateAlbum = albumFactory("update_album", band, genres, null, null);
+
 		Integer id = 1;
 
 		when(albumRepository.findById(id)).thenReturn(existingAlbum);
-        when(albumUpdateMapper.map(any(),any())).thenReturn(updateAlbum);
-		
+		when(albumUpdateMapper.map(any(), any())).thenReturn(updateAlbum);
+
 		albumService.update(updateAlbum, id);
 
 		verify(albumRepository).update(eq(updateAlbum));
-
 
 	}
 
@@ -244,25 +241,47 @@ public class AlbumServiceTests {
 		Genre genre = genreFactory("any_genre");
 		Origin origin = originFactory("any_city", "any_country", 1999);
 		Band band = bandFactory("any_name", origin, List.of(genre));
-		
+
 		List<Genre> genres = new ArrayList<>();
 		genres.add(genre);
-		
-		Album existingAlbum = albumFactory("any_album",band,genres,null, null);
 
-		Album updateAlbum = albumFactory("update_album",band,genres,null, null);
-		
+		Album existingAlbum = albumFactory("any_album", band, genres, null, null);
+
+		Album updateAlbum = albumFactory("update_album", band, genres, null, null);
+
 		Integer id = 1;
 
 		when(albumRepository.findById(id)).thenReturn(existingAlbum);
-        when(albumUpdateMapper.map(any(),any())).thenReturn(updateAlbum);
+		when(albumUpdateMapper.map(any(), any())).thenReturn(updateAlbum);
 		when(albumRepository.update(any())).thenReturn(updateAlbum);
-        
+
 		Album updatedAlbum = albumService.update(updateAlbum, id);
 
-		
 		assertEquals(updatedAlbum.getTitle(), updateAlbum.getTitle());
-		
+
+	}
+
+	@Test
+	public void should_ThrowBandNotFound_WhenBandInAlbumToUpdateNotExists() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+
+		Album existingAlbum = albumFactory("any_album", band, genres, null, null);
+
+		Album updateAlbum = albumFactory("update_album", band, genres, null, null);
+
+		Integer id = 1;
+
+		when(albumRepository.findById(id)).thenReturn(existingAlbum);
+		when(bandRepository.findByName(anyString())).thenThrow(EntityNotFoundException.class);
+	
+
+		assertThrows(BandNotFoundException.class, () -> albumService.update(updateAlbum, id));
+
 	}
 
 }

@@ -88,6 +88,7 @@ public class AlbumRepositoryImpl implements IAlbumRepository {
 	}
 
 	@Override
+	@Transactional
 	public Album update(Album object) {
 
 		return entityManager.merge(object);

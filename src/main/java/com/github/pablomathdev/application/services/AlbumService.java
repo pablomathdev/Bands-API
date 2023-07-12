@@ -53,9 +53,12 @@ public class AlbumService {
 
 	}
 
+	@Transactional
 	public Album update(Album album, Integer id) {
 
 		Album albumFound = findAlbumByIdOrThrow(id);
+		Band band = findBandOrThrow(album.getBand().getName());
+		
 		List<Genre> genres = findGenreOrThrow(album.getGenres());
 
 		var genresToSave = new ArrayList<Genre>();
@@ -68,6 +71,7 @@ public class AlbumService {
 			}
 		}
 
+	    album.setBand(band);
 		album.setGenres(genresToSave);
 
 		return albumRepository.update(albumUpdateMapper.map(album, albumFound));

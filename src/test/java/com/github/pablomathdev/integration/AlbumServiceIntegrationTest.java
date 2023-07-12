@@ -128,4 +128,30 @@ public class AlbumServiceIntegrationTest {
 		
 		assertTrue(albumIsRemoved);
 	}
+	
+	@Test
+	public void should_UpdateAlbumSuccessfully() {
+		
+		Genre genre = genreFactory("Trash Metal");
+		Band band = bandFactory("Metallica", null, null);
+		Album album = new Album();
+		album.setBand(band);
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		album.setGenres(genres);
+		album.setTitle("Metallica (The Black Album) - Updated Title");
+		album.setReleaseDate(LocalDate.parse("1991-08-12"));
+		
+		Integer id = 1;
+		
+		Album albumUpdated =  albumService.update(album,id);
+		
+		
+		assertNotNull(albumUpdated.getId());
+		assertEquals(id, albumUpdated.getId());
+		assertEquals(album.getTitle(),albumUpdated.getTitle());
+	
+		
+		
+	}
 }
