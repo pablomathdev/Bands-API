@@ -239,29 +239,30 @@ public class AlbumServiceTests {
 
 	}
 
-//	@Test
-//	public void should_ReturnBandUpdated() {
-//		Origin origin = originFactory("any_city", "any_country", 1999);
-//		Genre genre = genreFactory("any_genre");
-//		List<Genre> genres = new ArrayList<>();
-//		genres.add(genre);
-//		
-//		
-//		Band existingBand = bandFactory("any_band", origin, genres);
-//
-//		Band updateBand = bandFactory("update_band", origin, genres);
-//		
-//		Integer id = 1;
-//
-//		when(bandRepository.findById(id)).thenReturn(existingBand);
-//        when(bandUpdateMapper.map(any(),any())).thenReturn(updateBand);
-//		when(bandRepository.update(any())).thenReturn(updateBand);
-//        
-//		Band updatedBand = bandService.update(updateBand, id);
-//
-//		
-//		assertEquals(updatedBand.getName(), updateBand.getName());
-//		
-//	}
+	@Test
+	public void should_ReturnAlbumUpdated() {
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		
+		List<Genre> genres = new ArrayList<>();
+		genres.add(genre);
+		
+		Album existingAlbum = albumFactory("any_album",band,genres,null, null);
+
+		Album updateAlbum = albumFactory("update_album",band,genres,null, null);
+		
+		Integer id = 1;
+
+		when(albumRepository.findById(id)).thenReturn(existingAlbum);
+        when(albumUpdateMapper.map(any(),any())).thenReturn(updateAlbum);
+		when(albumRepository.update(any())).thenReturn(updateAlbum);
+        
+		Album updatedAlbum = albumService.update(updateAlbum, id);
+
+		
+		assertEquals(updatedAlbum.getTitle(), updateAlbum.getTitle());
+		
+	}
 
 }
