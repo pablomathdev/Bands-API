@@ -92,7 +92,17 @@ public class BandService implements ICreateService<Band>, IFindAllService<Band> 
 
 		List<Genre> genres = findGenreOrThrow(band.getGenres());
 
-		band.setGenres(genres);
+		var genresToSave = new ArrayList<Genre>();
+
+		for (Genre genre : genres) {
+
+			if (!bandFound.getGenres().contains(genre)) {
+
+				genresToSave.add(genre);
+			}
+		}
+
+		band.setGenres(genresToSave);
 
 		return bandRepository.update(bandUpdateMapper.map(band, bandFound));
 
