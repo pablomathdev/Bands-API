@@ -6,6 +6,7 @@ import static com.github.pablomathdev.Factory.genreFactory;
 import static com.github.pablomathdev.Factory.originFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +30,7 @@ import com.github.pablomathdev.domain.entities.Band;
 import com.github.pablomathdev.domain.entities.Genre;
 import com.github.pablomathdev.domain.entities.Origin;
 import com.github.pablomathdev.domain.entities.Track;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.infraestructure.repositories.AlbumRepositoryImpl;
 
@@ -255,15 +257,13 @@ public class AlbumRepositoryTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"), null);
 
 		when(entityManager.merge(any(Album.class))).thenReturn(album);
-		
+
 		Album albumUpdated = albumRepositoryImpl.update(album);
-		
-		
+
 		assertEquals(album.getTitle(), albumUpdated.getTitle());
 		assertEquals(album.getBand(), albumUpdated.getBand());
 
 	}
-	
 
 	@Test
 	public void should_ReturnAlbumById_WhenAlbumExists() {
@@ -274,14 +274,24 @@ public class AlbumRepositoryTests {
 		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"), null);
 
 		Integer id = 1;
-		
-		when(entityManager.find(Album.class,id)).thenReturn(album);
-		
+
+		when(entityManager.find(Album.class, id)).thenReturn(album);
+
 		Album albumReturned = albumRepositoryImpl.findById(id);
-		
-		
+
 		assertEquals(album.getTitle(), albumReturned.getTitle());
 		assertEquals(album.getBand(), albumReturned.getBand());
+
+	}
+
+	@Test
+	public void should_ThrowAlbumNotFoundException_WhenAlbumNotExists() {
+
+		Integer id = 1;
+
+		when(entityManager.find(Album.class, id)).thenReturn(null);
+
+		assertThrows(AlbumNotFoundException.class, () -> albumRepositoryImpl.findById(id));
 
 	}
 
