@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -304,6 +305,18 @@ public class AlbumServiceTests {
 		
 
 		assertThrows(GenreNotFoundException.class, () -> albumService.update(updateAlbum, id));
+
+	}
+	@Test
+	public void should_ThrowAlbumNotFound_WhenAlbumToUpdateNotExists() {
+		
+
+		Integer id = 1;
+
+		when(albumRepository.findById(anyInt())).thenThrow(EntityNotFoundException.class);
+		
+
+		assertThrows(AlbumNotFoundException.class, () -> albumService.update(any(Album.class), id));
 
 	}
 
