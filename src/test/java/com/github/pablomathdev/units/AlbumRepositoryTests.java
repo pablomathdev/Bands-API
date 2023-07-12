@@ -263,5 +263,26 @@ public class AlbumRepositoryTests {
 		assertEquals(album.getBand(), albumUpdated.getBand());
 
 	}
+	
+
+	@Test
+	public void should_ReturnAlbumById_WhenAlbumExists() {
+
+		Genre genre = genreFactory("any_genre");
+		Origin origin = originFactory("any_city", "any_country", 1999);
+		Band band = bandFactory("any_name", origin, List.of(genre));
+		Album album = albumFactory("any_title", band, List.of(genre), LocalDate.parse("1999-09-09"), null);
+
+		Integer id = 1;
+		
+		when(entityManager.find(Album.class,id)).thenReturn(album);
+		
+		Album albumReturned = albumRepositoryImpl.findById(id);
+		
+		
+		assertEquals(album.getTitle(), albumReturned.getTitle());
+		assertEquals(album.getBand(), albumReturned.getBand());
+
+	}
 
 }

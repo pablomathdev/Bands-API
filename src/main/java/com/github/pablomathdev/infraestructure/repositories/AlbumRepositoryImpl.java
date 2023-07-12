@@ -1,9 +1,11 @@
 package com.github.pablomathdev.infraestructure.repositories;
+
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.github.pablomathdev.domain.entities.Album;
+import com.github.pablomathdev.domain.exceptions.notFoundExceptions.AlbumNotFoundException;
 import com.github.pablomathdev.domain.exceptions.notFoundExceptions.EntityNotFoundException;
 import com.github.pablomathdev.domain.repositories.IAlbumRepository;
 
@@ -14,31 +16,32 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
-public class AlbumRepositoryImpl implements IAlbumRepository{
+public class AlbumRepositoryImpl implements IAlbumRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Override
 	public List<Album> findAll() {
-		
-	TypedQuery<Album> query = entityManager.createQuery("from Album", Album.class);	
-	  return query.getResultList();
-		
+
+		TypedQuery<Album> query = entityManager.createQuery("from Album", Album.class);
+		return query.getResultList();
+
 	}
 
 	@Override
 	@Transactional
 	public Album save(Album object) {
-		
-		 entityManager.persist(object);
-		 return object;
-		
+
+		entityManager.persist(object);
+		return object;
+
 	}
+
 	@Override
 	@Transactional
 	public void delete(Album object) {
-	     entityManager.remove(object);
+		entityManager.remove(object);
 	}
 
 	@Override
@@ -50,18 +53,17 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 
 		try {
 			return query.getSingleResult();
-		}catch (NoResultException e) {
+		} catch (NoResultException e) {
 			throw new EntityNotFoundException(String.format("Album %s not found", title), e);
 		}
 	}
-	
-	
-	public boolean exists(String albumTitle,String bandName) {
+
+	public boolean exists(String albumTitle, String bandName) {
 		String jpql = "select count(a) from Album a where a.title = :albumTitle AND a.band.name = :bandName";
 
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		query.setParameter("albumTitle", albumTitle);
-		query.setParameter("bandName",bandName);
+		query.setParameter("bandName", bandName);
 
 		if (query.getSingleResult() == 1L) {
 			return true;
@@ -70,34 +72,37 @@ public class AlbumRepositoryImpl implements IAlbumRepository{
 		return false;
 
 	}
-	
+
 	public Album findAlbumByTitleAndBandName(String albumTitle, String bandName) {
-		
+
 		String jpql = "select a from Album a where a.title =:albumTitle AND a.band.name =:bandName";
 		TypedQuery<Album> query = entityManager.createQuery(jpql, Album.class);
-		query.setParameter("albumTitle",albumTitle);
-		query.setParameter("bandName",bandName);
-		
+		query.setParameter("albumTitle", albumTitle);
+		query.setParameter("bandName", bandName);
+
 		try {
 			return query.getSingleResult();
-		}catch (NoResultException e) {
-			throw new EntityNotFoundException(String.format("Album %s of band %s not found", albumTitle,bandName), e);
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Album %s of band %s not found", albumTitle, bandName), e);
 		}
 	}
 
 	@Override
 	public Album update(Album object) {
-		
+
 		return entityManager.merge(object);
 	}
 
 	@Override
 	public Album findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	
-	
+		Album album = entityManager.find(Album.class, id);
+
+		if (album == null) {
+			throw new AlbumNotFoundException(String.format("Album with id %d not found", id));
+		}
+
+		return album;
+	}
 
 }
