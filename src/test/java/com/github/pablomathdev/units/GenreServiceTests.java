@@ -31,7 +31,6 @@ import com.github.pablomathdev.domain.repositories.IGenreRepository;
 
 import jakarta.persistence.PersistenceException;
 
-
 @ExtendWith(MockitoExtension.class)
 public class GenreServiceTests {
 
@@ -141,19 +140,19 @@ public class GenreServiceTests {
 		assertThrows(GenreNotFoundException.class, () -> genreService.delete(genre.getName()));
 
 	}
-	
+
 	@Test
 	public void should_ThrowEntityRelationshipExceptionion_WhenGenreRepositoryDeleteThrowDataIntegrityViolationException() {
 
 		Genre genre = genreFactory("any_genre");
 
+		doThrow(DataIntegrityViolationException.class).when(genreRepository).delete(any());
+		;
 
-        doThrow(DataIntegrityViolationException.class).when(genreRepository).delete(any());;
-		
 		assertThrows(EntityRelationshipException.class, () -> genreService.delete(genre.getName()));
 
 	}
-	
+
 	@Test
 	public void should_InvokeGenreRepositoryFindById_WithCorrectArguments() {
 
@@ -162,37 +161,41 @@ public class GenreServiceTests {
 		Integer id = 1;
 
 		when(genreRepository.findById(id)).thenReturn(genre);
-		
+
 		genreService.update(genre, id);
 
 		verify(genreRepository).findById(eq(id));
 
 	}
-	
+
 	@Test
 	public void should_ReturnGenreUpdated_WhenGenreIsUpdated() {
 
 		Genre genreExisting = genreFactory("any_genre");
 
 		Genre genreUpdate = genreFactory("update_genre");
-		
+
 		Integer id = 1;
 
 		when(genreRepository.findById(id)).thenReturn(genreExisting);
 		when(genreRepository.save(any(Genre.class))).thenReturn(genreUpdate);
-		
-		
+
 		Genre genreUpdated = genreService.update(genreUpdate, id);
 
-		
 		assertEquals(genreUpdate.getName(), genreUpdated.getName());
-		
 
 	}
-	
-	
-	
-	
-	
-	
+
+	@Test
+	public void should_ThrowEntityNotFoundException_WhenGenreNotFound() {
+
+
+		Integer id = 1;
+
+		when(genreRepository.findById(id)).thenThrow(EntityNotFoundException.class);
+
+		assertThrows(EntityNotFoundException.class, () -> genreService.update(any(Genre.class), id));
+
+	}
+
 }
