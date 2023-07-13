@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -199,6 +200,17 @@ public class GenreRepositoryTests {
 		
 		
 		verify(entityManager).merge(eq(genre));
+	}
+	@Test
+	public void should_ReturnGenre_WhenEntityManagerMergeReturnGenreUpdated() {
+		Genre genre = genreFactory("any_genre");
+		
+		when(entityManager.merge(any(Genre.class))).thenReturn(genre);
+		
+		
+	    Genre genreUpdated = genreRepositoryImpl.update(genre);
+		
+		assertEquals(genre.getName(), genreUpdated.getName());
 	}
 
 }
