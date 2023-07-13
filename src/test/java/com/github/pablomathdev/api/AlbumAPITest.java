@@ -30,6 +30,7 @@ public class AlbumAPITest {
 	static final String CREATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_GENRE = "classpath:data/create_album_test_error_non-existent_genre.json";
 	static final String CREATE_ALBUM_ERROR_ALBUM_EXISTING = "classpath:data/create_album_test_error_album_existing.json";
 	static final String UPDATE_ALBUM_SUCCESS = "classpath:data/update_album_test_success.json";
+	static final String UPDATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_BAND = "classpath:data/update_album_test_error_non-existent_band.json";
 	@LocalServerPort
 	private int port;
 
@@ -156,6 +157,21 @@ public class AlbumAPITest {
 		.when()
 		.put("/1")
 		.then().statusCode(200);
+
+	}
+	
+	@Test
+	public void should_ReturnStatusCode400_WhenBandInAlbumNotFound() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_ALBUM_ERROR_ALBUM_WITH_NON_EXISTENT_BAND);
+
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.put("/1")
+		.then().statusCode(400);
 
 	}
 	
