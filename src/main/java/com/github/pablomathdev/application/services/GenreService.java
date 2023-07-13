@@ -43,7 +43,7 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 	}
 	
 	
-	
+	@Transactional
 	public Genre update(Genre genre,Integer id) {
 	
 		try {

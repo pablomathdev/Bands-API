@@ -74,5 +74,21 @@ public class GenreServiceIntegrationTest {
 		assertTrue(genreIsRemoved);
 
 	}
+	@Test
+	public void should_UpdateGenreSuccessfully() {
+
+		Genre genre = genreFactory("Glam Rock");
+		
+		Integer id = 1;
+		
+		Genre genreUpdated = genreService.update(genre,id);
+
+		
+	    assertEquals(id, genreUpdated.getId());
+	    assertEquals(genre.getName(), genreUpdated.getName());
+		
+		
+
+	}
 
 }
