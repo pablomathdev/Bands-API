@@ -210,7 +210,7 @@ public class GenreRepositoryTests {
 	@Test
 	public void should_InvokeEntityManagerFind_WithCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
-		
+
 		Integer id = 1;
 
 		when(entityManager.find(Genre.class, id)).thenReturn(genre);
@@ -218,6 +218,16 @@ public class GenreRepositoryTests {
 		genreRepositoryImpl.findById(id);
 
 		verify(entityManager).find(eq(Genre.class), eq(id));
+	}
+
+	@Test
+	public void should_ThrowEntityNotFoundException_WhenGenreNotFound() {
+
+		Integer id = 1;
+
+		when(entityManager.find(Genre.class, id)).thenReturn(null);
+
+		assertThrows(EntityNotFoundException.class, () -> genreRepositoryImpl.findById(id));
 	}
 
 }
