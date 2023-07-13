@@ -190,5 +190,15 @@ public class GenreRepositoryTests {
 		
 		verify(entityManager).remove(eq(genre1));
 	}
+	
+	@Test
+	public void should_InvokeEntityManagerMerge_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		
+		genreRepositoryImpl.update(genre);
+		
+		
+		verify(entityManager).merge(eq(genre));
+	}
 
 }

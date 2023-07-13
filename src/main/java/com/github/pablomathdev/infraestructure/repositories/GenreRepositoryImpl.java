@@ -76,9 +76,11 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	}
 
 	@Override
+	@Transactional
 	public Genre update(Genre object) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return entityManager.merge(object);
+	  
 	}
 
 	@Override
