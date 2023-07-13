@@ -191,6 +191,21 @@ public class AlbumAPITest {
 
 	}
 	
+	@Test
+	public void should_ReturnStatusCode404_WhenAlbumToUpdateNotFound() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_ALBUM_SUCCESS);
+
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.put("/99")
+		.then().statusCode(404);
+
+	}
+	
 	public void clearDatabase() {
 		executeSQL.run("clear_database_test.sql");
 	}
