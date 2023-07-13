@@ -169,6 +169,27 @@ public class GenreServiceTests {
 
 	}
 	
+	@Test
+	public void should_ReturnGenreUpdated_WhenGenreIsUpdated() {
+
+		Genre genreExisting = genreFactory("any_genre");
+
+		Genre genreUpdate = genreFactory("update_genre");
+		
+		Integer id = 1;
+
+		when(genreRepository.findById(id)).thenReturn(genreExisting);
+		when(genreRepository.save(any(Genre.class))).thenReturn(genreUpdate);
+		
+		
+		Genre genreUpdated = genreService.update(genreUpdate, id);
+
+		
+		assertEquals(genreUpdate.getName(), genreUpdated.getName());
+		
+
+	}
+	
 	
 	
 	
