@@ -86,7 +86,12 @@ public class GenreRepositoryImpl implements IGenreRepository {
 	@Override
 	public Genre findById(Integer id) {
 		
-		return null;
+		Genre genre = entityManager.find(Genre.class, id);
+		
+		if(genre == null) {
+			throw new EntityNotFoundException(String.format("Genre with id %d not found", id));
+		}
+		return genre;
 	}
 
 }

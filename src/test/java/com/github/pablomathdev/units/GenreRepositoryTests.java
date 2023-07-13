@@ -28,7 +28,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
-
 @ExtendWith(MockitoExtension.class)
 public class GenreRepositoryTests {
 
@@ -163,54 +162,62 @@ public class GenreRepositoryTests {
 		 assertTrue(listGenreExpected.isEmpty());
 	}
 
-	@Test 
+	@Test
 	public void should_ReturnGenre_WhenTypedQueryGetResultListNotIsEmpty() {
-     
+
 		Genre genre1 = genreFactory("any_genre_1");
-		
-		when(entityManager.createQuery("from Genre",Genre.class)).thenReturn(typedQueryGenre);
-		
-      
-      
+
+		when(entityManager.createQuery("from Genre", Genre.class)).thenReturn(typedQueryGenre);
+
 		List<Genre> results = new ArrayList<>();
 		results.add(genre1);
 		when(typedQueryGenre.getResultList()).thenReturn(results);
-		
-		
-		 List<Genre> listGenreExpected =  genreRepositoryImpl.findAll();
-		
-		 assertFalse(listGenreExpected.isEmpty());
+
+		List<Genre> listGenreExpected = genreRepositoryImpl.findAll();
+
+		assertFalse(listGenreExpected.isEmpty());
 	}
-	
+
 	@Test
 	public void should_InvokeEntityManagerRemove_WithCorrectArguments() {
 		Genre genre1 = genreFactory("any_genre_1");
-		
+
 		genreRepositoryImpl.delete(genre1);
-		
-		
+
 		verify(entityManager).remove(eq(genre1));
 	}
-	
+
 	@Test
 	public void should_InvokeEntityManagerMerge_WithCorrectArguments() {
 		Genre genre = genreFactory("any_genre");
-		
+
 		genreRepositoryImpl.update(genre);
-		
-		
+
 		verify(entityManager).merge(eq(genre));
 	}
+
 	@Test
 	public void should_ReturnGenre_WhenEntityManagerMergeReturnGenreUpdated() {
 		Genre genre = genreFactory("any_genre");
-		
+
 		when(entityManager.merge(any(Genre.class))).thenReturn(genre);
-		
-		
-	    Genre genreUpdated = genreRepositoryImpl.update(genre);
-		
+
+		Genre genreUpdated = genreRepositoryImpl.update(genre);
+
 		assertEquals(genre.getName(), genreUpdated.getName());
+	}
+
+	@Test
+	public void should_InvokeEntityManagerFind_WithCorrectArguments() {
+		Genre genre = genreFactory("any_genre");
+		
+		Integer id = 1;
+
+		when(entityManager.find(Genre.class, id)).thenReturn(genre);
+
+		genreRepositoryImpl.findById(id);
+
+		verify(entityManager).find(eq(Genre.class), eq(id));
 	}
 
 }
