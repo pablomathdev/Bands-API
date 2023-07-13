@@ -146,6 +146,21 @@ public class GenreAPITest {
 
 	}
 	
+	@Test
+	public void should_ReturnStatusCode404_WhenGenreToUpdateNotFound() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_GENRE_SUCCESS);
+		
+		given()
+		.body(resource.getInputStream())
+		.contentType(ContentType.JSON)
+		.accept(ContentType.JSON)
+		.when()
+		.put("/90")
+		.then().statusCode(404);
+
+	}
+	
 
 
 	public void prepareData() {

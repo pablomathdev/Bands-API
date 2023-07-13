@@ -55,9 +55,11 @@ public class GenreController {
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody @Valid GenreRequestDTO genreRequestDTO) {
 
-		Genre genre = genreService.create(genreRequestDTOToGenre.convert(genreRequestDTO));
+		Genre genre = genreRequestDTOToGenre.convert(genreRequestDTO);
+		
+		Genre genreUpdated = genreService.update(genre,id);
 
-		return ResponseEntity.ok(genre);
+		return ResponseEntity.ok(genreUpdated);
 	}
 
 	@DeleteMapping(value = "/{name}")

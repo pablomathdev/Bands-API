@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,9 +36,8 @@ public class Genre {
 	@Setter(value = AccessLevel.NONE)
 	@ManyToMany(mappedBy = "genres")
 	private List<Track> tracks;
-	
-    
-    
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
@@ -58,7 +55,10 @@ public class Genre {
 		Genre other = (Genre) obj;
 		return Objects.equals(name, other.name);
 	}
-	
-	
+
+
+
+    
+
 	
 }

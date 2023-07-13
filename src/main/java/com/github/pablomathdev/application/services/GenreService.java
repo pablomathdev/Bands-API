@@ -52,11 +52,11 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 			genreFound.setName(genre.getName());
 			
 			
-			return genreRepository.save(genreFound);
+			return genreRepository.update(genreFound);
 			
 			
 		}catch (EntityNotFoundException e) {
-		    throw new EntityNotFoundException(e.getMessage(),e);
+		    throw new GenreNotFoundException(e.getMessage(),e);
 		}
 		
 		
