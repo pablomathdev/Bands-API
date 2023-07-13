@@ -29,12 +29,12 @@ public class Genre {
 
 	private String name;
 	
-	@JsonIgnore
+	
 	@Setter(value = AccessLevel.NONE)
 	@ManyToMany(mappedBy = "genres")
 	private Set<Band> bands;
 	
-	@JsonIgnore
+	
 	@Setter(value = AccessLevel.NONE)
 	@ManyToMany(mappedBy = "genres")
 	private List<Track> tracks;

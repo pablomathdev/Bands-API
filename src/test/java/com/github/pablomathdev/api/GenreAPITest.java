@@ -32,7 +32,8 @@ public class GenreAPITest {
 
 	private static final String CREATE_GENRE_SUCCESS = "classpath:data/create_genre_test_success.json";
 	private static final String CREATE_GENRE_ERROR_GENRE_EXISTING = "classpath:data/create_genre_test_error_genre_existing.json";
-
+	private static final String UPDATE_GENRE_SUCCESS = "classpath:data/update_genre_test_success.json";
+	
 	@LocalServerPort
 	private int port;
 
@@ -126,6 +127,22 @@ public class GenreAPITest {
 		.delete("/heavy metal")
 		.then()
 		.statusCode(409);
+
+	}
+	
+	@Test
+	public void should_ReturnStatusCode200_WhenGenreIsUpdated() throws IOException {
+
+		Resource resource = resourceLoader.getResource(UPDATE_GENRE_SUCCESS);
+		
+		given()
+		.contentType(ContentType.JSON)
+		.body(resource.getInputStream())
+		.accept(ContentType.JSON)
+		.when()
+		.put("/1")
+		.then()
+		.statusCode(200);
 
 	}
 	
