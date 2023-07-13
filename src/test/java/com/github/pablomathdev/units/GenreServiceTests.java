@@ -154,6 +154,24 @@ public class GenreServiceTests {
 
 	}
 	
+	@Test
+	public void should_InvokeGenreRepositoryFindById_WithCorrectArguments() {
+
+		Genre genre = genreFactory("any_genre");
+
+		Integer id = 1;
+
+		when(genreRepository.findById(id)).thenReturn(genre);
+		
+		genreService.update(genre, id);
+
+		verify(genreRepository).findById(eq(id));
+
+	}
+	
+	
+	
+	
 	
 	
 }

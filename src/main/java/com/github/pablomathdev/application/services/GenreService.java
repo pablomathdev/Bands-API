@@ -42,6 +42,28 @@ public class GenreService implements ICreateService<Genre>,IFindAllService<Genre
 
 	}
 	
+	
+	
+	public Genre update(Genre genre,Integer id) {
+	
+		try {
+			Genre genreFound = genreRepository.findById(id);
+			
+			genreFound.setName(genre.getName());
+			
+			
+			return genreRepository.save(genreFound);
+			
+			
+		}catch (EntityNotFoundException e) {
+		    throw new EntityNotFoundException(e.getMessage(),e);
+		}
+		
+		
+	
+		
+	}
+	
 	@Override
 	public List<Genre> find() {
 
